@@ -1,15 +1,12 @@
-name: Deploy Environment
+name: Deploy
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - dev
-  pull_request:
-    branches:
       - qa
       - main
-    types:
-      - closed  # Trigger when a pull request is closed (includes merged)
 
 permissions:
   id-token: write  # Required for OIDC authentication
@@ -28,8 +25,8 @@ jobs:
         id: 'auth'
         uses: 'google-github-actions/auth@v1'
         with:
-          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
-          service_account: ${{ secrets.SERVICE_ACCOUNT }}
+          workload_identity_provider: ${{ env.WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ env.SERVICE_ACCOUNT }}
 
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v1
@@ -37,7 +34,7 @@ jobs:
       - name: Check if GCS bucket exists
         id: check-bucket
         run: |
-          if gsutil ls -b gs://${{ secrets.TF_VAR_BUCKET }}; then
+          if gsutil ls -b gs://${{ env.TF_VAR_BUCKET }}; then
             echo "Bucket already exists."
             echo "bucket_exists=true" >> $GITHUB_ENV
           else
@@ -48,9 +45,9 @@ jobs:
       - name: Create GCS bucket
         if: env.bucket_exists == 'false'
         run: |
-          gsutil mb -l europe-west6 gs://${{ secrets.TF_VAR_BUCKET }}
+          gsutil mb -l europe-west6 gs://${{ env.TF_VAR_BUCKET }}
 
       - name: Create backend folder
         run: |
           echo "Creating backend folder in the bucket"
-          gsutil cp /dev/null gs://${{ secrets.TF_VAR_BUCKET }}/backend/
+          gsutil cp /dev/null gs://${{ env.TF_VAR_BUCKET }}/backend/
