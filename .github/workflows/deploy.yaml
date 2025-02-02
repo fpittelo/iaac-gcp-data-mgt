@@ -25,7 +25,7 @@ jobs:
         id: 'auth'
         uses: 'google-github-actions/auth@v1'
         with:
-          workload_identity_provider: "projects/571690378641/locations/global/workloadIdentityPools/github-id/providers/-github-provider"
+          workload_identity_provider: "projects/571690378641/locations/global/workloadIdentityPools/github-id/providers/github-id-provider"
           service_account: "github-sa@iaac-gcp-data-mgt.iam.gserviceaccount.com"
 
       - name: Set up Cloud SDK
