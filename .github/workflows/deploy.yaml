@@ -16,7 +16,7 @@ jobs:
   deploy-backend:
     name: Deploy Backend
     runs-on: ubuntu-latest
-    environment: ${{ github.ref_name }}
+#   environment: ${{ github.ref_name }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -25,6 +25,7 @@ jobs:
         id: 'auth'
         uses: 'google-github-actions/auth@v1'
         with:
+          token_format: 'access_token'
           workload_identity_provider: "projects/571690378641/locations/global/workloadIdentityPools/github-wif-pool/subject/iaac-gcp-data-mgt"
           service_account: "github-wif-sa@iaac-gcp-data-mgt.iam.gserviceaccount.com"
 
