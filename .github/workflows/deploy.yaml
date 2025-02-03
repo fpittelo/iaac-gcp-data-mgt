@@ -28,26 +28,6 @@ jobs:
           workload_identity_provider: "projects/571690378641/locations/global/workloadIdentityPools/github-wif-pool/subject/iaac-gcp-data-mgt"
           service_account: "github-wif-sa@iaac-gcp-data-mgt.iam.gserviceaccount.com"
 
-      - name: Set up Cloud SDK
-        uses: google-github-actions/setup-gcloud@v2
-
-      - name: Check if GCS bucket exists
-        id: check-bucket
+      - name: List instances
         run: |
-          if gsutil ls -b gs://iaac-gcp-data-mgt-terraform; then
-            echo "Bucket already exists."
-            echo "bucket_exists=true" >> $GITHUB_ENV
-          else
-            echo "Bucket does not exist."
-            echo "bucket_exists=false" >> $GITHUB_ENV
-          fi
-
-      - name: Create GCS bucket
-        if: env.bucket_exists == 'false'
-        run: |
-          gsutil mb -l europe-west6 gs://iaac-gcp-data-mgt-terraform
-
-      - name: Create backend folder
-        run: |
-          echo "Creating backend folder in the bucket"
-          gsutil cp /dev/null gs://iaac-gcp-data-mgt-terraform/backend/
+          gcloud compute instances list --project=iaac-gcp-data-mgt
