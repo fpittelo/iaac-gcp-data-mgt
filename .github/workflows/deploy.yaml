@@ -34,7 +34,7 @@ jobs:
       - name: Check if GCS bucket exists
         id: check-bucket
         run: |
-          if gsutil ls -b gs://${{ secrets.TF_VAR_BUCKET }}; then
+          if gsutil ls -b gs://iaac-gcp-data-mgt-terraform; then
             echo "Bucket already exists."
             echo "bucket_exists=true" >> $GITHUB_ENV
           else
@@ -45,9 +45,9 @@ jobs:
       - name: Create GCS bucket
         if: env.bucket_exists == 'false'
         run: |
-          gsutil mb -l europe-west6 gs://${{ secrets.TF_VAR_BUCKET }}
+          gsutil mb -l europe-west6 gs://iaac-gcp-data-mgt-terraform
 
       - name: Create backend folder
         run: |
           echo "Creating backend folder in the bucket"
-          gsutil cp /dev/null gs://${{ secrets.TF_VAR_BUCKET }}/backend/
+          gsutil cp /dev/null gs://iaac-gcp-data-mgt-terraform/backend/
