@@ -25,8 +25,10 @@ jobs:
         id: 'auth'
         uses: 'google-github-actions/auth@v1'
         with:
-          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
-          service_account: ${{ secrets.SERVICE_ACCOUNT }}
+          # value must come from the audience fiele in the service account key file #
+          workload_identity_provider: "projects/571690378641/locations/global/workloadIdentityPools/github-wif-pool/providers/github-provider-id"
+          # value is the email address of the service account #
+          service_account: "github-wif-sa@iaac-gcp-data-mgt.iam.gserviceaccount.com"
 
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v1
@@ -63,8 +65,10 @@ jobs:
         id: 'auth'
         uses: 'google-github-actions/auth@v1'
         with:
-          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
-          service_account: ${{ secrets.SERVICE_ACCOUNT }}
+          # value must come from the audience fiele in the service account key file #
+          workload_identity_provider: "projects/571690378641/locations/global/workloadIdentityPools/github-wif-pool/providers/github-provider-id"
+          # value is the email address of the service account #
+          service_account: "github-wif-sa@iaac-gcp-data-mgt.iam.gserviceaccount.com"
 
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v1
@@ -72,7 +76,7 @@ jobs:
       - name: Check if GCS bucket exists
         id: check-bucket
         run: |
-          if gsutil ls -b gs://${{ secrets.TF_VAR_BUCKET }}; then
+          if gsutil ls -b gs://iaac-gcp-data-mgt-terraform; then
             echo "Bucket exists."
             echo "bucket_exists=true" >> $GITHUB_ENV
           else
@@ -83,7 +87,7 @@ jobs:
       - name: Delete GCS bucket
         if: env.bucket_exists == 'true'
         run: |
-          gsutil rm -r gs://${{ secrets.TF_VAR_BUCKET }}
+          gsutil rm -r gs://iaac-gcp-data-mgt-terraform
 
 env:
   ZONE: europe-west6-b
