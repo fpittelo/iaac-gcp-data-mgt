@@ -25,7 +25,7 @@ jobs:
         id: 'auth'
         uses: 'google-github-actions/auth@v1'
         with:
-          workload_identity_provider: "projects/571690378641/locations/global/workloadIdentityPools/github-wif-pool"
+          workload_identity_provider: "projects/571690378641/locations/global/workloadIdentityPools/github-wif-pool/providers/github-provider-id"
           service_account: "github-wif-sa@iaac-gcp-data-mgt.iam.gserviceaccount.com"
 
       - name: List instances
