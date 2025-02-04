@@ -1,7 +1,7 @@
 #### Create GCP Cloud Storage bucket ####
 
 module "cloud_storage_bucket" {
-  source                    = "./modules/gcp-cloud-storage"
+  source                    = "./modules/cloud_storage_bucket"
   bucket                    = var.bucket
   location                  = var.location
   versioning_enabled        = var.versioning_enabled
