@@ -25,10 +25,10 @@ jobs:
         id: 'auth'
         uses: 'google-github-actions/auth@v1'
         with:
-          # value must come from the audience fiele in the service account key file #
-          workload_identity_provider: "projects/571690378641/locations/global/workloadIdentityPools/github-wif-pool/providers/github-provider-id"
-          # value is the email address of the service account #
-          service_account: "github-wif-sa@iaac-gcp-data-mgt.iam.gserviceaccount.com"
+          # Value is found on the GCP WIF Provider details > Default audience #
+          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+          # Value is the email address of the GCP service account #
+          service_account: ${{ secrets.SERVICE_ACCOUNT }}
 
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v1
@@ -53,3 +53,21 @@ jobs:
         run: |
             echo "Creating backend folder in the bucket"
             gsutil cp /dev/null gs://iaac-gcp-data-mgt-terraform/backend/
+
+  terraform-setup:
+    name: Terraform Set Up
+    runs-on: ubuntu-latest
+    needs: deploy-backend
+    environment: ${{ github.ref_name }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+  
+      - name: Set auth
+        id: 'auth'
+        uses: 'google-github-actions/auth@v1'
+        with:
+          # Value is found on the GCP WIF Provider details > Default audience #
+          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+          # Value is the email address of the GCP service account #
+          service_account: ${{ secrets.SERVICE_ACCOUNT }}
