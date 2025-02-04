@@ -79,24 +79,40 @@ jobs:
             --member="serviceAccount:${{ secrets.SERVICE_ACCOUNT }}" \
             --role="roles/bigquery.dataOwner"
 
-  clean-up-backend:
-    name: Clean Up Backend Bucket
-    needs: remove-service-account-permissions
+  destroy-backend:
+    name: Destroy Backend
     runs-on: ubuntu-latest
-    environment: ${{ inputs.environment }}
+    needs: remove-service-account-permissions
+    environment: ${{ github.ref_name }}
     steps:
-      - name: Set auth
+      - name: Checkout code
+        uses: actions/checkout@v3
+          
+      - name: Set auth for dev branch
         id: 'auth'
         uses: 'google-github-actions/auth@v1'
         with:
           workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
           service_account: ${{ secrets.SERVICE_ACCOUNT }}
-
+          
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v1
-
-      - name: Remove Backend Folder Contents
+  
+      - name: Check if GCS bucket exists
+        id: check-bucket
         run: |
-          # Remove contents of the backend folder
-          gsutil rm -r gs://${{ secrets.TF_VAR_BUCKET }}/backend/
-        continue-on-error: true
+          if gsutil ls -b gs://${{ secrets.TF_VAR_BUCKET }}; then
+             echo "Bucket exists."
+             echo "bucket_exists=true" >> $GITHUB_ENV
+          else
+              echo "Bucket does not exist."
+              echo "bucket_exists=false" >> $GITHUB_ENV
+          fi
+          
+      - name: Delete GCS bucket
+        if: env.bucket_exists == 'true'
+        run: |
+          gsutil rm -r gs://${{ secrets.TF_VAR_BUCKET }}
+          
+env:
+  ZONE: europe-west6-b
