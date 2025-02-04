@@ -1,12 +1,14 @@
 #### Create GCP Cloud Storage bucket ####
 
 module "cloud_storage_bucket" {
-  source                    = "./modules/cloud_storage_bucket"
+  source                    = "../modules/cloud_storage_bucket"
+  project                   = var.project
+  zone                      = var.zone
   bucket                    = var.bucket
   location                  = var.location
   versioning_enabled        = var.versioning_enabled
   lifecycle_rule_age        = var.lifecycle_rule_age
-  owner_email               = var.bucket_owner_email
+  bucket_owner_email        = var.bucket_owner_email
   
 }
 
