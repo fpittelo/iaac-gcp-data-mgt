@@ -7,7 +7,7 @@ terraform {
   }
   
   backend "gcs" {
-    bucket    = var.bucket
+    bucket    = "iaac-gcp-data-mgt-terraform"
     prefix    = "backend/terraform/state"
   # use_oidc  = true
   }
