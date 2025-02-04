@@ -1,38 +1,37 @@
-name: Destroy
+name: Destroy Infrastructure
 
 on:
   workflow_dispatch:
-# push:
-#   branches:
-#     - dev
-#     - qa
-#     - main
+    inputs:
+      environment:
+        description: 'Environment to destroy (dev/qa/main)'
+        required: true
+        type: choice
+        options:
+          - dev
+          - qa
+          - main
 
 permissions:
-  id-token: write  # Required for OIDC authentication
-  contents: read   # Default permission for accessing the repo
+  id-token: write   # Required for OIDC authentication
+  contents: read    # Default permission for accessing the repo
 
 jobs:
-  terraform-destroy:
-    name: Terraform Destroy
+  destroy-fabric:
+    name: Destroy Fabric Resources
     runs-on: ubuntu-latest
-    environment: ${{ github.ref_name }}
+    environment: ${{ inputs.environment }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-
-      - name: Set auth for dev branch
+   
+      - name: Set auth
         id: 'auth'
         uses: 'google-github-actions/auth@v1'
         with:
-          # value must come from the audience fiele in the service account key file #
-          workload_identity_provider: "projects/571690378641/locations/global/workloadIdentityPools/github-wif-pool/providers/github-provider-id"
-          # value is the email address of the service account #
-          service_account: "github-wif-sa@iaac-gcp-data-mgt.iam.gserviceaccount.com"
-
-      - name: Set up Cloud SDK
-        uses: google-github-actions/setup-gcloud@v1
-
+          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.SERVICE_ACCOUNT }}
+      
       - name: Install Terraform
         run: |
           sudo apt-get update && sudo apt-get install -y gnupg software-properties-common curl
@@ -47,47 +46,57 @@ jobs:
             -backend-config="bucket=${{ secrets.TF_VAR_BUCKET }}" \
             -backend-config="prefix=backend/terraform/state"
 
-      - name: Destroy Terraform-managed infrastructure
+      - name: Destroy Terraform Resources
         run: |
           cd infra
-          terraform destroy -var-file="dev.tfvars" -var="github_run_id=${{ github.run_id }}" -auto-approve
+          terraform destroy -var-file="${{ inputs.environment }}.tfvars" -auto-approve
 
-  destroy-backend:
-    name: Destroy Backend
+  remove-service-account-permissions:
+    name: Remove Service Account Permissions
+    needs: destroy-fabric
     runs-on: ubuntu-latest
-    needs: terraform-destroy
-    environment: ${{ github.ref_name }}
+    environment: ${{ inputs.environment }}
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Set auth for dev branch
+      - name: Set auth
         id: 'auth'
         uses: 'google-github-actions/auth@v1'
         with:
-          # value must come from the audience fiele in the service account key file #
-          workload_identity_provider: "projects/571690378641/locations/global/workloadIdentityPools/github-wif-pool/providers/github-provider-id"
-          # value is the email address of the service account #
-          service_account: "github-wif-sa@iaac-gcp-data-mgt.iam.gserviceaccount.com"
+          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.SERVICE_ACCOUNT }}
 
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v1
 
-      - name: Check if GCS bucket exists
-        id: check-bucket
+      - name: Remove Service Usage Admin Role
         run: |
-          if gsutil ls -b gs://iaac-gcp-data-mgt-terraform; then
-            echo "Bucket exists."
-            echo "bucket_exists=true" >> $GITHUB_ENV
-          else
-            echo "Bucket does not exist."
-            echo "bucket_exists=false" >> $GITHUB_ENV
-          fi
+          gcloud projects remove-iam-policy-binding ${{ secrets.GCP_PROJECT_ID }} \
+            --member="serviceAccount:${{ secrets.SERVICE_ACCOUNT }}" \
+            --role="roles/serviceusage.serviceUsageAdmin"
 
-      - name: Delete GCS bucket
-        if: env.bucket_exists == 'true'
+      - name: Remove BigQuery Data Owner Role
         run: |
-          gsutil rm -r gs://iaac-gcp-data-mgt-terraform
+          gcloud projects remove-iam-policy-binding ${{ secrets.GCP_PROJECT_ID }} \
+            --member="serviceAccount:${{ secrets.SERVICE_ACCOUNT }}" \
+            --role="roles/bigquery.dataOwner"
 
-env:
-  ZONE: europe-west6-b
+  clean-up-backend:
+    name: Clean Up Backend Bucket
+    needs: remove-service-account-permissions
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    steps:
+      - name: Set auth
+        id: 'auth'
+        uses: 'google-github-actions/auth@v1'
+        with:
+          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.SERVICE_ACCOUNT }}
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+
+      - name: Remove Backend Folder Contents
+        run: |
+          # Remove contents of the backend folder
+          gsutil rm -r gs://${{ secrets.TF_VAR_BUCKET }}/backend/
+        continue-on-error: true
