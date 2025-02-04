@@ -15,3 +15,8 @@ versioning_enabled              = true
 lifecycle_rule_age              = 5
 bucket_owner_email              = "frederic.pitteloud@gmail.com"
 default_table_expiration_ms     = "3600000"
+### BigQuery variables       ###
+data_viewer_user               = "frederic.pitteloud@gmail.com"
+data_editor_user               = "frederic.pitteloud@gmail.com"
+data_viewer_group              = "frederic.pitteloud@gmail.com"
+data_editor_group              = "frederic.pitteloud@gmail.com"

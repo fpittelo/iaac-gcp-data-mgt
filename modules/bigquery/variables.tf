@@ -52,3 +52,15 @@ variable "table_expiration_time" {
   description = "Table expiration time (optional)"
   default = null
 }
+
+variable "data_viewer_user" {
+  type = string
+  description = "The email of the user to grant dataViewer access"
+  default = null
+}
+
+variable "data_editor_user" {
+  type = string
+  description = "The email of the user to grant dataEditor access"
+  default = null
+}

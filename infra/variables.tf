@@ -99,3 +99,15 @@ variable "default_table_expiration_ms" {
   description = "Default table expiration in milliseconds"
   default = "3600000"
 }
+
+variable "data_viewer_group" {
+  type = string
+  description = "The email of the group to grant dataViewer access"
+  default = null
+}
+
+variable "data_editor_group" {
+  type = string
+  description = "The email of the group to grant dataEditor access"
+  default = null
+}

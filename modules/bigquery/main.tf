@@ -17,11 +17,11 @@ resource "google_bigquery_dataset" "dataset" {
   # Optional: Access grants (example - for a group)
   access {
     role          = "roles/bigquery.dataViewer"
-    group_by_email = var.data_viewer_group # Example
+    user_by_email = var.data_viewer_group # Example
   }
 
     access {
     role          = "roles/bigquery.dataEditor"
-    group_by_email = var.data_editor_group # Example
+    user_by_email = var.data_editor_group # Example
   }
 }
