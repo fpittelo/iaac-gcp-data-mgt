@@ -5,10 +5,11 @@ terraform {
       version = ">= 6.17.0"
     }
   }
+  
   backend "gcs" {
     bucket    = var.bucket
     prefix    = "backend/terraform/state"
-    use_oidc  = true
+  # use_oidc  = true
   }
 }
 
