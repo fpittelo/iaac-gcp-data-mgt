@@ -88,3 +88,26 @@ jobs:
           terraform init \
             -backend-config="bucket=${{ secrets.TF_VAR_BUCKET }}" \
             -backend-config="prefix=backend/terraform/state"
+
+  deploy-fabric:
+    name: Deploy Fabric
+    runs-on: ubuntu-latest
+    needs: terraform-setup
+    environment: ${{ github.ref_name }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+   
+      - name: Set auth
+        id: 'auth'
+        uses: 'google-github-actions/auth@v1'
+        with:
+          # Value is found on the GCP WIF Provider details > Default audience #
+          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+          # Value is the email address of the GCP service account #
+          service_account: ${{ secrets.SERVICE_ACCOUNT }}
+       
+      - name: Apply Terraform
+        run: |
+          cd infra
+          terraform apply -auto-approve
