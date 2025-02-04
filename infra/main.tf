@@ -26,13 +26,6 @@ resource "google_bigquery_dataset" "dataset" {
   depends_on = [google_project_service.bigquery_api]
 }
 
-
-# Example usage in a module or main.tf:
-variable "project" {
-  type = string
-  description = "The ID of the GCP project"
-}
-
 # Example of how to use the module:
 # module "bigquery" {
 #   project_id = "your-project-id"
