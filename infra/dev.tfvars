@@ -1,3 +1,4 @@
+bucket                = "iaac-gcp-data-mgt-terraform"
 location              = "europe-west6"
 zone                  = "europe-west6-b"
 project               = "iaac-gcp-data-mgt"

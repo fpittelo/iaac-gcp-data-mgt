@@ -10,6 +10,11 @@ variable "github_run_id" {
   type        = string
 }
 
+variable "bucket" {
+  description = "The location for the BigQuery dataset"
+  type        = string
+}
+
 variable "location" {
   description = "The location for the BigQuery dataset"
   type        = string
