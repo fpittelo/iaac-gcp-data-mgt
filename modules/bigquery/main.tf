@@ -1,6 +1,6 @@
 ### Module for BigQuery Dataset ###
 
-resource "google_bigquery_dataset" "default" {
+resource "google_bigquery_dataset" "dataset" {
   dataset_id                  = var.dataset_id
   location                    = var.location
   default_table_expiration_ms = var.default_table_expiration_ms # Optional: Table expiration
