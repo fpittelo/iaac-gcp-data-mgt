@@ -13,6 +13,34 @@ permissions:
   contents: read    # Default permission for accessing the repo
 
 jobs:
+  
+  Set-up-permissions-for-the-workflow:
+    name: Set up Service account permissions
+    runs-on: ubuntu-latest
+    environment: ${{ github.ref_name }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set auth
+        id: 'auth'
+        uses: 'google-github-actions/auth@v1'
+        with:
+          # Value is found on the GCP WIF Provider details > Default audience #
+          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+          # Value is the email address of the GCP service account #
+          service_account: ${{ secrets.SERVICE_ACCOUNT }}
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+
+      - name:
+        #### Use the github environment secrets DEV/GCP_PROJECT_ID ####
+        run: |
+          gcloud projects add-iam-policy-binding ${{ secrets.GCP_PROJECT_ID }} \
+            --member="serviceAccount:${{ secrets.SERVICE_ACCOUNT }}" \
+            --role="roles/serviceusage.serviceUsageAdmin"
+  
   deploy-backend:
     name: Deploy Backend
     runs-on: ubuntu-latest
