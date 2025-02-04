@@ -71,3 +71,17 @@ jobs:
           workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
           # Value is the email address of the GCP service account #
           service_account: ${{ secrets.SERVICE_ACCOUNT }}
+
+      - name: Install Terraform
+        run: |
+          sudo apt-get update && sudo apt-get install -y gnupg software-properties-common curl
+          curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
+          sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+          sudo apt-get update && sudo apt-get install -y terraform
+  
+      - name: Initialize Terraform
+        run: |
+          cd infra
+          terraform init \
+            -backend-config="bucket=${{ secrets.TF_VAR_BUCKET }}" \
+            -backend-config="prefix=backend/terraform/state"
