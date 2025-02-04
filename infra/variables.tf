@@ -30,7 +30,7 @@ variable "project" {
     type        = string
 }
 
-variable "dataset" {
+variable "dataset_id" {
   description = "The BigQuery dataset ID"
   type        = string
 }
