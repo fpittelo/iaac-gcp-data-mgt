@@ -110,4 +110,4 @@ jobs:
       - name: Apply Terraform
         run: |
           cd infra
-          terraform apply -auto-approve
+          terraform apply -var-file="${{ github.ref_name }}.tfvars" -var="github_run_id=${{ github.run_id }}" -auto-approve
