@@ -16,6 +16,7 @@ resource "google_project_service" "bigquery_api" {
   project = var.project
   service                     = "bigquery.googleapis.com"
   disable_on_destroy          = true
+  disable_dependent_services  = true
 }
 
 resource "google_bigquery_dataset" "dataset" {
