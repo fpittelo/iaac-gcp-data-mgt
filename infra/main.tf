@@ -24,7 +24,7 @@ module "bigquery_dataset" {
   location                    = var.location
   dataset_id                  = var.dataset_id
   dataset_description         = var.dataset_description
-  default_table_expiration_ms = 1000000
+  default_table_expiration_ms = var.default_table_expiration_ms
   data_editor_group           = ""
   data_viewer_group           = ""
   depends_on                  = [google_project_service.bigquery_api] # Ensure API is enabled first

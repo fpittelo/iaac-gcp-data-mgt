@@ -91,3 +91,11 @@ variable "bucket_owner_email" {
   type = string
   description = "Email address of the bucket owner (for IAM)"
 }
+
+####### Variables for GPC BigQuery ####
+
+variable "default_table_expiration_ms" {
+  type = string
+  description = "Default table expiration in milliseconds"
+  default = "3600000"
+}
