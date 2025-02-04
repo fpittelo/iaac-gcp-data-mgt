@@ -1,17 +1,29 @@
+#### Create GCP Cloud Storage bucket ####
+
+module "cloud_storage_bucket" {
+  source                    = "./modules/cloud_storage_bucket"
+  bucket                    = var.bucket
+  location                  = var.location
+  versioning_enabled        = var.versioning_enabled
+  lifecycle_rule_age        = var.lifecycle_rule_age
+  owner_email               = var.bucket_owner_email
+  
+}
+
 resource "google_project_service" "bigquery_api" {
   project = var.project
-  service            = "bigquery.googleapis.com"
-  disable_on_destroy = false
+  service                   = "bigquery.googleapis.com"
+  disable_on_destroy        = false
 }
 
 resource "google_bigquery_dataset" "dataset" {
-  dataset_id                  = var.dataset
-  project                     = var.project
-  location                    = var.location
+  dataset_id                = var.dataset
+  project                   = var.project
+  location                  = var.location
 
   access {
-    role          = "roles/bigquery.dataOwner"
-    user_by_email = var.owner_email # Replace with your email or service account
+    role                    = "roles/bigquery.dataOwner"
+    user_by_email           = var.owner_email # Replace with your email or service account
   }
 
   # Optional: Add more specific access controls

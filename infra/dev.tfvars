@@ -10,3 +10,8 @@ subnetwork            = "default"
 service_account_email = "github-sa-dev@iaac-gcp-vm-dev.iam.gserviceaccount.com"
 git_branch            = "dev"
 github_run_id         = ""
+### Cloud Storage variables ###
+bucket_owner_email    = "frederic.pitteloud@gmail.com"
+versioning_enabled    = true
+lifecycle_rule_age    = 5
+bucket_owner_email    = "frederic.pitteloud@gmail.com"

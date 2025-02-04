@@ -66,3 +66,28 @@ variable "tags" {
   type        = map(string)
   default     = {}  # Set default to empty map if appropriate
 }
+
+####### Variables for GPC Cloud Storage #######
+
+variable "versioning_enabled" {
+  type = bool
+  description = "Enable versioning for the bucket"
+  default = false
+}
+
+variable "lifecycle_rule_age" {
+  type = number
+  description = "Age (in days) for lifecycle rule (example)"
+  default = 30
+}
+
+# variable "kms_key_id" { # For CMEK
+#   type = string
+#   description = "KMS key ID for encryption (optional)"
+#   default = null
+# }
+
+variable "bucket_owner_email" {
+  type = string
+  description = "Email address of the bucket owner (for IAM)"
+}
