@@ -1,4 +1,4 @@
-bucket                = "iaac-gcp-data-mgt-terraform"
+bucket                = "iaac-gcp-data-mgt-data"
 location              = "europe-west6"
 zone                  = "europe-west6-b"
 project               = "iaac-gcp-data-mgt"
