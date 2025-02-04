@@ -11,6 +11,16 @@ This repository houses the Infrastructure as Code (IaC) for a gloriously over-en
 *   **Data Catalog:**  Because knowing where your data is hiding is half the battle.  Think of it as the Dewey Decimal System for the digital age.
 *   **API Management:**  So you can access your data with the elegance of a well-crafted API call.  No more messy SQL queries in the dark!
 
+** Components **
+
+- Cloud Storage
+- BigQuery
+- Dataflow
+- Pub/Sub
+- DataPlex
+- Apigee
+- Looker
+
 **Why did we build this?**
 
 Because data is the new oil, and we're here to refine it (and maybe spill a little in the process).

@@ -13,8 +13,9 @@ permissions:
   contents: read    # Default permission for accessing the repo
 
 jobs:
-  deploy-backend:
-    name: Deploy Backend
+  
+  Set-up-permissions-for-the-workflow:
+    name: Set up Service account permissions
     runs-on: ubuntu-latest
     environment: ${{ github.ref_name }}
     steps:
@@ -25,10 +26,45 @@ jobs:
         id: 'auth'
         uses: 'google-github-actions/auth@v1'
         with:
-          # value must come from the audience fiele in the service account key file #
-          workload_identity_provider: "projects/571690378641/locations/global/workloadIdentityPools/github-wif-pool/providers/github-provider-id"
-          # value is the email address of the service account #
-          service_account: "github-wif-sa@iaac-gcp-data-mgt.iam.gserviceaccount.com"
+          # Value is found on the GCP WIF Provider details > Default audience #
+          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+          # Value is the email address of the GCP service account #
+          service_account: ${{ secrets.SERVICE_ACCOUNT }}
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+
+      - name:
+        #### Use the github environment secrets DEV/GCP_PROJECT_ID ####
+        run: |
+          gcloud projects add-iam-policy-binding ${{ secrets.GCP_PROJECT_ID }} \
+            --member="serviceAccount:${{ secrets.SERVICE_ACCOUNT }}" \
+            --role="roles/serviceusage.serviceUsageAdmin"
+  
+      - name:
+        #### Use the github environment secrets DEV/GCP_PROJECT_ID ####
+        run: |
+          gcloud projects add-iam-policy-binding ${{ secrets.GCP_PROJECT_ID }} \
+            --member="serviceAccount:${{ secrets.SERVICE_ACCOUNT }}" \
+            --role="roles/bigquery.dataOwner"
+
+  deploy-backend:
+    name: Deploy Backend
+    runs-on: ubuntu-latest
+    needs: Set-up-permissions-for-the-workflow
+    environment: ${{ github.ref_name }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set auth
+        id: 'auth'
+        uses: 'google-github-actions/auth@v1'
+        with:
+          # Value is found on the GCP WIF Provider details > Default audience #
+          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+          # Value is the email address of the GCP service account #
+          service_account: ${{ secrets.SERVICE_ACCOUNT }}
 
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v1
@@ -36,7 +72,8 @@ jobs:
       - name: Check if GCS bucket exists
         id: check-bucket
         run: |
-          if gsutil ls -b gs://iaac-gcp-data-mgt-terraform; then
+          # Value TF_VAR_BUCKET must be defined in Github environement secrets #
+          if gsutil ls -b gs://${{ secrets.TF_VAR_BUCKET }}; then
               echo "Bucket already exists."
               echo "bucket_exists=true" >> $GITHUB_ENV
             else
@@ -47,9 +84,83 @@ jobs:
       - name: Create GCS bucket
         if: env.bucket_exists == 'false'
         run: |
-          gsutil mb -l europe-west6 gs://iaac-gcp-data-mgt-terraform
+          # Value TF_VAR_BUCKET must be defined in Github environement secrets #
+          gsutil mb -l europe-west6 gs://${{ secrets.TF_VAR_BUCKET }}
 
       - name: Create backend folder
         run: |
             echo "Creating backend folder in the bucket"
-            gsutil cp /dev/null gs://iaac-gcp-data-mgt-terraform/backend/
+            # Value TF_VAR_BUCKET must be defined in Github environement secrets #
+            gsutil cp /dev/null gs://${{ secrets.TF_VAR_BUCKET }}/backend/
+
+  terraform-setup:
+    name: Terraform Set Up
+    runs-on: ubuntu-latest
+    needs: deploy-backend
+    environment: ${{ github.ref_name }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+  
+      - name: Set auth
+        id: 'auth'
+        uses: 'google-github-actions/auth@v1'
+        with:
+          # Value is found on the GCP WIF Provider details > Default audience #
+          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+          # Value is the email address of the GCP service account #
+          service_account: ${{ secrets.SERVICE_ACCOUNT }}
+
+      - name: Install Terraform
+        run: |
+          sudo apt-get update && sudo apt-get install -y gnupg software-properties-common curl
+          curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
+          sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+          sudo apt-get update && sudo apt-get install -y terraform
+  
+      - name: Initialize Terraform
+        run: |
+          cd infra
+          terraform init \
+            -backend-config="bucket=${{ secrets.TF_VAR_BUCKET }}" \
+            -backend-config="prefix=backend/terraform/state"
+
+  deploy-fabric:
+    name: Deploy Fabric
+    runs-on: ubuntu-latest
+    needs: terraform-setup
+    environment: ${{ github.ref_name }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+   
+      - name: Set auth
+        id: 'auth'
+        uses: 'google-github-actions/auth@v1'
+        with:
+          # Value is found on the GCP WIF Provider details > Default audience #
+          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+          # Value is the email address of the GCP service account #
+          service_account: ${{ secrets.SERVICE_ACCOUNT }}
+      
+      - name: Install Terraform
+        run: |
+          sudo apt-get update && sudo apt-get install -y gnupg software-properties-common curl
+          curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
+          sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+          sudo apt-get update && sudo apt-get install -y terraform
+  
+      - name: Set GitHub Run ID
+        run: echo "github_run_id=${{ github.run_id }}" >> $GITHUB_ENV
+  
+      - name: Initialize Terraform
+        run: |
+          cd infra
+          terraform init \
+            -backend-config="bucket=${{ secrets.TF_VAR_BUCKET }}" \
+            -backend-config="prefix=backend/terraform/state"
+
+      - name: Apply Terraform
+        run: |
+          cd infra
+          terraform apply -var-file="${{ github.ref_name }}.tfvars" -var="github_run_id=${{ github.run_id }}" -auto-approve
