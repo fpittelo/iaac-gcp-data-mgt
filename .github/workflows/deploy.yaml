@@ -36,7 +36,8 @@ jobs:
       - name: Check if GCS bucket exists
         id: check-bucket
         run: |
-          if gsutil ls -b gs://iaac-gcp-data-mgt-terraform; then
+          # Value TF_VAR_BUCKET must be defined in Github environement secrets #
+          if gsutil ls -b gs://${{ secrets.TF_VAR_BUCKET }}; then
               echo "Bucket already exists."
               echo "bucket_exists=true" >> $GITHUB_ENV
             else
@@ -47,12 +48,14 @@ jobs:
       - name: Create GCS bucket
         if: env.bucket_exists == 'false'
         run: |
-          gsutil mb -l europe-west6 gs://iaac-gcp-data-mgt-terraform
+          # Value TF_VAR_BUCKET must be defined in Github environement secrets #
+          gsutil mb -l europe-west6 gs://${{ secrets.TF_VAR_BUCKET }}
 
       - name: Create backend folder
         run: |
             echo "Creating backend folder in the bucket"
-            gsutil cp /dev/null gs://iaac-gcp-data-mgt-terraform/backend/
+            # Value TF_VAR_BUCKET must be defined in Github environement secrets #
+            gsutil cp /dev/null gs://${{ secrets.TF_VAR_BUCKET }}/backend/
 
   terraform-setup:
     name: Terraform Set Up
@@ -83,5 +86,6 @@ jobs:
         run: |
           cd infra
           terraform init \
+            # Value TF_VAR_BUCKET must be defined in Github environement secrets #
             -backend-config="bucket=${{ secrets.TF_VAR_BUCKET }}" \
             -backend-config="prefix=backend/terraform/state"
