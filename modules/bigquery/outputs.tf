@@ -1,4 +1,5 @@
+
 output "dataset_self_link" {
-  value       = module.bigquery_dataset.dataset_self_link # Corrected line
+  value = google_bigquery_dataset.dataset.self_link
   description = "The self link of the created dataset"
 }
