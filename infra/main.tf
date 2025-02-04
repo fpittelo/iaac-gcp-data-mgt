@@ -14,14 +14,15 @@ module "cloud_storage_bucket" {
 
 resource "google_project_service" "bigquery_api" {
   project = var.project
-  service                   = "bigquery.googleapis.com"
-  disable_on_destroy        = false
+  service                     = "bigquery.googleapis.com"
+  disable_on_destroy          = true
 }
 
 resource "google_bigquery_dataset" "dataset" {
-  dataset_id                = var.dataset
-  project                   = var.project
-  location                  = var.location
+  dataset_id                  = var.dataset
+  project                     = var.project
+  location                    = var.location
+  delete_contents_on_destroy  = true
 
   access {
     role                    = "roles/bigquery.dataOwner"
