@@ -61,11 +61,6 @@ variable "service_account_email" {
   type        = string
 }
 
-variable "owner_email" {
-  description = "The service account email for the VM instance"
-  type        = string
-}
-
 variable "tags" {
   description = "Tags to apply to resources"
   type        = map(string)
