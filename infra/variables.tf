@@ -10,13 +10,13 @@ variable "github_run_id" {
   type        = string
 }
 
-variable "bucket" {
+variable "location" {
   description = "The location for the BigQuery dataset"
   type        = string
 }
 
-variable "location" {
-  description = "The location for the BigQuery dataset"
+variable "region" {
+  description = "The GCP region"
   type        = string
 }
 
@@ -28,17 +28,6 @@ variable "zone" {
 variable "project" {
     description = "The GCP project ID"
     type        = string
-}
-
-variable "dataset_id" {
-  description = "The BigQuery dataset ID"
-  type        = string
-}
-
-variable "dataset_description" {
-  description = "The description of the dataset"
-  type        = string
-  default     = null
 }
 
 variable "owner_email" {
@@ -69,6 +58,11 @@ variable "tags" {
 
 ####### Variables for GPC Cloud Storage #######
 
+variable "bucket" {
+  description = "The location for the BigQuery dataset"
+  type        = string
+}
+
 variable "versioning_enabled" {
   type = bool
   description = "Enable versioning for the bucket"
@@ -86,6 +80,17 @@ variable "lifecycle_rule_age" {
 #   description = "KMS key ID for encryption (optional)"
 #   default = null
 # }
+
+variable "dataset_id" {
+  description = "The BigQuery dataset ID"
+  type        = string
+}
+
+variable "dataset_description" {
+  description = "The description of the dataset"
+  type        = string
+  default     = null
+}
 
 variable "bucket_owner_email" {
   type = string
