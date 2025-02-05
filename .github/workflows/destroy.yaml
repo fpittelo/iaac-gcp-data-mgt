@@ -2,35 +2,36 @@ name: Destroy
 
 on:
   workflow_dispatch:
-# push:
-#   branches:
-#     - dev
-#     - qa
-#     - main
+    inputs:
+      environment:
+        description: 'Environment to destroy (dev/qa/main)'
+        required: true
+        type: choice
+        options:
+          - dev
+          - qa
+          - main
 
 permissions:
-  id-token: write  # Required for OIDC authentication
-  contents: read   # Default permission for accessing the repo
+  id-token: write   # Required for OIDC authentication
+  contents: read    # Default permission for accessing the repo
 
 jobs:
-  terraform-destroy:
-    name: Terraform Destroy
+  destroy-fabric:
+    name: Destroy Fabric Resources
     runs-on: ubuntu-latest
-    environment: ${{ github.ref_name }}
+    environment: ${{ inputs.environment }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-
-      - name: Set auth for dev branch
+   
+      - name: Set auth
         id: 'auth'
         uses: 'google-github-actions/auth@v1'
         with:
           workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
           service_account: ${{ secrets.SERVICE_ACCOUNT }}
-
-      - name: Set up Cloud SDK
-        uses: google-github-actions/setup-gcloud@v1
-
+      
       - name: Install Terraform
         run: |
           sudo apt-get update && sudo apt-get install -y gnupg software-properties-common curl
@@ -45,21 +46,18 @@ jobs:
             -backend-config="bucket=${{ secrets.TF_VAR_BUCKET }}" \
             -backend-config="prefix=backend/terraform/state"
 
-      - name: Destroy Terraform-managed infrastructure
+      - name: Destroy Terraform Resources
         run: |
           cd infra
-          terraform destroy -var-file="dev.tfvars" -var="github_run_id=${{ github.run_id }}" -auto-approve
+          terraform destroy -var-file="${{ inputs.environment }}.tfvars" -auto-approve
 
-  destroy-backend:
-    name: Destroy Backend
+  remove-service-account-permissions:
+    name: Remove Service Account Permissions
+    needs: destroy-fabric
     runs-on: ubuntu-latest
-    needs: terraform-destroy
-    environment: ${{ github.ref_name }}
+    environment: ${{ inputs.environment }}
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Set auth for dev branch
+      - name: Set auth
         id: 'auth'
         uses: 'google-github-actions/auth@v1'
         with:
@@ -69,21 +67,52 @@ jobs:
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v1
 
+      - name: Remove Service Usage Admin Role
+        run: |
+          gcloud projects remove-iam-policy-binding ${{ secrets.GCP_PROJECT_ID }} \
+            --member="serviceAccount:${{ secrets.SERVICE_ACCOUNT }}" \
+            --role="roles/serviceusage.serviceUsageAdmin"
+
+      - name: Remove BigQuery Data Owner Role
+        run: |
+          gcloud projects remove-iam-policy-binding ${{ secrets.GCP_PROJECT_ID }} \
+            --member="serviceAccount:${{ secrets.SERVICE_ACCOUNT }}" \
+            --role="roles/bigquery.dataOwner"
+
+  destroy-backend:
+    name: Destroy Backend
+    runs-on: ubuntu-latest
+    needs: remove-service-account-permissions
+    environment: ${{ github.ref_name }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+          
+      - name: Set auth for dev branch
+        id: 'auth'
+        uses: 'google-github-actions/auth@v1'
+        with:
+          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.SERVICE_ACCOUNT }}
+          
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+  
       - name: Check if GCS bucket exists
         id: check-bucket
         run: |
           if gsutil ls -b gs://${{ secrets.TF_VAR_BUCKET }}; then
-            echo "Bucket exists."
-            echo "bucket_exists=true" >> $GITHUB_ENV
+             echo "Bucket exists."
+             echo "bucket_exists=true" >> $GITHUB_ENV
           else
-            echo "Bucket does not exist."
-            echo "bucket_exists=false" >> $GITHUB_ENV
+              echo "Bucket does not exist."
+              echo "bucket_exists=false" >> $GITHUB_ENV
           fi
-
+          
       - name: Delete GCS bucket
         if: env.bucket_exists == 'true'
         run: |
           gsutil rm -r gs://${{ secrets.TF_VAR_BUCKET }}
-
+          
 env:
   ZONE: europe-west6-b
