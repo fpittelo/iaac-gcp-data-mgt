@@ -40,12 +40,6 @@ resource "google_storage_bucket_object" "error_folder" {
   # No content is needed for a folder
 }
 
-resource "google_storage_bucket_object" "error_folder" {
-  bucket                  = var.bucket
-  name                    = "${var.error_folder}/" # The trailing slash creates a folder
-  # No content is needed for a folder
-}
-
 data "http" "input_file" {
   url = "https://github.com/fpittelo/iaac-gcp-data-mgt/blob/dev/README.md" # Replace with your GitHub URL
 }
