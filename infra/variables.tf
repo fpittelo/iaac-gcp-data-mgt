@@ -111,3 +111,65 @@ variable "data_editor_group" {
   description = "The email of the group to grant dataEditor access"
   default = null
 }
+
+variable "input_file_name" {
+  type = string
+  description = "The name of the input file"
+  default = null
+}
+
+variable "input_folder" {
+  type = string
+  description = "The input folder for the Dataflow job"
+  default = null
+}
+
+variable "output_folder" {
+  type = string
+  description = "The output folder for the Dataflow job"
+  default = null
+}
+
+variable "temp_folder" {
+  type = string
+  description = "The temporary folder for the Dataflow job"
+  default = null
+}
+
+variable "error_folder" {
+  type = string
+  description = "The error folder for the Dataflow job"
+  default = null
+}
+
+####### Variables for GPC Dataflow ####
+
+variable "job_name" {
+    description = "The name of the Dataflow job"
+    type        = string
+}
+
+variable "temp_gcs_location" {
+    description = "The GCS location for temporary files"
+    type        = string
+}
+
+variable "temp_gcs_path" {
+    description = "The GCS path for temporary files"
+    type        = string
+}
+
+variable "input_subscription" {
+    description = "The Pub/Sub input subscription"
+    type        = string
+}
+
+variable "output_topic" {
+    description = "The Pub/Sub output topic"
+    type        = string
+}
+
+variable "max_workers" {
+    description = "The maximum number of workers"
+    type        = string
+}

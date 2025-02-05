@@ -1,4 +1,5 @@
 bucket                          = "iaac-gcp-data-mgt-data"
+region                          = "europe-west6"
 location                        = "europe-west6"
 zone                            = "europe-west6-b"
 project                         = "iaac-gcp-data-mgt"
@@ -15,8 +16,20 @@ versioning_enabled              = true
 lifecycle_rule_age              = 5
 bucket_owner_email              = "frederic.pitteloud@gmail.com"
 default_table_expiration_ms     = "3600000"
+input_file_name                 = "readme.md"
+input_folder                    = "input"
+output_folder                   = "output"
+temp_folder                     = "temp"
+error_folder                    = "error"
 ### BigQuery variables       ###
 data_viewer_user               = "frederic.pitteloud@gmail.com"
 data_editor_user               = "frederic.pitteloud@gmail.com"
 data_viewer_group              = "frederic.pitteloud@gmail.com"
 data_editor_group              = "frederic.pitteloud@gmail.com"
+### Dataflow variables       ###
+temp_gcs_path                   = ""
+temp_gcs_location               = ""
+max_workers                     = ""
+job_name                        = "dataflow-job"
+input_subscription              = ""
+output_topic                    = ""
