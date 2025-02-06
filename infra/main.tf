@@ -61,7 +61,7 @@ resource "google_dataflow_job" "wordcount_job" {
   project                     = var.project_id
   region                      = var.region
   name                        = "wordcount-job"
-  template_gcs_path           = "gs://dataflow-templates/classic/TextToText"  # Or a custom template if needed
+  template_gcs_path           = "gs://dataflow-templates-us-central1/latest/Word_Count"  # Or a custom template if needed
   temp_gcs_location           = "gs://${module.cloud_storage_bucket.bucket_name}/${var.temp_folder}" # Correct path!
 
   parameters = {
