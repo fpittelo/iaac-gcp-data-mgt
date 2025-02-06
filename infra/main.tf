@@ -62,11 +62,11 @@ resource "google_dataflow_job" "wordcount_job" {
   region                      = var.region
   name                        = "wordcount-job"
   template_gcs_path           = "gs://dataflow-templates/classic/TextToText"  # Or a custom template if needed
-  temp_gcs_location           = "gs://${module.cloud_storage_bucket.bucket}/${var.temp_folder}" # Correct path!
+  temp_gcs_location           = "gs://${module.cloud_storage_bucket.bucket_name}/${var.temp_folder}" # Correct path!
 
   parameters = {
-    inputFile                 = "gs://${module.cloud_storage_bucket.bucket}/${var.input_folder}/${var.input_file_name}" # Correct path!
-    output                    = "gs://${module.cloud_storage_bucket.bucket}/${var.output_folder}/wordcount.txt"  # Correct path!
+    inputFile                 = "gs://${module.cloud_storage_bucket.bucket_name}/${var.input_folder}/${var.input_file_name}" # Correct path!
+    output                    = "gs://${module.cloud_storage_bucket.bucket_name}/${var.output_folder}/wordcount.txt"  # Correct path!
   }
 
   depends_on = [
