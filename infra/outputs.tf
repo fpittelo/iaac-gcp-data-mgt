@@ -1,4 +1,4 @@
 output "bucket" {
-  value = google_storage_bucket.bucket.name
+  value = module.cloud_storage_bucket.bucket_name
   description = "Name of the created bucket"
 }

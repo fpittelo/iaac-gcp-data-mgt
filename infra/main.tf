@@ -17,7 +17,7 @@ data "http" "bucket" {
 }
 
 resource "google_storage_bucket_object" "input_file" {
-  bucket                    = module.cloud_storage_bucket.bucket
+  bucket                    = module.cloud_storage_bucket.bucket_name
   name                      = "inputs/readme.md"
   content                   = data.http.bucket.response_body # Correction: Utilisation de response_body
 }
