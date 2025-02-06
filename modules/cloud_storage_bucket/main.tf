@@ -24,7 +24,7 @@ resource "google_storage_bucket" "bucket" {
 
 # Optional: Bucket IAM bindings (example)
 resource "google_storage_bucket_iam_member" "bucket_owner" {
-  bucket = google_storage_bucket.default.name
+  bucket = google_storage_bucket.bucket.name
   role   = "roles/storage.objectAdmin" # Or other appropriate role
   member = "user:${var.bucket_owner_email}" # Example: user email
 }
