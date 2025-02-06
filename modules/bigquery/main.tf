@@ -14,17 +14,6 @@ resource "google_bigquery_dataset" "dataset" {
   #   kms_key_name = var.kms_key_name
   # }
 
-  # Optional: Access grants (example - for a group)
-  access {
-    role          = "roles/bigquery.dataViewer"
-    user_by_email = var.data_viewer_group # Example
-  }
-
-  access {
-    role          = "roles/bigquery.dataEditor"
-    user_by_email = var.data_editor_group # Example
-  }
-
   # Add an owner role to ensure there is at least one owner
   access {
     role          = "roles/bigquery.dataOwner"
