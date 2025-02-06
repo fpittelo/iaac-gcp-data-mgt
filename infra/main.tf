@@ -17,9 +17,9 @@ data "http" "input_file" {
 }
 
 resource "google_storage_bucket_object" "input_file" {
-  bucket                      = module.cloud_storage_bucket.bucket_name
-  name                        = "inputs/readme.md"
-  content                     = data.http.input_file.body # Use 'content' directly with the http data source.
+  bucket                    = module.cloud_storage_bucket.bucket_name
+  name                      = "inputs/readme.md"
+  content                   = data.http.input_file.response_body # Correction: Utilisation de response_body
 }
 
 ### BigQuery Deployment ###
