@@ -12,7 +12,7 @@ module "cloud_storage_bucket" {
 }
 
 # Fetch input file from GitHub (Corrected URL)
-data "http" "input_file" {
+data "http" "bucket" {
   url                         = "https://raw.githubusercontent.com/GoogleCloudPlatform/DataflowTemplates/master/apache_beam_wordcount/README.md"
 }
 
