@@ -1,8 +1,8 @@
 # Outputs
 output "bucket_name" {
-  value = google_storage_bucket.input_file.name
+  value = google_storage_bucket.bucket.name
 }
 
 output "bucket_url" {
-  value = google_storage_bucket.input_file.self_link
+  value = google_storage_bucket.bucket.self_link
 }

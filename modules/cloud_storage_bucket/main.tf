@@ -1,4 +1,4 @@
-resource "google_storage_bucket" "input_file" {
+resource "google_storage_bucket" "bucket" {
   name                        = var.bucket
   location                    = var.location
   uniform_bucket_level_access = true # Enforce uniform bucket-level access
