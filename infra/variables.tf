@@ -1,13 +1,8 @@
 ###### varialbes.tf ######
 
-variable "git_branch" {
-   description = "The Github branch name"
-   type        = string
-}
-
-variable "github_run_id" {
-  description = "GitHub run ID"
-  type        = string
+variable "project_id" {
+    description = "The GCP project ID"
+    type        = string
 }
 
 variable "location" {
@@ -25,9 +20,22 @@ variable "zone" {
     type        = string
 }
 
-variable "project" {
-    description = "The GCP project ID"
-    type        = string
+variable "tags" {
+  description = "Tags to apply to resources"
+  type        = map(string)
+  default     = {}  # Set default to empty map if appropriate
+}
+
+# Define variables for each environment (dev, qa, main)
+
+variable "git_branch" {
+   description = "The Github branch name"
+   type        = string
+}
+
+variable "github_run_id" {
+  description = "GitHub run ID"
+  type        = string
 }
 
 variable "owner_email" {
@@ -48,12 +56,6 @@ variable "subnetwork" {
 variable "service_account_email" {
   description = "The service account email for the VM instance"
   type        = string
-}
-
-variable "tags" {
-  description = "Tags to apply to resources"
-  type        = map(string)
-  default     = {}  # Set default to empty map if appropriate
 }
 
 ####### Variables for GPC Cloud Storage #######
