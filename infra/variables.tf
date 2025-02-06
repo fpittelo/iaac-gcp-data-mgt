@@ -107,6 +107,12 @@ variable "default_table_expiration_ms" {
   default = "3600000"
 }
 
+variable "dataset_owner_email" {
+  type = string
+  description = "The email of the user to grant dataOwner access"
+  default = null
+}
+
 variable "data_viewer_group" {
   type = string
   description = "The email of the group to grant dataViewer access"

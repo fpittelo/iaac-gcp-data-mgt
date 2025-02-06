@@ -22,6 +22,7 @@ output_folder                   = "output/output.txt"
 temp_folder                     = "temp/temp.txt"
 error_folder                    = "error/error.txt"
 ### BigQuery variables       ###
+dataset_owner_email            = "frederic.pitteloud@gmail.com"
 data_viewer_group              = "frederic.pitteloud@gmail.com"
 data_editor_group              = "frederic.pitteloud@gmail.com"
 ### Dataflow variables       ###
