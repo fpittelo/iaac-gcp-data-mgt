@@ -1,8 +1,8 @@
 # Outputs
 output "bucket_name" {
-  value = google_storage_bucket.default.name
+  value = google_storage_bucket.input_file.name
 }
 
 output "bucket_url" {
-  value = google_storage_bucket.default.url
+  value = google_storage_bucket.input_file.self_link
 }
