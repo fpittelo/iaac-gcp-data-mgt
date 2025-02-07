@@ -118,6 +118,9 @@ module "google_apigee_organization" {
   region                  = var.region
   analytics_region        = var.region
 
+  depends_on = [
+    google_project_service.apigee_api
+  ]
 }
 
 ####    Deploy Apigee Organization   ####
