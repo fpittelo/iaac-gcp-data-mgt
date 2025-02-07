@@ -3,22 +3,23 @@ name: Destroy
 on:
   workflow_dispatch:
     inputs:
-      environment:
-        description: 'Environment to destroy (dev/qa/main)'
-        required: true
-        type: choice
-        options:
-          - dev
-          - qa
-          - main
+        environment:
+          description: 'Environment to destroy (dev/qa/main)'
+          required: true
+          type: choice
+          options:
+            - dev
+            - qa
+            - main
 
 permissions:
   id-token: write   # Required for OIDC authentication
   contents: read    # Default permission for accessing the repo
 
 jobs:
+
   destroy-fabric:
-    name: Destroy Fabric Resources
+    name: Destroy Fabric
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
     steps:
@@ -52,7 +53,7 @@ jobs:
           terraform destroy -var-file="${{ inputs.environment }}.tfvars" -auto-approve
 
   remove-service-account-permissions:
-    name: Remove Service Account Permissions
+    name: Remove SA Permissions
     needs: destroy-fabric
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
@@ -78,6 +79,12 @@ jobs:
           gcloud projects remove-iam-policy-binding ${{ secrets.GCP_PROJECT_ID }} \
             --member="serviceAccount:${{ secrets.SERVICE_ACCOUNT }}" \
             --role="roles/bigquery.dataOwner"
+
+      - name: Remove roles/dataflow.developer Role
+        run: |
+          gcloud projects remove-iam-policy-binding ${{ secrets.GCP_PROJECT_ID }} \
+            --member="serviceAccount:${{ secrets.SERVICE_ACCOUNT }}" \
+            --role="roles/dataflow.developer"
 
   destroy-backend:
     name: Destroy Backend
