@@ -49,7 +49,7 @@ output "dataset_self_link" {
   description = "The self link of the created dataset"
 }
 
-### Dataflow Deployment ###
+### Activate GCP Project Services APIs ###
 
 resource "google_project_service" "dataflow_api" {
   project                     = var.project_id
@@ -61,6 +61,13 @@ resource "google_project_service" "cloudfunctions_api" {
   project                     = var.project_id # Replace with your actual project ID
   service                     = "cloudfunctions.googleapis.com"
   disable_on_destroy          = true
+}
+
+resource "google_project_service" "pubsub_api" {
+  project                     = var.project_id
+  service                     = "pubsub.googleapis.com"
+  disable_on_destroy          = true
+  disable_dependent_services  = true
 }
 
 # Dataflow Job (Corrected)
@@ -84,3 +91,4 @@ resource "google_dataflow_job" "wordcount_job" {
   ]
 }
 
+#### Deploy Pub/Sub Topic and Subscription ####

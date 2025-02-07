@@ -26,6 +26,12 @@ variable "tags" {
   default     = {}  # Set default to empty map if appropriate
 }
 
+variable "labels" {
+  type = map(string)
+  description = "Labels to apply to resources"
+  default = {}
+}
+
 # Define variables for each environment (dev, qa, main)
 
 variable "git_branch" {
