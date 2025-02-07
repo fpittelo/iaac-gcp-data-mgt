@@ -111,19 +111,6 @@ resource "google_dataflow_job" "wordcount_job" {
 
 
 ####    Deploy Apigee Organization   ####
-module "google_apigee_organization" {
-  source                  = "../modules/apigee/org"
-  project_id              = var.project_id
-  org_description         = var.project_id
-  region                  = var.region
-  analytics_region        = var.region
-
-  depends_on = [
-    google_project_service.apigee_api
-  ]
-}
-
-####    Deploy Apigee Organization   ####
 resource "google_apigee_environment" "apigee_env" {
   org_id                  = var.apigee_org_id
   name                    = var.apigee_env_name  # Use the more specific variable name
