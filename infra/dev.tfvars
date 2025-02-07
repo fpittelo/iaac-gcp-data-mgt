@@ -41,4 +41,3 @@ apigee_env_description          = "Development environment"
 apigee_env_deployment_type      = "PROXY"
 apigee_min_node_count           = 1
 apigee_max_node_count           = 1
-apigee_services                 = [ "1" ]

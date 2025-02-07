@@ -221,12 +221,6 @@ variable "apigee_env_deployment_type" {
   default = "PROXY"
 }
 
-variable "apigee_services" {
-  type = number
-  description = "The number of services for the Apigee environment"
-  default = 3 # Adjust as needed
-}
-
 variable "apigee_min_node_count" {
   type = number
   description = "The minimum number of nodes for the Apigee environment"
