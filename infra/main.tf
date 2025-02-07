@@ -57,6 +57,12 @@ resource "google_project_service" "dataflow_api" {
   disable_on_destroy          = true
 }
 
+resource "google_project_service" "cloudfunctions_api" {
+  project                     = var.project_id # Replace with your actual project ID
+  service                     = "cloudfunctions.googleapis.com"
+  disable_on_destroy          = true
+}
+
 # Dataflow Job (Corrected)
 resource "google_dataflow_job" "wordcount_job" {
   project                     = var.project_id
