@@ -124,18 +124,32 @@ module "google_apigee_organization" {
 }
 
 ####    Deploy Apigee Organization   ####
-module "google_apigee_environment" {
-  source                      = "../modules/apigee/env"
-  apigee_env                  = var.apigee_env
-  apigee_env_display_name     = var.apigee_env_display_name
-  apigee_env_description      = var.apigee_env_description
-  apigee_env_deployment_type  = var.apigee_env_deployment_type
-  apigee_min_node_count       = var.apigee_min_node_count
-  apigee_max_node_count       = var.apigee_max_node_count
+resource "google_apigee_environment" "apigee_env" {
+  org_id                  = var.apigee_org_id
+  name                    = var.apigee_env_name  # Use the more specific variable name
+  display_name            = var.apigee_env_display_name
+  description             = var.apigee_env_description
+  deployment_type         = var.apigee_env_deployment_type # Make sure this aligns with your Apigee setup
+
+  node_config {
+    min_node_count        = var.apigee_min_node_count
+    max_node_count        = var.apigee_max_node_count
+  }
+
+  # KMS configuration (if needed)
+  # kms_config {
+  #   key_reference = var.kms_key_id  # If you're using CMEK
+  # }
 }
 
-resource "google_project_service" "services" {
-  for_each = toset(var.services)
-  project  = var.project_id
-  service  = each.value
+# Grant necessary permissions to the service account
+resource "google_project_iam_member" "apigee_admin" {
+  project = var.project_id
+  role    = "roles/apigee.environmentAdmin" # Or a more granular role
+  member  = "serviceAccount:${var.service_account_email}"
+}
+
+# Example: Output the Apigee environment name
+output "apigee_environment_name" {
+  value = google_apigee_environment.apigee_env.name
 }

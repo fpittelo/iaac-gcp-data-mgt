@@ -195,37 +195,40 @@ variable "max_workers" {
 
 #### APIGEE Variables ####
 
-variable "apigee_env" {
-    description = "The Apigee Environment name"
-    type        = string
+variable "apigee_org_id" {
+  type = string
+  description = "The Apigee Organization ID"
+}
+
+variable "apigee_env_name" {
+  type = string
+  description = "The Apigee Environment name"
 }
 
 variable "apigee_env_display_name" {
-    description = "The Apigee Environment name"
-    type        = string
+  type = string
+  description = "The Apigee Environment display name"
 }
 
 variable "apigee_env_description" {
-    description = "The Apigee env descr."
-    type        = string
+  type = string
+  description = "The Apigee Environment description"
 }
 
 variable "apigee_env_deployment_type" {
-    description = "The Apigee Environment deployment type"
-    type        = string
+  type = string
+  description = "The Apigee Environment deployment type (PROXY or HYBRID)"
+  default = "PROXY"
 }
 
 variable "apigee_min_node_count" {
-    description = "The Apigee Environment min node count"
-    type        = string
+  type = number
+  description = "The minimum number of nodes for the Apigee environment"
+  default = 1
 }
 
 variable "apigee_max_node_count" {
-    description = "The Apigee Environment max node count"
-    type        = string
-}
-
-variable "services" {
-  type = list(string)
-  default = ["apigee.googleapis.com", "compute.googleapis.com"]
+  type = number
+  description = "The maximum number of nodes for the Apigee environment"
+  default = 3 # Adjust as needed
 }
