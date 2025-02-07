@@ -67,6 +67,7 @@ resource "google_project_service" "pubsub_api" {
   project                     = var.project_id
   service                     = "pubsub.googleapis.com"
   disable_on_destroy          = true
+  disable_dependent_services  = true
 }
 
 # Dataflow Job (Corrected)
