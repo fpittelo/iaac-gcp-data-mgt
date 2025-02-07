@@ -1,7 +1,8 @@
-resource "google_storage_bucket" "default" {
+resource "google_storage_bucket" "bucket" {
   name                        = var.bucket
   location                    = var.location
   uniform_bucket_level_access = true # Enforce uniform bucket-level access
+  force_destroy               = true # Allow Terraform to destroy non-empty bucket
 
   # Optional: Versioning
   versioning {
@@ -24,7 +25,7 @@ resource "google_storage_bucket" "default" {
 
 # Optional: Bucket IAM bindings (example)
 resource "google_storage_bucket_iam_member" "bucket_owner" {
-  bucket = google_storage_bucket.default.name
+  bucket = google_storage_bucket.bucket.name
   role   = "roles/storage.objectAdmin" # Or other appropriate role
   member = "user:${var.bucket_owner_email}" # Example: user email
 }

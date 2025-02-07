@@ -53,6 +53,12 @@ variable "table_expiration_time" {
   default = null
 }
 
+variable "dataset_owner_email" {
+  type = string
+  description = "The email of the user to grant dataOwner access"
+  default = null
+}
+
 variable "data_viewer_user" {
   type = string
   description = "The email of the user to grant dataViewer access"
