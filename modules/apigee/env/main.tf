@@ -1,5 +1,5 @@
 # Create Apigee Environment within the organization
-resource "google_apigee_environment" "env" {
+resource "google_apigee_environment" "data-mgt-env" {
   name                  = var.apigee_env
   org_id                = module.google_apigee_organization.data-mgt-org.id
   display_name          = var.apigee_env_description
