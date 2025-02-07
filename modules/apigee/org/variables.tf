@@ -1,0 +1,19 @@
+variable "project_id" {
+  description = "The project ID to enable the Apigee API"
+  type        = string
+}
+
+variable "region" {
+  description = "The region to create the Apigee organization in"
+  type        = string
+}
+
+variable "analytics_region" {
+  description = "The region to store analytics data in"
+  type        = string
+}
+
+variable "org_description" {
+  description = "The description of the Apigee organization"
+  type        = string
+}

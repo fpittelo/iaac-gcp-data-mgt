@@ -23,7 +23,6 @@ resource "google_storage_bucket_object" "input_file" {
 }
 
 ### BigQuery Deployment ###
-
 resource "google_project_service" "bigquery_api" {
   project                     = var.project_id
   service                     = "bigquery.googleapis.com"
@@ -50,7 +49,6 @@ output "dataset_self_link" {
 }
 
 ### Activate GCP Project Services APIs ###
-
 resource "google_project_service" "dataflow_api" {
   project                     = var.project_id
   service                     = "dataflow.googleapis.com"
@@ -68,6 +66,24 @@ resource "google_project_service" "pubsub_api" {
   service                     = "pubsub.googleapis.com"
   disable_on_destroy          = true
   disable_dependent_services  = true
+}
+
+resource "google_project_service" "apigee_api" {
+  project                     = var.project_id
+  service                     = "apigee.googleapis.com"
+  disable_on_destroy          = false # Recommended: Keep this as false
+}
+
+resource "google_project_service" "cloudkms_api" {
+  project                     = var.project_id
+  service                     = "cloudkms.googleapis.com"
+  disable_on_destroy          = false # Recommended: Keep this as false
+}
+
+resource "google_project_service" "servicenetworking_api" {
+  project = var.project_id
+  service            = "servicenetworking.googleapis.com"
+  disable_on_destroy = false
 }
 
 # Dataflow Job (Corrected)
@@ -92,3 +108,25 @@ resource "google_dataflow_job" "wordcount_job" {
 }
 
 #### Deploy Pub/Sub Topic and Subscription ####
+
+
+####    Deploy Apigee Organization   ####
+module "google_apigee_organization" {
+  source                  = "../modules/apigee/org"
+  project_id              = var.project_id
+  org_description         = var.project_id
+  region                  = var.region
+  analytics_region        = var.region
+
+}
+
+####    Deploy Apigee Organization   ####
+module "google_apigee_environment" {
+  source                      = "../modules/apigee/env"
+  apigee_env                  = var.apigee_env
+  apigee_env_display_name     = var.apigee_env_display_name
+  apigee_env_description      = var.apigee_env_description
+  apigee_env_deployment_type  = var.apigee_env_deployment_type
+  apigee_min_node_count       = var.apigee_min_node_count
+  apigee_max_node_count       = var.apigee_max_node_count
+}
