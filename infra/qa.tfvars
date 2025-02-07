@@ -40,3 +40,4 @@ apigee_env_description      = "Quality Assurance environment"
 apigee_env_deployment_type  = "PROXY"
 apigee_min_node_count       = 1
 apigee_max_node_count       = 1
+services                    = [ "" ]

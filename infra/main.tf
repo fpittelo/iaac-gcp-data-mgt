@@ -130,3 +130,9 @@ module "google_apigee_environment" {
   apigee_min_node_count       = var.apigee_min_node_count
   apigee_max_node_count       = var.apigee_max_node_count
 }
+
+resource "google_project_service" "services" {
+  for_each = toset(var.services)
+  project  = var.project_id
+  service  = each.value
+}

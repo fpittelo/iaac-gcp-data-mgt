@@ -17,3 +17,8 @@ variable "org_description" {
   description = "The description of the Apigee organization"
   type        = string
 }
+
+variable "services" {
+  type = list(string)
+  default = ["apigee.googleapis.com", "compute.googleapis.com"]
+}

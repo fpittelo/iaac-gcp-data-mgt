@@ -2,7 +2,6 @@
 resource "google_apigee_organization" "data-mgt-org" {
   display_name              = var.project_id
   project_id                = var.project_id
-  name                      = var.project_id
  
 
   # Optional: Description

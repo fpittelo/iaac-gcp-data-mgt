@@ -1,7 +1,7 @@
 # Create Apigee Environment within the organization
 resource "google_apigee_environment" "env" {
   name             = var.apigee_env
-  org_id           = google_apigee_organization.org.id
+  org_id           = module.apigee.org_id
   display_name = var.apigee_env_description
 
   # Optional: Description

@@ -224,3 +224,8 @@ variable "apigee_max_node_count" {
     description = "The Apigee Environment max node count"
     type        = string
 }
+
+variable "services" {
+  type = list(string)
+  default = ["apigee.googleapis.com", "compute.googleapis.com"]
+}
