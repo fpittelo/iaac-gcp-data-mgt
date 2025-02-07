@@ -1,14 +1,14 @@
 # Create Apigee Environment within the organization
 resource "google_apigee_environment" "env" {
-  name             = var.apigee_env
-  org_id           = module.apigee.org_id
-  display_name = var.apigee_env_description
+  name                  = var.apigee_env
+  org_id                = module.google_apigee_organization.data-mgt-org.id
+  display_name          = var.apigee_env_description
 
   # Optional: Description
-  description = var.apigee_env_description
+  description           = var.apigee_env_description
 
   # Optional: Deployment type (usually "STANDARD")
-  deployment_type = var.apigee_env_deployment_type
+  deployment_type       = var.apigee_env_deployment_type
 
   # Optional: Kms Encryption Config
   # kms_encryption_config {
@@ -17,7 +17,7 @@ resource "google_apigee_environment" "env" {
 
   # Optional: Node Config
   node_config {
-    min_node_count = var.apigee_min_node_count
-    max_node_count = var.apigee_max_node_count
+    min_node_count      = var.apigee_min_node_count
+    max_node_count      = var.apigee_max_node_count
   }
 }
