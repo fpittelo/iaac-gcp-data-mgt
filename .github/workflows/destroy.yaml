@@ -2,11 +2,15 @@ name: Destroy
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - dev
-      - qa
-      - main
+    inputs:
+        environment:
+          description: 'Environment to destroy (dev/qa/main)'
+          required: true
+          type: choice
+          options:
+            - dev
+            - qa
+            - main
 
 permissions:
   id-token: write   # Required for OIDC authentication
@@ -15,7 +19,7 @@ permissions:
 jobs:
 
   destroy-fabric:
-    name: Destroy Fabric Resources
+    name: Destroy Fabric
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
     steps:
