@@ -15,7 +15,7 @@ permissions:
 jobs:
   
   Set-up-permissions-for-the-workflow:
-    name: Set up Service account permissions
+    name: Set SA permissions
     runs-on: ubuntu-latest
     environment: ${{ github.ref_name }}
     steps:
