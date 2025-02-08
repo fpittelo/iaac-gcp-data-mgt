@@ -68,7 +68,7 @@ resource "google_project_service" "pubsub_api" {
   disable_dependent_services  = true
 }
 
-resource "google_project_service" "bigquery data_transfer_api" {
+resource "google_project_service" "bigquery_data_transfer_api" {
   service                     = "bigquerydatatransfer.googleapis.com"
   disable_on_destroy          = false # Garder l'API activée même si la ressource est détruite
 }
