@@ -5,7 +5,7 @@ resource "google_apigee_organization" "data-mgt-org" {
  
 
   # Optional: Description
-  description = var.org_description
+  description = var.apigee_org_id
 
   # Optional: Properties (e.g., analytics region)
   properties {

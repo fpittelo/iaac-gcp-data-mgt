@@ -13,7 +13,7 @@ variable "analytics_region" {
   type        = string
 }
 
-variable "org_description" {
+variable "apigee_org_id" {
   description = "The description of the Apigee organization"
   type        = string
 }
