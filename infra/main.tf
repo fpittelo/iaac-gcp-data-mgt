@@ -90,7 +90,7 @@ EOF
 }
 
 resource "google_bigquery_table" "batch_data" {
-  dataset_id                  = google_bigquery_dataset.main.dataset_id
+  dataset_id                  = module.bigquery_dataset.dataset_id
   table_id                    = "data-mgt-table-batch"
   schema                      = <<EOF
 [
