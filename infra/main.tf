@@ -1,5 +1,38 @@
 ### Activate GCP Project Services APIs ###
-resource "google_project_service" "bigquery_api" {
+
+resource "google_project_service_identity" "df_pubsub_identity" {
+  provider = google-beta
+  service  = "pubsub.googleapis.com"
+}
+
+resource "google_project_service_identity" "df_dataflow_identity" {
+  provider = google-beta
+  service  = "dataflow.googleapis.com"
+}
+
+
+resource "google_project_service" "api_activations" {
+  for_each = toset([
+    "bigquery.googleapis.com",
+    "bigquerystorage.googleapis.com",
+    "cloudfunctions.googleapis.com",
+    "cloudresourcemanager.googleapis.com",
+    "cloudscheduler.googleapis.com",
+    "compute.googleapis.com",
+    "dataflow.googleapis.com",
+    "iam.googleapis.com",
+    "pubsub.googleapis.com",
+    "secretmanager.googleapis.com",
+    "storage.googleapis.com",
+    "storage-api.googleapis.com",
+    "vertexai.googleapis.com",
+  ])
+  service            = each.key
+  disable_on_destroy = false
+}
+
+### Activate GCP Project Services APIs ###
+/* resource "google_project_service" "bigquery_api" {
   project                     = var.project_id
   service                     = "bigquery.googleapis.com"
   disable_on_destroy          = true
@@ -46,7 +79,7 @@ resource "google_project_service" "servicenetworking_api" {
   project = var.project_id
   service            = "servicenetworking.googleapis.com"
   disable_on_destroy = false
-}
+} */
 
 #### Create GCP Cloud Storage bucket ####
 module "cloud_storage_bucket" {
