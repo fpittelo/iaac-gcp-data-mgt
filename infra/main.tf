@@ -1,5 +1,35 @@
-#### Create GCP Cloud Storage bucket ####
+### Activate GCP Project Services APIs ###
+resource "google_project_service_identity" "df_pubsub_identity" {
+  provider = google-beta
+  service  = "pubsub.googleapis.com"
+}
 
+resource "google_project_service_identity" "df_dataflow_identity" {
+  provider = google-beta
+  service  = "dataflow.googleapis.com"
+}
+
+resource "google_project_service" "api_activations" {
+  for_each = toset([
+    "bigquery.googleapis.com",
+    "bigquerystorage.googleapis.com",
+    "cloudfunctions.googleapis.com",
+    "cloudresourcemanager.googleapis.com",
+    "cloudscheduler.googleapis.com",
+    "compute.googleapis.com",
+    "dataflow.googleapis.com",
+    "iam.googleapis.com",
+    "pubsub.googleapis.com",
+    "secretmanager.googleapis.com",
+    "storage.googleapis.com",
+  # "vertexai.googleapis.com",
+  # "cloudsql.googleapis.com",
+  ])
+  service            = each.key
+  disable_on_destroy = false
+}
+
+#### Create GCP Cloud Storage bucket ####
 module "cloud_storage_bucket" {
   source                    = "../modules/cloud_storage_bucket"
   project                   = var.project_id
@@ -23,14 +53,6 @@ resource "google_storage_bucket_object" "input_file" {
 }
 
 ### BigQuery Deployment ###
-
-resource "google_project_service" "bigquery_api" {
-  project                     = var.project_id
-  service                     = "bigquery.googleapis.com"
-  disable_on_destroy          = true
-  disable_dependent_services  = true
-}
-
 module "bigquery_dataset" {
   source                      = "../modules/bigquery"
   project                     = var.project_id
@@ -41,33 +63,12 @@ module "bigquery_dataset" {
   dataset_owner_email         = var.dataset_owner_email
   data_editor_group           = var.data_editor_group
   data_viewer_group           = var.data_viewer_group
-  depends_on                  = [google_project_service.bigquery_api] # Ensure API is enabled first
+# depends_on                  = [google_project_service.bigquery_api] # Ensure API is enabled first
 }
 
 output "dataset_self_link" {
   value       = module.bigquery_dataset.dataset_self_link  # Corrected line
   description = "The self link of the created dataset"
-}
-
-### Activate GCP Project Services APIs ###
-
-resource "google_project_service" "dataflow_api" {
-  project                     = var.project_id
-  service                     = "dataflow.googleapis.com"
-  disable_on_destroy          = true
-}
-
-resource "google_project_service" "cloudfunctions_api" {
-  project                     = var.project_id # Replace with your actual project ID
-  service                     = "cloudfunctions.googleapis.com"
-  disable_on_destroy          = true
-}
-
-resource "google_project_service" "pubsub_api" {
-  project                     = var.project_id
-  service                     = "pubsub.googleapis.com"
-  disable_on_destroy          = true
-  disable_dependent_services  = true
 }
 
 # Dataflow Job (Corrected)
@@ -84,7 +85,7 @@ resource "google_dataflow_job" "wordcount_job" {
   }
 
   depends_on = [
-    google_project_service.dataflow_api,
+  # google_project_service.dataflow_api,
     module.cloud_storage_bucket,  # Depend on the bucket module
     google_storage_bucket_object.input_file, # Depend on the input file
     module.bigquery_dataset # Depend on bigquery dataset if needed
@@ -92,3 +93,6 @@ resource "google_dataflow_job" "wordcount_job" {
 }
 
 #### Deploy Pub/Sub Topic and Subscription ####
+
+
+####    Deploy Apigee Organization   ####

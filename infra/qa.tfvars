@@ -1,3 +1,4 @@
+### General Project variables values  ###
 region                          = "europe-west6"
 location                        = "europe-west6"
 zone                            = "europe-west6-b"
@@ -8,7 +9,7 @@ subnetwork                      = "default"
 service_account_email           = "github-sa-dev@iaac-gcp-vm-dev.iam.gserviceaccount.com"
 git_branch                      = "qa"
 github_run_id                   = ""
-### Cloud Storage variables ###
+### Cloud Storage variables values  ###
 bucket                          = "iaac-gcp-data-mgt-data"
 versioning_enabled              = true
 lifecycle_rule_age              = 5
@@ -21,14 +22,22 @@ input_folder                    = "input/readme.md"
 output_folder                   = "output/output.txt"
 temp_folder                     = "temp/temp.txt"
 error_folder                    = "error/error.txt"
-### BigQuery variables       ###
+### BigQuery variables values  ###
 dataset_owner_email            = "frederic.pitteloud@gmail.com"
 data_viewer_group              = "frederic.pitteloud@gmail.com"
 data_editor_group              = "frederic.pitteloud@gmail.com"
-### Dataflow variables       ###
+### Dataflow variables values  ###
 temp_gcs_path                   = ""
 temp_gcs_location               = ""
 max_workers                     = ""
 job_name                        = "dataflow-job"
 input_subscription              = ""
 output_topic                    = ""
+####  Apigee variables values  ###
+apigee_org_id                   = "data-mgt-org"
+apigee_env_name                 = "qa"
+apigee_env_display_name         = "Quality Assurance"
+apigee_env_description          = "Quality Assurance environment"
+apigee_env_deployment_type      = "PROXY"
+apigee_min_node_count           = 1
+apigee_max_node_count           = 1

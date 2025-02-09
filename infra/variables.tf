@@ -192,3 +192,43 @@ variable "max_workers" {
     description = "The maximum number of workers"
     type        = string
 }
+
+#### APIGEE Variables ####
+
+variable "apigee_org_id" {
+  type = string
+  description = "The Apigee Organization ID"
+}
+
+variable "apigee_env_name" {
+  type = string
+  description = "The Apigee Environment name"
+}
+
+variable "apigee_env_display_name" {
+  type = string
+  description = "The Apigee Environment display name"
+}
+
+variable "apigee_env_description" {
+  type = string
+  description = "The Apigee Environment description"
+}
+
+variable "apigee_env_deployment_type" {
+  type = string
+  description = "The Apigee Environment deployment type (PROXY or HYBRID)"
+  default = "PROXY"
+}
+
+variable "apigee_min_node_count" {
+  type = number
+  description = "The minimum number of nodes for the Apigee environment"
+  default = 1
+}
+
+variable "apigee_max_node_count" {
+  type = number
+  description = "The maximum number of nodes for the Apigee environment"
+  default = 3 # Adjust as needed
+}
