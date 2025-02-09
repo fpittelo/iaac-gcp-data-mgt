@@ -64,9 +64,9 @@ module "bigquery_dataset" {
 }
 
 ### BigQuery tables creation ###
-resource "google_bigquery_dataset" "main" {
- dataset_id                   = "iaac_gcp_data_mgt_dataset"
-}
+#resource "google_bigquery_dataset" "main" {
+#dataset_id                   = "iaac_gcp_data_mgt_dataset"
+#}
 
 resource "google_bigquery_table" "stream_data" {
   dataset_id                  = google_bigquery_dataset.main.dataset_id
