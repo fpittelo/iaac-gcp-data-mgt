@@ -137,7 +137,7 @@ resource "google_dataflow_job" "wordcount_job" {
   }
 
   depends_on = [
-    google_project_service.dataflow_api,
+  # google_project_service.dataflow_api,
     module.cloud_storage_bucket,  # Depend on the bucket module
     google_storage_bucket_object.input_file, # Depend on the input file
     module.bigquery_dataset # Depend on bigquery dataset if needed
