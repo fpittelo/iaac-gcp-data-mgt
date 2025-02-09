@@ -69,7 +69,7 @@ module "bigquery_dataset" {
 #}
 
 resource "google_bigquery_table" "stream_data" {
-  dataset_id                  = google_bigquery_dataset.main.dataset_id
+  dataset_id                  = module.bigquery_dataset.dataset_id
   table_id                    = "data-mgt-table-stream"
   schema                      = <<EOF
 [
