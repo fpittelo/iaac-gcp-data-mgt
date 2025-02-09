@@ -34,9 +34,10 @@ job_name                        = "dataflow-job"
 input_subscription              = ""
 output_topic                    = ""
 ####  Apigee variables values  ###
-apigee_env                  = "main"
-apigee_env_display_name     = "Production"
-apigee_env_description      = "Production environment"
-apigee_env_deployment_type  = "PROXY"
-apigee_min_node_count       = 1
-apigee_max_node_count       = 1
+apigee_org_id                   = "data-mgt-org"
+apigee_env_name                 = "main"
+apigee_env_display_name         = "Production"
+apigee_env_description          = "Production environment"
+apigee_env_deployment_type      = "PROXY"
+apigee_min_node_count           = 1
+apigee_max_node_count           = 1
