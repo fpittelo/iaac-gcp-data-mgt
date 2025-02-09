@@ -1,5 +1,4 @@
 ### Activate GCP Project Services APIs ###
-
 resource "google_project_service_identity" "df_pubsub_identity" {
   provider = google-beta
   service  = "pubsub.googleapis.com"
@@ -9,7 +8,6 @@ resource "google_project_service_identity" "df_dataflow_identity" {
   provider = google-beta
   service  = "dataflow.googleapis.com"
 }
-
 
 resource "google_project_service" "api_activations" {
   for_each = toset([
@@ -30,56 +28,6 @@ resource "google_project_service" "api_activations" {
   service            = each.key
   disable_on_destroy = false
 }
-
-### Activate GCP Project Services APIs ###
-/* resource "google_project_service" "bigquery_api" {
-  project                     = var.project_id
-  service                     = "bigquery.googleapis.com"
-  disable_on_destroy          = true
-  disable_dependent_services  = true
-}
-
-resource "google_project_service" "dataflow_api" {
-  project                     = var.project_id
-  service                     = "dataflow.googleapis.com"
-  disable_on_destroy          = true
-}
-
-resource "google_project_service" "cloudfunctions_api" {
-  project                     = var.project_id # Replace with your actual project ID
-  service                     = "cloudfunctions.googleapis.com"
-  disable_on_destroy          = true
-}
-
-resource "google_project_service" "pubsub_api" {
-  project                     = var.project_id
-  service                     = "pubsub.googleapis.com"
-  disable_on_destroy          = true
-  disable_dependent_services  = true
-}
-
-resource "google_project_service" "bigquery_data_transfer_api" {
-  service                     = "bigquerydatatransfer.googleapis.com"
-  disable_on_destroy          = false # Garder l'API activée même si la ressource est détruite
-}
-
-resource "google_project_service" "apigee_api" {
-  project                     = var.project_id
-  service                     = "apigee.googleapis.com"
-  disable_on_destroy          = false # Recommended: Keep this as false
-}
-
-resource "google_project_service" "cloudkms_api" {
-  project                     = var.project_id
-  service                     = "cloudkms.googleapis.com"
-  disable_on_destroy          = false # Recommended: Keep this as false
-}
-
-resource "google_project_service" "servicenetworking_api" {
-  project = var.project_id
-  service            = "servicenetworking.googleapis.com"
-  disable_on_destroy = false
-} */
 
 #### Create GCP Cloud Storage bucket ####
 module "cloud_storage_bucket" {
@@ -147,33 +95,4 @@ resource "google_dataflow_job" "wordcount_job" {
 #### Deploy Pub/Sub Topic and Subscription ####
 
 
-/* ####    Deploy Apigee Organization   ####
-resource "google_apigee_environment" "apigee_env" {
-  org_id                  = var.apigee_org_id
-  name                    = var.apigee_env_name  # Use the more specific variable name
-  display_name            = var.apigee_env_display_name
-  description             = var.apigee_env_description
-  deployment_type         = var.apigee_env_deployment_type # Make sure this aligns with your Apigee setup
-
-  node_config {
-    min_node_count        = var.apigee_min_node_count
-    max_node_count        = var.apigee_max_node_count
-  }
-
-  # KMS configuration (if needed)
-  # kms_config {
-  #   key_reference = var.kms_key_id  # If you're using CMEK
-  # }
-}
-
-# Grant necessary permissions to the service account
-resource "google_project_iam_member" "apigee_admin" {
-  project = var.project_id
-  role    = "roles/apigee.environmentAdmin" # Or a more granular role
-  member  = "serviceAccount:${var.service_account_email}"
-}
-
-# Example: Output the Apigee environment name
-output "apigee_environment_name" {
-  value = google_apigee_environment.apigee_env.name
-} */
+####    Deploy Apigee Organization   ####
