@@ -34,9 +34,10 @@ job_name                        = "dataflow-job"
 input_subscription              = ""
 output_topic                    = ""
 ####  Apigee variables values  ###
-apigee_env                  = "qa"
-apigee_env_display_name     = "Quality Assurance"
-apigee_env_description      = "Quality Assurance environment"
-apigee_env_deployment_type  = "PROXY"
-apigee_min_node_count       = 1
-apigee_max_node_count       = 1
+apigee_org_id                   = "data-mgt-org"
+apigee_env_name                 = "qa"
+apigee_env_display_name         = "Quality Assurance"
+apigee_env_description          = "Quality Assurance environment"
+apigee_env_deployment_type      = "PROXY"
+apigee_min_node_count           = 1
+apigee_max_node_count           = 1
