@@ -24,8 +24,8 @@ resource "google_project_service" "api_activations" {
     "pubsub.googleapis.com",
     "secretmanager.googleapis.com",
     "storage.googleapis.com",
-    "vertexai.googleapis.com",
-    "cloudsql.googleapis.com",
+  # "vertexai.googleapis.com",
+  # "cloudsql.googleapis.com",
   ])
   service            = each.key
   disable_on_destroy = false
@@ -147,7 +147,7 @@ resource "google_dataflow_job" "wordcount_job" {
 #### Deploy Pub/Sub Topic and Subscription ####
 
 
-####    Deploy Apigee Organization   ####
+/* ####    Deploy Apigee Organization   ####
 resource "google_apigee_environment" "apigee_env" {
   org_id                  = var.apigee_org_id
   name                    = var.apigee_env_name  # Use the more specific variable name
@@ -176,4 +176,4 @@ resource "google_project_iam_member" "apigee_admin" {
 # Example: Output the Apigee environment name
 output "apigee_environment_name" {
   value = google_apigee_environment.apigee_env.name
-}
+} */
