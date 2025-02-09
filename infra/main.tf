@@ -115,7 +115,7 @@ module "bigquery_dataset" {
   dataset_owner_email         = var.dataset_owner_email
   data_editor_group           = var.data_editor_group
   data_viewer_group           = var.data_viewer_group
-  depends_on                  = [google_project_service.bigquery_api] # Ensure API is enabled first
+# depends_on                  = [google_project_service.bigquery_api] # Ensure API is enabled first
 }
 
 output "dataset_self_link" {
