@@ -1,13 +1,10 @@
 ### Grant the necessary permissions to the service account ###
 
 resource "google_project_iam_member" "multiple_roles" {
+  for_each = toset(var.roles)
   project = var.project_id
-  member  = "serviceAccount:github-wif-sa@iaac-gcp-data-mgt.iam.gserviceaccount.com"
-  role = [
-    "roles/serviceusage.serviceUsageAdmin",
-    "roles/bigquery.dataOwner",
-    "roles/storage.objectAdmin",
-  ]
+  role    = each.key
+  member  = var.member
 }
 
 ### Manages the service identity for Pub/Sub service ###

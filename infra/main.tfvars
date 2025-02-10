@@ -9,6 +9,12 @@ subnetwork                      = "default"
 service_account_email           = "github-sa-dev@iaac-gcp-vm-dev.iam.gserviceaccount.com"
 git_branch                      = "main"
 github_run_id                   = ""
+member                          = "serviceAccount:github-wif-sa@iaac-gcp-data-mgt.iam.gserviceaccount.com"
+roles                           = [ 
+  "roles/serviceusage.serviceUsageAdmin",
+  "roles/bigquery.dataOwner",
+  "roles/storage.objectAdmin", 
+  ]
 ### Cloud Storage variables values  ###
 bucket                          = "iaac-gcp-data-mgt-data"
 versioning_enabled              = true

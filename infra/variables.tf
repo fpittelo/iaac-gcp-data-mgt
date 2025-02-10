@@ -32,6 +32,16 @@ variable "labels" {
   default = {}
 }
 
+variable "member" {
+  type = string
+  description = "Adresse e-mail du membre à qui attribuer les rôles"
+}
+
+variable "roles" {
+  type = list(string)
+  description = "Liste des rôles à attribuer"
+}
+
 # Define variables for each environment (dev, qa, main)
 
 variable "git_branch" {
