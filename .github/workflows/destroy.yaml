@@ -79,6 +79,7 @@ jobs:
           fi
 
       - name: Remove Service Usage Admin Role
+        if: env.service_usage_admin_exists == 'true'
         run: |
           gcloud projects remove-iam-policy-binding ${{ secrets.GCP_PROJECT_ID }} \
             --member="serviceAccount:${{ secrets.SERVICE_ACCOUNT }}" \
@@ -95,6 +96,7 @@ jobs:
             fi
 
       - name: Remove BigQuery Data Owner Role
+        if: env.bigquery_data_owner_exists == 'true'
         run: |
           gcloud projects remove-iam-policy-binding ${{ secrets.GCP_PROJECT_ID }} \
             --member="serviceAccount:${{ secrets.SERVICE_ACCOUNT }}" \
@@ -111,6 +113,7 @@ jobs:
             fi
 
       - name: Remove roles/dataflow.developer Role
+        if: env.dataflow_developer_exists == 'true'
         run: |
           gcloud projects remove-iam-policy-binding ${{ secrets.GCP_PROJECT_ID }} \
             --member="serviceAccount:${{ secrets.SERVICE_ACCOUNT }}" \
