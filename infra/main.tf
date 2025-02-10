@@ -37,6 +37,12 @@ resource "google_project_service" "api_activations" {
   disable_on_destroy = false
 }
 
+resource "google_project_iam_member" "service_account_bigquery_admin" {
+  project = var.project_id
+  role    = "roles/bigquery.admin"
+  member  = "serviceAccount:${var.service_account_email}"
+}
+
 #### Create GCP Cloud Storage bucket ####
 module "cloud_storage_bucket" {
   source                    = "../modules/cloud_storage_bucket"
