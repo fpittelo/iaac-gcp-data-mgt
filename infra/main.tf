@@ -1,9 +1,22 @@
-### Activate GCP Project Services APIs ###
+### Grant the necessary permissions to the service account ###
+
+resource "google_project_iam_member" "multiple_roles" {
+  project = var.project_id
+  member  = "serviceAccount:github-wif-sa@iaac-gcp-data-mgt.iam.gserviceaccount.com"
+  role = [
+    "roles/serviceusage.serviceUsageAdmin",
+    "roles/bigquery.dataOwner",
+    "roles/storage.objectAdmin",
+  ]
+}
+
+### Manages the service identity for Pub/Sub service ###
 resource "google_project_service_identity" "df_pubsub_identity" {
   provider = google-beta
   service  = "pubsub.googleapis.com"
 }
 
+### Managing the service identity of a service ###
 resource "google_project_service_identity" "df_dataflow_identity" {
   provider = google-beta
   service  = "dataflow.googleapis.com"
