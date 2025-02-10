@@ -68,17 +68,47 @@ jobs:
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v1
 
+      - name: Check if Service Usage Admin Role exists
+        id: check_service_usage_admin
+        run: |
+          set -e
+          if gcloud projects get-iam-policy ${{ secrets.GCP_PROJECT_ID }} --format=json | jq -e '.bindings[] | select(.role=="roles/serviceusage.serviceUsageAdmin") | .members[] | select(.=="serviceAccount:${{ secrets.SERVICE_ACCOUNT }}")' > /dev/null; then
+            echo "service_usage_admin_exists=true" >> $GITHUB_ENV
+          else
+            echo "service_usage_admin_exists=false" >> $GITHUB_ENV
+          fi
+
       - name: Remove Service Usage Admin Role
         run: |
           gcloud projects remove-iam-policy-binding ${{ secrets.GCP_PROJECT_ID }} \
             --member="serviceAccount:${{ secrets.SERVICE_ACCOUNT }}" \
             --role="roles/serviceusage.serviceUsageAdmin"
 
+      - name: Check if BigQuery Data Owner Role exists
+        id: check_bigquery_data_owner
+        run: |
+          set -e
+            if gcloud projects get-iam-policy ${{ secrets.GCP_PROJECT_ID }} --format=json | jq -e '.bindings[] | select(.role=="roles/bigquery.dataOwner") | .members[] | select(.=="serviceAccount:${{ secrets.SERVICE_ACCOUNT }}")' > /dev/null; then
+              echo "bigquery_data_owner_exists=true" >> $GITHUB_ENV
+            else
+              echo "bigquery_data_owner_exists=false" >> $GITHUB_ENV
+            fi
+
       - name: Remove BigQuery Data Owner Role
         run: |
           gcloud projects remove-iam-policy-binding ${{ secrets.GCP_PROJECT_ID }} \
             --member="serviceAccount:${{ secrets.SERVICE_ACCOUNT }}" \
             --role="roles/bigquery.dataOwner"
+
+      - name: Check if Dataflow Developer Role exists
+        id: check_dataflow_developer
+        run: |
+          set -e
+            if gcloud projects get-iam-policy ${{ secrets.GCP_PROJECT_ID }} --format=json | jq -e '.bindings[] | select(.role=="roles/dataflow.developer") | .members[] | select(.=="serviceAccount:${{ secrets.SERVICE_ACCOUNT }}")' > /dev/null; then
+              echo "dataflow_developer_exists=true" >> $GITHUB_ENV
+            else
+              echo "dataflow_developer_exists=false" >> $GITHUB_ENV
+            fi
 
       - name: Remove roles/dataflow.developer Role
         run: |
