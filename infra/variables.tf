@@ -171,6 +171,12 @@ variable "error_folder" {
   default = null
 }
 
+variable "deletion_protection" {
+  type = string
+  description = "The error folder for the Dataflow job"
+  default = null
+}
+
 ####### Variables for GPC Dataflow ####
 
 variable "job_name" {

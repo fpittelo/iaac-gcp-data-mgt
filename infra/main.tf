@@ -80,6 +80,7 @@ module "bigquery_dataset" {
 
 resource "google_bigquery_table" "stream_data" {
   dataset_id                  = module.bigquery_dataset.dataset_id
+  deletion_protection         = false
   table_id                    = "data-mgt-table-stream"
   schema                      = <<EOF
 [
@@ -101,6 +102,7 @@ EOF
 
 resource "google_bigquery_table" "batch_data" {
   dataset_id                  = module.bigquery_dataset.dataset_id
+  deletion_protection         = false
   table_id                    = "data-mgt-table-batch"
   schema                      = <<EOF
 [
