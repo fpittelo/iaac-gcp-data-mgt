@@ -43,6 +43,12 @@ resource "google_project_iam_member" "service_account_bigquery_admin" {
   member  = "serviceAccount:${var.service_account_email}"
 }
 
+resource "google_project_iam_member" "service_account_bigquery_metadata_viewer" {
+  project = var.project_id
+  role    = "roles/bigquery.metadataViewer"
+  member  = "serviceAccount:${var.service_account_email}"
+}
+
 #### Create GCP Cloud Storage bucket ####
 module "cloud_storage_bucket" {
   source                    = "../modules/cloud_storage_bucket"
