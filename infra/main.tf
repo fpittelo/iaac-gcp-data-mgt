@@ -32,7 +32,6 @@ resource "google_project_service" "api_activations" {
     "pubsub.googleapis.com",
     "secretmanager.googleapis.com",
     "storage.googleapis.com",
-    "dataflow_api.googleapis.com",
   ])
   service            = each.key
   disable_on_destroy = false
