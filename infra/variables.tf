@@ -32,6 +32,16 @@ variable "labels" {
   default = {}
 }
 
+variable "member" {
+  type = string
+  description = "Adresse e-mail du membre à qui attribuer les rôles"
+}
+
+variable "roles" {
+  type = list(string)
+  description = "Liste des rôles à attribuer"
+}
+
 # Define variables for each environment (dev, qa, main)
 
 variable "git_branch" {
@@ -156,6 +166,12 @@ variable "temp_folder" {
 }
 
 variable "error_folder" {
+  type = string
+  description = "The error folder for the Dataflow job"
+  default = null
+}
+
+variable "deletion_protection" {
   type = string
   description = "The error folder for the Dataflow job"
   default = null

@@ -1,9 +1,19 @@
-### Activate GCP Project Services APIs ###
+### Grant the necessary permissions to the service account ###
+
+resource "google_project_iam_member" "multiple_roles" {
+  for_each = toset(var.roles)
+  project = var.project_id
+  role    = each.key
+  member  = var.member
+}
+
+### Manages the service identity for Pub/Sub service ###
 resource "google_project_service_identity" "df_pubsub_identity" {
   provider = google-beta
   service  = "pubsub.googleapis.com"
 }
 
+### Managing the service identity of a service ###
 resource "google_project_service_identity" "df_dataflow_identity" {
   provider = google-beta
   service  = "dataflow.googleapis.com"
@@ -22,11 +32,15 @@ resource "google_project_service" "api_activations" {
     "pubsub.googleapis.com",
     "secretmanager.googleapis.com",
     "storage.googleapis.com",
-  # "vertexai.googleapis.com",
-  # "cloudsql.googleapis.com",
   ])
   service            = each.key
   disable_on_destroy = false
+}
+
+resource "google_project_iam_member" "service_account_bigquery_admin" {
+  project = var.project_id
+  role    = "roles/bigquery.admin"
+  member  = "serviceAccount:${var.service_account_email}"
 }
 
 #### Create GCP Cloud Storage bucket ####
@@ -63,9 +77,58 @@ module "bigquery_dataset" {
   dataset_owner_email         = var.dataset_owner_email
   data_editor_group           = var.data_editor_group
   data_viewer_group           = var.data_viewer_group
-# depends_on                  = [google_project_service.bigquery_api] # Ensure API is enabled first
 }
 
+### BigQuery tables creation ###
+#resource "google_bigquery_dataset" "main" {
+#dataset_id                   = "iaac_gcp_data_mgt_dataset"
+#}
+
+resource "google_bigquery_table" "stream_data" {
+  dataset_id                  = module.bigquery_dataset.dataset_id
+  deletion_protection         = false
+  table_id                    = "data-mgt-table-stream"
+  schema                      = <<EOF
+[
+  {
+    "name": "event_time",
+    "type": "TIMESTAMP",
+    "mode": "NULLABLE",
+    "description": "Timestamp of the event"
+  },
+  {
+    "name": "data",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": "Event data as a JSON string"
+  }
+]
+EOF
+}
+
+resource "google_bigquery_table" "batch_data" {
+  dataset_id                  = module.bigquery_dataset.dataset_id
+  deletion_protection         = false
+  table_id                    = "data-mgt-table-batch"
+  schema                      = <<EOF
+[
+  {
+    "name": "ingestion_time",
+    "type": "TIMESTAMP",
+    "mode": "NULLABLE",
+    "description": "Timestamp of the ingestion"
+  },
+  {
+    "name": "data",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": "Batch data as a JSON string"
+  }
+]
+EOF
+}
+
+### BigQuery outputs ###
 output "dataset_self_link" {
   value       = module.bigquery_dataset.dataset_self_link  # Corrected line
   description = "The self link of the created dataset"
