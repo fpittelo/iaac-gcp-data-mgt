@@ -180,7 +180,7 @@ EOF
 
 ### Bigquery Transfer Configuration ###
 
-resource "google_bigquery_transfer_config" "swissgrid_transfer" {
+resource "google_bigquery_data_transfer_config" "swissgrid_transfer" {
   data_source_id                    = "google_cloud_storage"
   destination_dataset_id            = module.bigquery_dataset.dataset_id
   display_name                      = "Swissgrid Data Transfer"
