@@ -73,10 +73,10 @@ module "cloud_storage_bucket" {
   bucket_owner_email        = var.bucket_owner_email  
 }
 
-resource "null_resource" "create_rail_traffic_csv" {
+resource "null_resource" "create_swissgrid_csv" {
   provisioner "local-exec" {
     command = <<EOT
-      curl -s -L 'https://data.sbb.ch/api/v2/catalog/datasets/rail-traffic-information/exports/csv?use_labels=true' -o ${path.module}/rail_traffic.csv
+      curl -s -L https://www.uvek-gis.admin.ch/BFE/ogd/103/ogd103_stromverbrauch_swissgrid_lv_und_endv.csv -o ${path.module}/swissgrid.csv
       sleep 60
     EOT
   }
@@ -87,18 +87,18 @@ resource "null_resource" "create_rail_traffic_csv" {
 }
 
 # Download and stage the data in Cloud Storage
-resource "google_storage_bucket_object" "rail_traffic_data" {
+resource "google_storage_bucket_object" "swissgrid_data" {
   bucket = var.bucket
-  name   = "inputs/rail_traffic.csv" # Path within your bucket
-  depends_on = [ null_resource.create_rail_traffic_csv ]
+  name   = "inputs/swissgrid.csv" # Path within your bucket
+  depends_on = [ null_resource.create_swissgrid_csv ]
   # Use a local file as a trigger for updates.
   # This makes the resource update when the file changes.
-  source = "${path.module}/rail_traffic.csv"  # Create a dummy rail_traffic.csv in your module
+  source = "${path.module}/swissgrid.csv"  # Create swissgrid.csv 
 
   ## Provisioner to download the data to the dummy file
   provisioner "local-exec" {
     command = <<EOT
-      curl -L https://data.sbb.ch/api/v2/catalog/datasets/rail-traffic-information/exports/csv?use_labels=true -o ${path.module}/rail_traffic.csv
+      curl -L https://www.uvek-gis.admin.ch/BFE/ogd/103/ogd103_stromverbrauch_swissgrid_lv_und_endv.csv -o ${path.module}/swissgrid.csv
       sleep 60
     EOT
   }
