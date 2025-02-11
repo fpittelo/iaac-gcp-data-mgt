@@ -98,9 +98,11 @@ module "bigquery_dataset" {
 }
 
 ### BigQuery tables creation ###
-#resource "google_bigquery_dataset" "main" {
-#dataset_id                   = "iaac_gcp_data_mgt_dataset"
-#}
+resource "google_bigquery_dataset" "main" {
+dataset_id                   = "iaac_gcp_data_mgt_dataset"
+location                     = var.location
+project                      = var.project_id
+}
 
 resource "google_bigquery_table" "stream_data" {
   dataset_id                  = module.bigquery_dataset.dataset_id
@@ -122,6 +124,12 @@ resource "google_bigquery_table" "stream_data" {
   }
 ]
 EOF
+
+  # Important for deletion control:
+ lifecycle {
+   prevent_destroy = false # Allow deletion by default
+ }
+
 }
 
 resource "google_bigquery_table" "batch_data" {
@@ -144,6 +152,12 @@ resource "google_bigquery_table" "batch_data" {
   }
 ]
 EOF
+
+  # Important for deletion control:
+ lifecycle {
+   prevent_destroy = false # Allow deletion by default
+ }
+
 }
 
 ### BigQuery outputs ###
