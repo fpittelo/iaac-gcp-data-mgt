@@ -73,11 +73,18 @@ module "cloud_storage_bucket" {
   bucket_owner_email        = var.bucket_owner_email  
 }
 
+# Create the rail_traffic.csv file automatically
+resource "null_resource" "create_rail_traffic_csv" {
+  provisioner "local-exec" {
+    command = "touch rail_traffic.csv" # Creates an empty file
+  }
+}
+
 # Download and stage the data in Cloud Storage
 resource "google_storage_bucket_object" "rail_traffic_data" {
   bucket = var.bucket
   name   = "inputs/rail_traffic.csv" # Path within your bucket
-
+  depends_on = [ null_resource.create_rail_traffic_csv ]
   # Use a local file as a trigger for updates.
   # This makes the resource update when the file changes.
   source = "${path.module}/rail_traffic.csv"  # Create a dummy rail_traffic.csv in your module
