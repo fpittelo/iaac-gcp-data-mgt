@@ -99,7 +99,7 @@ module "bigquery_dataset" {
 
 ### BigQuery tables creation ###
 resource "google_bigquery_dataset" "main" {
-dataset_id                   = "iaac_gcp_data_mgt_dataset"
+dataset_id                   = var.dataset_id
 location                     = var.location
 project                      = var.project_id
 }
