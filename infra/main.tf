@@ -95,6 +95,11 @@ module "bigquery_dataset" {
   dataset_owner_email         = var.dataset_owner_email
   data_editor_group           = var.data_editor_group
   data_viewer_group           = var.data_viewer_group
+
+  depends_on = [ 
+    google_project_iam_member_bq.service_account_bigquery_admin,
+    google_project_iam_member_bq.bq_dataset_delete,
+   ]
 }
 
 resource "google_bigquery_table" "stream_data" {
