@@ -97,13 +97,6 @@ module "bigquery_dataset" {
   data_viewer_group           = var.data_viewer_group
 }
 
-### BigQuery tables creation ###
-resource "google_bigquery_dataset" "main" {
-dataset_id                   = var.dataset_id
-location                     = var.location
-project                      = var.project_id
-}
-
 resource "google_bigquery_table" "stream_data" {
   dataset_id                  = module.bigquery_dataset.dataset_id
   deletion_protection         = false
