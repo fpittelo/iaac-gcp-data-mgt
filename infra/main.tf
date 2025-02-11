@@ -95,12 +95,12 @@ module "bigquery_dataset" {
   dataset_owner_email         = var.dataset_owner_email
   data_editor_group           = var.data_editor_group
   data_viewer_group           = var.data_viewer_group
-}
 
-### BigQuery tables creation ###
-#resource "google_bigquery_dataset" "main" {
-#dataset_id                   = "iaac_gcp_data_mgt_dataset"
-#}
+  depends_on = [ 
+    google_project_iam_member.service_account_bigquery_admin,
+    google_project_iam_member.bq_dataset_delete,
+   ]
+}
 
 resource "google_bigquery_table" "stream_data" {
   dataset_id                  = module.bigquery_dataset.dataset_id
@@ -122,6 +122,12 @@ resource "google_bigquery_table" "stream_data" {
   }
 ]
 EOF
+
+  # Important for deletion control:
+ lifecycle {
+   prevent_destroy = false # Allow deletion by default
+ }
+
 }
 
 resource "google_bigquery_table" "batch_data" {
@@ -144,6 +150,12 @@ resource "google_bigquery_table" "batch_data" {
   }
 ]
 EOF
+
+  # Important for deletion control:
+ lifecycle {
+   prevent_destroy = false # Allow deletion by default
+ }
+
 }
 
 ### BigQuery outputs ###
