@@ -49,6 +49,12 @@ resource "google_project_iam_member" "service_account_bigquery_metadata_viewer" 
   member  = "serviceAccount:${var.service_account_email}"
 }
 
+resource "google_project_iam_member" "bq_dataset_view" {
+  project = var.project_id
+  role    = "roles/bigquery.dataViewer"
+  member  = "serviceAccount:${var.service_account_email}"
+}
+
 resource "google_project_iam_member" "bq_dataset_delete" {
   project = var.project_id
   role    = "roles/bigquery.dataOwner"
