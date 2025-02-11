@@ -73,10 +73,9 @@ module "cloud_storage_bucket" {
   bucket_owner_email        = var.bucket_owner_email  
 }
 
-# Create the rail_traffic.csv file automatically
 resource "null_resource" "create_rail_traffic_csv" {
   provisioner "local-exec" {
-    command = "touch rail_traffic.csv" # Creates an empty file
+    command = "curl -s -L 'https://data.sbb.ch/api/v2/catalog/datasets/rail-traffic-information/exports/csv?use_labels=true' -o ${path.module}/rail_traffic.csv"
   }
 }
 
