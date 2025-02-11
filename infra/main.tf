@@ -178,6 +178,29 @@ EOF
 
 }
 
+### Bigquery Transfer Configuration ###
+
+resource "google_bigquery_transfer_config" "swissgrid_transfer" {
+  data_source_id                    = "google_cloud_storage"
+  destination_dataset_id            = module.bigquery_dataset.dataset_id
+  display_name                      = "Swissgrid Data Transfer"
+  schedule                          = "every 24 hours" # Adjust as needed
+
+  params = {
+    destination_table_name_template = "batch_data"
+    source_uris = [
+      "gs://${var.bucket}/inputs/swissgrid.csv",
+    ]
+    format = "CSV"
+    skip_leading_rows               = 1 # If there's a header row
+    write_disposition               = "WRITE_TRUNCATE" # Or "WRITE_APPEND"
+  }
+
+  depends_on = [
+    google_storage_bucket_object.swissgrid_data, # Ensure data is uploaded first
+  ]
+}
+
 ### BigQuery outputs ###
 output "dataset_self_link" {
   value       = module.bigquery_dataset.dataset_self_link  # Corrected line
