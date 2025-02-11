@@ -97,8 +97,8 @@ module "bigquery_dataset" {
   data_viewer_group           = var.data_viewer_group
 
   depends_on = [ 
-    google_project_iam_member_bq.service_account_bigquery_admin,
-    google_project_iam_member_bq.bq_dataset_delete,
+    google_project_iam_member.service_account_bigquery_admin,
+    google_project_iam_member.bq_dataset_delete,
    ]
 }
 
