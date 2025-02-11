@@ -61,12 +61,6 @@ resource "google_project_iam_member" "bq_dataset_view" {
   member  = "serviceAccount:${var.service_account_email}"
 }
 
-resource "google_project_iam_member" "bq_dataset_delete" {
-  project = var.project_id
-  role    = "roles/bigquery.dataOwner"
-  member  = "serviceAccount:${var.service_account_email}"
-}
-
 #### Create GCP Cloud Storage bucket ####
 module "cloud_storage_bucket" {
   source                    = "../modules/cloud_storage_bucket"
