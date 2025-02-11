@@ -75,7 +75,14 @@ module "cloud_storage_bucket" {
 
 resource "null_resource" "create_rail_traffic_csv" {
   provisioner "local-exec" {
-    command = "curl -s -L 'https://data.sbb.ch/api/v2/catalog/datasets/rail-traffic-information/exports/csv?use_labels=true' -o ${path.module}/rail_traffic.csv"
+    command = <<EOT
+      curl -s -L 'https://data.sbb.ch/api/v2/catalog/datasets/rail-traffic-information/exports/csv?use_labels=true' -o ${path.module}/rail_traffic.csv
+      sleep 60
+    EOT
+  }
+
+  triggers = {
+    always_run = "${timestamp()}"
   }
 }
 
@@ -88,9 +95,12 @@ resource "google_storage_bucket_object" "rail_traffic_data" {
   # This makes the resource update when the file changes.
   source = "${path.module}/rail_traffic.csv"  # Create a dummy rail_traffic.csv in your module
 
-  # Provisioner to download the data to the dummy file
+  ## Provisioner to download the data to the dummy file
   provisioner "local-exec" {
-    command = "curl -L 'https://data.sbb.ch/api/v2/catalog/datasets/rail-traffic-information/exports/csv?use_labels=true' -o ${path.module}/rail_traffic.csv"
+    command = <<EOT
+      curl -L 'https://data.sbb.ch/api/v2/catalog/datasets/rail-traffic-information/exports/csv?use_labels=true' -o ${path.module}/rail_traffic.csv
+      sleep 60
+    EOT
   }
 }
 
