@@ -98,7 +98,7 @@ resource "google_storage_bucket_object" "rail_traffic_data" {
   ## Provisioner to download the data to the dummy file
   provisioner "local-exec" {
     command = <<EOT
-      curl -L 'https://data.sbb.ch/api/v2/catalog/datasets/rail-traffic-information/exports/csv?use_labels=true' -o ${path.module}/rail_traffic.csv
+      curl -L https://data.sbb.ch/api/v2/catalog/datasets/rail-traffic-information/exports/csv?use_labels=true -o ${path.module}/rail_traffic.csv
       sleep 60
     EOT
   }
