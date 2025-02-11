@@ -188,9 +188,7 @@ resource "google_bigquery_data_transfer_config" "swissgrid_transfer" {
 
   params = {
     destination_table_name_template = "batch_data"
-    source_uris = [
-      "gs://${var.bucket}/inputs/swissgrid.csv",
-    ]
+    source_uris = "gs://${var.bucket}/inputs/swissgrid.csv"
     format = "CSV"
     skip_leading_rows               = 1 # If there's a header row
     write_disposition               = "WRITE_TRUNCATE" # Or "WRITE_APPEND"
