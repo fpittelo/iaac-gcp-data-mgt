@@ -62,10 +62,10 @@ resource "google_project_iam_member" "bq_dataset_view" {
   member  = "serviceAccount:${var.service_account_email}"
 }
 
-resource "google_project_iam_member" "bigquery_data_transfer_admin" {
+resource "google_project_iam_member" "bigquery_data_transfer_service_agent" {
   project = var.project_id
-  role    = "roles/bigquery.dataTransferAdmin"
-  member  = "serviceAccount:${var.service_account_email}"
+  role    = "roles/bigquery.admin"
+  member  = "serviceAccount:service-571690378641@gcp-sa-bigquerydatatransfer.iam.gserviceaccount.com"
 }
 
 #### Create GCP Cloud Storage bucket ####
