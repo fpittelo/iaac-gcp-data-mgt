@@ -122,60 +122,73 @@ module "bigquery_dataset" {
    ]
 }
 
-resource "google_bigquery_table" "stream_data" {
+resource "google_bigquery_table" "swissgrid_data" {
   dataset_id                  = module.bigquery_dataset.dataset_id
   deletion_protection         = false
-  table_id                    = "data-mgt-table-stream"
-  schema                      = <<EOF
-[
-  {
-    "name": "event_time",
-    "type": "TIMESTAMP",
-    "mode": "NULLABLE",
-    "description": "Timestamp of the event"
-  },
-  {
-    "name": "data",
-    "type": "STRING",
-    "mode": "NULLABLE",
-    "description": "Event data as a JSON string"
+  table_id                    = "swissgrid_data"
+  schema                      = <<-EOF
+  [
+    {
+      "name": "event_time",
+      "type": "TIMESTAMP",
+      "mode": "NULLABLE",
+      "description": "Timestamp of the event"
+    },
+    {
+      "name": "data",
+      "type": "STRING",
+      "mode": "NULLABLE",
+      "description": "Event data as a JSON string"
+    },
+    {
+      "name": "Datum",
+      "type": "STRING",
+      "mode": "NULLABLE",
+      "description": "Date of the data"
+    },
+    {
+      "name": "Landesverbrauch_GWh",
+      "type": "STRING",
+      "mode": "NULLABLE",
+      "description": "National consumption in GWh"
+    },
+    {
+      "name": "Endverbrauch_GWh",
+      "type": "STRING",
+      "mode": "NULLABLE",
+      "description": "Final consumption in GWh"
+    }
+  ]
+  EOF
+  lifecycle {
+    prevent_destroy = false
   }
-]
-EOF
-
-  # Important for deletion control:
- lifecycle {
-   prevent_destroy = false # Allow deletion by default
- }
-
 }
 
 resource "google_bigquery_table" "batch_data" {
   dataset_id                  = module.bigquery_dataset.dataset_id
   deletion_protection         = false
   table_id                    = "data-mgt-table-batch"
-  schema                      = <<EOF
-[
-  {
-    "name": "ingestion_time",
-    "type": "TIMESTAMP",
-    "mode": "NULLABLE",
-    "description": "Timestamp of the ingestion"
-  },
-  {
-    "name": "data",
-    "type": "STRING",
-    "mode": "NULLABLE",
-    "description": "Batch data as a JSON string"
+  schema                      = <<-EOF
+  [
+    {
+      "name": "ingestion_time",
+      "type": "TIMESTAMP",
+      "mode": "NULLABLE",
+      "description": "Timestamp of the ingestion"
+    },
+    {
+      "name": "data",
+      "type": "STRING",
+      "mode": "NULLABLE",
+      "description": "Batch data as a JSON string"
+    }
+  ]
+  EOF
+
+  lifecycle {
+    prevent_destroy = false
   }
-]
-EOF
-
-  # Important for deletion control:
- lifecycle {
-   prevent_destroy = false # Allow deletion by default
- }
-
 }
 
 ### Bigquery Transfer Configuration ###
@@ -184,22 +197,21 @@ resource "google_bigquery_data_transfer_config" "swissgrid_transfer" {
   data_source_id                    = "google_cloud_storage"
   destination_dataset_id            = module.bigquery_dataset.dataset_id
   display_name                      = "Swissgrid Data Transfer"
-  schedule                          = "every 24 hours" # Adjust as needed
+  schedule                          = "every 24 hours"
 
   params = {
-    destination_table_name_template = "batch_data"
+    destination_table_name_template = "swissgrid_data"
     source_uris = "gs://${var.bucket}/inputs/swissgrid.csv"
     format = "CSV"
-    skip_leading_rows               = 1 # If there's a header row
-    write_disposition               = "WRITE_TRUNCATE" # Or "WRITE_APPEND"
+    skip_leading_rows               = 1
+    write_disposition               = "WRITE_TRUNCATE"
   }
 
   depends_on = [
-    google_storage_bucket_object.swissgrid_data, # Ensure data is uploaded first
+    google_storage_bucket_object.swissgrid_data
   ]
 }
 
-### BigQuery outputs ###
 output "dataset_self_link" {
   value       = module.bigquery_dataset.dataset_self_link  # Corrected line
   description = "The self link of the created dataset"
