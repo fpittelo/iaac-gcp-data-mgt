@@ -138,18 +138,6 @@ resource "google_bigquery_table" "swissgrid_data" {
   schema                      = <<-EOF
   [
     {
-      "name": "event_time",
-      "type": "TIMESTAMP",
-      "mode": "NULLABLE",
-      "description": "Timestamp of the event"
-    },
-    {
-      "name": "data",
-      "type": "STRING",
-      "mode": "NULLABLE",
-      "description": "Event data as a JSON string"
-    },
-    {
       "name": "Datum",
       "type": "STRING",
       "mode": "NULLABLE",
