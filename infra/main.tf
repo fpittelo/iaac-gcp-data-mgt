@@ -213,7 +213,7 @@ resource "google_bigquery_data_transfer_config" "swissgrid_transfer" {
     destination_table_name_template = "swissgrid_data"
     data_path_template              = "gs://${var.bucket}/inputs/swissgrid.csv"
 #   source_uris                     = "gs://${var.bucket}/inputs/swissgrid.csv"
-    format                          = "CSV"
+    file_format                     = "CSV"
     skip_leading_rows               = 1
     write_disposition               = "APPEND"
   }
