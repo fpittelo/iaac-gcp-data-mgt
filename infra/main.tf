@@ -101,7 +101,9 @@ resource "google_storage_bucket_object" "swissgrid_data" {
   # Use a local file as a trigger for updates.
   # This makes the resource update when the file changes.
   source = "${path.module}/swissgrid.csv"  # Create swissgrid.csv 
-
+  lifecycle {
+    ignore_changes = [ detect_md5hash ]
+  }
   ## Provisioner to download the data to the dummy file
   provisioner "local-exec" {
     command = <<EOT
