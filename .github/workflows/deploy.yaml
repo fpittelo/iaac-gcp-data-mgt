@@ -58,8 +58,8 @@ jobs:
       - name:
         run: |  
           gcloud projects add-iam-policy-binding ${{ secrets.GCP_PROJECT_ID }} \
-            --member="serviceAccount:${{ secrets.SERVICE_ACCOUNT }}" \
-            --role=roles/bigquery.dataTransferServiceAgent
+            --member="serviceAccount:service-571690378641@gcp-sa-bigquerydatatransfer.iam.gserviceaccount.com" \
+            --role=roles/bigquery.admin
 
   deploy-backend:
     name: Deploy Backend
