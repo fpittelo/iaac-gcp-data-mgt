@@ -133,7 +133,6 @@ module "bigquery_dataset" {
 
 resource "google_bigquery_table" "swissgrid_data" {
   dataset_id                  = module.bigquery_dataset.dataset_id
-  location                    = var.location
   deletion_protection         = false
   table_id                    = "swissgrid_data"
   schema                      = <<-EOF
@@ -177,7 +176,6 @@ resource "google_bigquery_table" "swissgrid_data" {
 
 resource "google_bigquery_table" "batch_data" {
   dataset_id                  = module.bigquery_dataset.dataset_id
-  location                    = var.location
   deletion_protection         = false
   table_id                    = "data-mgt-table-batch"
   schema                      = <<-EOF
