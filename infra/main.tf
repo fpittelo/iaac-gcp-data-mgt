@@ -215,7 +215,7 @@ resource "google_bigquery_data_transfer_config" "swissgrid_transfer" {
 #   source_uris                     = "gs://${var.bucket}/inputs/swissgrid.csv"
     format                          = "CSV"
     skip_leading_rows               = 1
-    write_disposition               = "WRITE_TRUNCATE"
+    write_disposition               = "APPEND"
   }
 
   depends_on = [
