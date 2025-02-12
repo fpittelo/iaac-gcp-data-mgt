@@ -22,6 +22,7 @@ resource "google_project_service_identity" "df_dataflow_identity" {
 resource "google_project_service" "api_activations" {
   for_each = toset([
     "bigquery.googleapis.com",
+    "bigquerydatatransfer.googleapis.com",
     "bigquerystorage.googleapis.com",
     "cloudfunctions.googleapis.com",
     "cloudresourcemanager.googleapis.com",

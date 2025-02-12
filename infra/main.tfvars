@@ -14,6 +14,7 @@ roles                           = [
   "roles/serviceusage.serviceUsageAdmin",
   "roles/bigquery.dataOwner",
   "roles/storage.objectAdmin", 
+  "roles/bigquery.dataTransferAdmin"
   ]
 ### Cloud Storage variables values  ###
 bucket                          = "iaac-gcp-data-mgt-data"
