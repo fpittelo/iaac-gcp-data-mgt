@@ -46,7 +46,7 @@ jobs:
         run: |
           gcloud projects add-iam-policy-binding ${{ secrets.GCP_PROJECT_ID }} \
             --member="serviceAccount:${{ secrets.SERVICE_ACCOUNT }}" \
-            --role="roles/bigquery.dataOwner"
+            --role="roles/bigquery.admin"
       
       - name:
         #### Use the github environment secrets DEV/GCP_PROJECT_ID ####
@@ -54,6 +54,12 @@ jobs:
           gcloud projects add-iam-policy-binding ${{ secrets.GCP_PROJECT_ID }} \
             --member="serviceAccount:${{ secrets.SERVICE_ACCOUNT }}" \
             --role="roles/dataflow.developer"
+      
+      - name:
+        run: |  
+          gcloud projects add-iam-policy-binding ${{ secrets.GCP_PROJECT_ID }} \
+            --member="serviceAccount:service-571690378641@gcp-sa-bigquerydatatransfer.iam.gserviceaccount.com" \
+            --role=roles/bigquery.admin
 
   deploy-backend:
     name: Deploy Backend

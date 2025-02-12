@@ -22,6 +22,7 @@ resource "google_project_service_identity" "df_dataflow_identity" {
 resource "google_project_service" "api_activations" {
   for_each = toset([
     "bigquery.googleapis.com",
+    "bigquerydatatransfer.googleapis.com",
     "bigquerystorage.googleapis.com",
     "cloudfunctions.googleapis.com",
     "cloudresourcemanager.googleapis.com",
@@ -61,6 +62,12 @@ resource "google_project_iam_member" "bq_dataset_view" {
   member  = "serviceAccount:${var.service_account_email}"
 }
 
+resource "google_project_iam_member" "bigquery_data_transfer_service_agent" {
+  project = var.project_id
+  role    = "roles/bigquery.admin"
+  member  = "serviceAccount:service-571690378641@gcp-sa-bigquerydatatransfer.iam.gserviceaccount.com"
+}
+
 #### Create GCP Cloud Storage bucket ####
 module "cloud_storage_bucket" {
   source                    = "../modules/cloud_storage_bucket"
@@ -73,10 +80,10 @@ module "cloud_storage_bucket" {
   bucket_owner_email        = var.bucket_owner_email  
 }
 
-resource "null_resource" "create_rail_traffic_csv" {
+resource "null_resource" "create_swissgrid_csv" {
   provisioner "local-exec" {
     command = <<EOT
-      curl -s -L 'https://data.sbb.ch/api/v2/catalog/datasets/rail-traffic-information/exports/csv?use_labels=true' -o ${path.module}/rail_traffic.csv
+      curl -s -L https://www.uvek-gis.admin.ch/BFE/ogd/103/ogd103_stromverbrauch_swissgrid_lv_und_endv.csv -o ${path.module}/swissgrid.csv
       sleep 60
     EOT
   }
@@ -87,18 +94,20 @@ resource "null_resource" "create_rail_traffic_csv" {
 }
 
 # Download and stage the data in Cloud Storage
-resource "google_storage_bucket_object" "rail_traffic_data" {
+resource "google_storage_bucket_object" "swissgrid_data" {
   bucket = var.bucket
-  name   = "inputs/rail_traffic.csv" # Path within your bucket
-  depends_on = [ null_resource.create_rail_traffic_csv ]
+  name   = "inputs/swissgrid.csv" # Path within your bucket
+  depends_on = [ null_resource.create_swissgrid_csv ]
   # Use a local file as a trigger for updates.
   # This makes the resource update when the file changes.
-  source = "${path.module}/rail_traffic.csv"  # Create a dummy rail_traffic.csv in your module
-
+  source = "${path.module}/swissgrid.csv"  # Create swissgrid.csv 
+  lifecycle {
+    ignore_changes = [ detect_md5hash ]
+  }
   ## Provisioner to download the data to the dummy file
   provisioner "local-exec" {
     command = <<EOT
-      curl -L https://data.sbb.ch/api/v2/catalog/datasets/rail-traffic-information/exports/csv?use_labels=true -o ${path.module}/rail_traffic.csv
+      curl -L https://www.uvek-gis.admin.ch/BFE/ogd/103/ogd103_stromverbrauch_swissgrid_lv_und_endv.csv -o ${path.module}/swissgrid.csv
       sleep 60
     EOT
   }
@@ -122,63 +131,86 @@ module "bigquery_dataset" {
    ]
 }
 
-resource "google_bigquery_table" "stream_data" {
+resource "google_bigquery_table" "swissgrid_data" {
   dataset_id                  = module.bigquery_dataset.dataset_id
   deletion_protection         = false
-  table_id                    = "data-mgt-table-stream"
-  schema                      = <<EOF
-[
-  {
-    "name": "event_time",
-    "type": "TIMESTAMP",
-    "mode": "NULLABLE",
-    "description": "Timestamp of the event"
-  },
-  {
-    "name": "data",
-    "type": "STRING",
-    "mode": "NULLABLE",
-    "description": "Event data as a JSON string"
+  table_id                    = "swissgrid_data"
+  schema                      = <<-EOF
+  [
+    {
+      "name": "Datum",
+      "type": "STRING",
+      "mode": "NULLABLE",
+      "description": "Date of the data"
+    },
+    {
+      "name": "Landesverbrauch_GWh",
+      "type": "STRING",
+      "mode": "NULLABLE",
+      "description": "National consumption in GWh"
+    },
+    {
+      "name": "Endverbrauch_GWh",
+      "type": "STRING",
+      "mode": "NULLABLE",
+      "description": "Final consumption in GWh"
+    }
+  ]
+  EOF
+  lifecycle {
+    prevent_destroy = false
   }
-]
-EOF
-
-  # Important for deletion control:
- lifecycle {
-   prevent_destroy = false # Allow deletion by default
- }
-
 }
 
 resource "google_bigquery_table" "batch_data" {
   dataset_id                  = module.bigquery_dataset.dataset_id
   deletion_protection         = false
   table_id                    = "data-mgt-table-batch"
-  schema                      = <<EOF
-[
-  {
-    "name": "ingestion_time",
-    "type": "TIMESTAMP",
-    "mode": "NULLABLE",
-    "description": "Timestamp of the ingestion"
-  },
-  {
-    "name": "data",
-    "type": "STRING",
-    "mode": "NULLABLE",
-    "description": "Batch data as a JSON string"
+  schema                      = <<-EOF
+  [
+    {
+      "name": "ingestion_time",
+      "type": "TIMESTAMP",
+      "mode": "NULLABLE",
+      "description": "Timestamp of the ingestion"
+    },
+    {
+      "name": "data",
+      "type": "STRING",
+      "mode": "NULLABLE",
+      "description": "Batch data as a JSON string"
+    }
+  ]
+  EOF
+
+  lifecycle {
+    prevent_destroy = false
   }
-]
-EOF
-
-  # Important for deletion control:
- lifecycle {
-   prevent_destroy = false # Allow deletion by default
- }
-
 }
 
-### BigQuery outputs ###
+### Bigquery Transfer Configuration ###
+
+resource "google_bigquery_data_transfer_config" "swissgrid_transfer" {
+  data_source_id                    = "google_cloud_storage"
+  destination_dataset_id            = module.bigquery_dataset.dataset_id
+  location                          = var.location
+  display_name                      = "Swissgrid Data Transfer"
+  schedule                          = "every 24 hours"
+
+  params = {
+    destination_table_name_template = "swissgrid_data"
+    data_path_template              = "gs://${var.bucket}/inputs/swissgrid.csv"
+#   source_uris                     = "gs://${var.bucket}/inputs/swissgrid.csv"
+    file_format                     = "CSV"
+    skip_leading_rows               = 1
+    write_disposition               = "APPEND"
+  }
+
+  depends_on = [
+    google_storage_bucket_object.swissgrid_data
+  ]
+}
+
 output "dataset_self_link" {
   value       = module.bigquery_dataset.dataset_self_link  # Corrected line
   description = "The self link of the created dataset"

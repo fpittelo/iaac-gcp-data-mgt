@@ -13,7 +13,7 @@ member                          = "serviceAccount:github-wif-sa@iaac-gcp-data-mg
 roles                           = [ 
   "roles/serviceusage.serviceUsageAdmin",
   "roles/bigquery.dataOwner",
-  "roles/storage.objectAdmin", 
+  "roles/storage.objectAdmin",
   ]
 ### Cloud Storage variables values  ###
 bucket                          = "iaac-gcp-data-mgt-data"
