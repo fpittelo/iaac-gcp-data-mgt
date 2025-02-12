@@ -54,6 +54,12 @@ jobs:
           gcloud projects add-iam-policy-binding ${{ secrets.GCP_PROJECT_ID }} \
             --member="serviceAccount:${{ secrets.SERVICE_ACCOUNT }}" \
             --role="roles/dataflow.developer"
+      
+      - name:
+        run: |  
+          gcloud projects add-iam-policy-binding ${{ secrets.GCP_PROJECT_ID }} \
+            --member="serviceAccount:${{ secrets.SERVICE_ACCOUNT }}" \
+            --role=roles/bigquery.dataTransferServiceAgent
 
   deploy-backend:
     name: Deploy Backend
