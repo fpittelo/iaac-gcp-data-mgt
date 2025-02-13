@@ -7,3 +7,4 @@ output "bucket" {
 output "member_roles" {
   value = google_project_iam_member.multiple_roles
 }
+

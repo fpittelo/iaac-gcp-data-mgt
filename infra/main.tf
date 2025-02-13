@@ -126,6 +126,7 @@ resource "google_storage_bucket_object" "swissgrid_data" {
 
 ### BigQuery Deployment ###
 module "bigquery_dataset" {
+  for_each                    = var.datasets
   source                      = "../modules/bigquery"
   project                     = var.project_id
   location                    = var.location
@@ -140,7 +141,7 @@ module "bigquery_dataset" {
 }
 
 resource "google_bigquery_table" "swissgrid_data" {
-  dataset_id                  = module.bigquery_dataset.dataset_id
+  dataset_id                  = module.bigquery_datasets["DOMAIN_OPERATIONS"].dataset_id
   deletion_protection         = false
   table_id                    = "swissgrid_data"
   schema                      = <<-EOF
@@ -173,7 +174,7 @@ resource "google_bigquery_table" "swissgrid_data" {
 ### Bigquery Transfer Configuration ###
 resource "google_bigquery_data_transfer_config" "swissgrid_transfer" {
   data_source_id                    = "google_cloud_storage"
-  destination_dataset_id            = module.bigquery_dataset.dataset_id
+  destination_dataset_id            = module.bigquery_datasets["DOMAIN_OPERATIONS"].dataset_id
   location                          = var.location
   display_name                      = "Swissgrid Data Transfer"
   schedule                          = "every 24 hours"
