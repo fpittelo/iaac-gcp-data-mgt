@@ -28,6 +28,40 @@ error_folder                    = "error/error.txt"
 ### BigQuery variables values   ###
 # dataset_id                      = "prod_dataset"
 # dataset_description             = "Production dataset" 
+
+datasets = {
+  "DOMAIN_FINANCE" = {
+    dataset_id                  = "DOMAIN_FINANCE"
+    description                 = "Finance dataset"
+    owner_email                 = "frederic.pitteloud@gmail.com"
+    delete_contents_on_destroy  = true
+  },
+  "DOMAIN_HR" = {
+      dataset_id                  = "DOMAIN_HR"
+      description                 = "HR dataset"
+      owner_email                 = "frederic.pitteloud@gmail.com"
+      delete_contents_on_destroy  = true
+    },
+    "DOMAIN_OPERATIONS" = {
+      dataset_id                  = "DOMAIN_OPERATIONS"
+      description                 = "Operations dataset"
+      owner_email                 = "frederic.pitteloud@gmail.com"
+      delete_contents_on_destroy  = true
+    },
+    "DOMAIN_PUBLIC" = {
+      dataset_id                  = "DOMAIN_PUBLIC"
+      description                 = "Public dataset"
+      owner_email                 = "frederic.pitteloud@gmail.com"
+      delete_contents_on_destroy  = true
+    },
+    "DOMAIN_SHARED" = {
+      dataset_id                  = "DOMAIN_SHARED"
+      description                 = "Shared dataset"
+      owner_email                 = "frederic.pitteloud@gmail.com"
+      delete_contents_on_destroy  = true
+    }
+}
+
 # default_table_expiration_ms   = "3600000"
 dataset_owner_email             = "frederic.pitteloud@gmail.com"
 data_viewer_group               = "frederic.pitteloud@gmail.com"

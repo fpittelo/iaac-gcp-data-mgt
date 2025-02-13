@@ -34,7 +34,7 @@ datasets = {
     dataset_id                  = "DOMAIN_FINANCE"
     description                 = "Finance dataset"
     owner_email                 = "frederic.pitteloud@gmail.com"
-    delete_contents_on_destroy  = ftrue
+    delete_contents_on_destroy  = true
   },
   "DOMAIN_HR" = {
       dataset_id                  = "DOMAIN_HR"

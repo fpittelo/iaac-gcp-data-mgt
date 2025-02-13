@@ -30,42 +30,36 @@ error_folder                    = "error/error.txt"
 # dataset_description             = "Production dataset"
 
 datasets = {
-  "prod_dataset" = {
-    dataset_id          = "prod_dataset"
-    description         = "Production dataset"
-    owner_email         = "frederic.pitteloud@gmail.com"
-    delete_contents_on_destroy = true
-  }
-  "op_dataset" = {
-    dataset_id          = "DOMAIN_OPERATIONS"
-    description         = "Production dataset"
-    owner_email         = "frederic.pitteloud@gmail.com"
-    delete_contents_on_destroy = true
-  }
-  "hr_dataset" = {
-    dataset_id          = "DOMAIN_HR"
-    description         = "Production dataset"
-    owner_email         = "frederic.pitteloud@gmail.com"
-    delete_contents_on_destroy = true
-  }
-  "fin_dataset" = {
-    dataset_id          = "DOMAIN_FINANCE"
-    description         = "Production dataset"
-    owner_email         = "frederic.pitteloud@gmail.com"
-    delete_contents_on_destroy = true
-  }
-  "pub_dataset" = {
-    dataset_id          = "DOMAIN_PUBLIC"
-    description         = "Production dataset"
-    owner_email         = "frederic.pitteloud@gmail.com"
-    delete_contents_on_destroy = true
-  }
-  "shr_dataset" = {
-    dataset_id          = "DOMAIN_SHARED"
-    description         = "Production dataset"
-    owner_email         = "frederic.pitteloud@gmail.com"
-    delete_contents_on_destroy = true
-  }
+  "DOMAIN_FINANCE" = {
+    dataset_id                  = "DOMAIN_FINANCE"
+    description                 = "Finance dataset"
+    owner_email                 = "frederic.pitteloud@gmail.com"
+    delete_contents_on_destroy  = true
+  },
+  "DOMAIN_HR" = {
+      dataset_id                  = "DOMAIN_HR"
+      description                 = "HR dataset"
+      owner_email                 = "frederic.pitteloud@gmail.com"
+      delete_contents_on_destroy  = true
+    },
+    "DOMAIN_OPERATIONS" = {
+      dataset_id                  = "DOMAIN_OPERATIONS"
+      description                 = "Operations dataset"
+      owner_email                 = "frederic.pitteloud@gmail.com"
+      delete_contents_on_destroy  = true
+    },
+    "DOMAIN_PUBLIC" = {
+      dataset_id                  = "DOMAIN_PUBLIC"
+      description                 = "Public dataset"
+      owner_email                 = "frederic.pitteloud@gmail.com"
+      delete_contents_on_destroy  = true
+    },
+    "DOMAIN_SHARED" = {
+      dataset_id                  = "DOMAIN_SHARED"
+      description                 = "Shared dataset"
+      owner_email                 = "frederic.pitteloud@gmail.com"
+      delete_contents_on_destroy  = true
+    }
 }
 
 # default_table_expiration_ms   = "3600000"

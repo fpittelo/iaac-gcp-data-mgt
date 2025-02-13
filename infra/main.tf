@@ -130,6 +130,7 @@ module "google_bigquery_dataset" {
   source                      = "../modules/bigquery"
   project                     = var.project_id
   location                    = var.location
+  dataset_id                  = each.value.dataset_id
   delete_contents_on_destroy  = each.value.delete_contents_on_destroy
   depends_on = [ 
     google_project_iam_member.service_account_bigquery_admin,
