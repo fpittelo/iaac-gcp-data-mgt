@@ -72,8 +72,7 @@ resource "google_project_iam_member" "bigquery_data_transfer_service_agent" {
 module "cloud_storage_bucket" {
   source                    = "../modules/bucket"
   project                   = var.project_id
-# zone                      = var.zone
-  bucket_name               = var.bucket_name
+  bucket                    = var.bucket
   location                  = var.location
   versioning_enabled        = var.versioning_enabled
   bucket_owner_email        = var.bucket_owner_email  
@@ -94,7 +93,7 @@ resource "null_resource" "create_swissgrid_csv" {
 
 # Download and stage the data in Cloud Storage
 resource "google_storage_bucket_object" "swissgrid_data" {
-  bucket = var.bucket_name
+  bucket = var.bucket
   name   = "inputs/swissgrid.csv" # Path within your bucket
   depends_on = [ null_resource.create_swissgrid_csv ]
   # Use a local file as a trigger for updates.
@@ -170,7 +169,7 @@ resource "google_bigquery_data_transfer_config" "swissgrid_transfer" {
 
   params = {
     destination_table_name_template = "swissgrid_data"
-    data_path_template              = "gs://${var.bucket_name}/inputs/swissgrid.csv"
+    data_path_template              = "gs://${var.bucket}/inputs/swissgrid.csv"
     file_format                     = "CSV"
     skip_leading_rows               = 1
     write_disposition               = "APPEND"

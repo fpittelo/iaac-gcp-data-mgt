@@ -1,5 +1,5 @@
 resource "google_storage_bucket" "bucket" {
-  name                        = var.bucket_name
+  name                        = var.bucket
   location                    = var.location
   uniform_bucket_level_access = true # Enforce uniform bucket-level access
   force_destroy               = true # Allow Terraform to destroy non-empty bucket

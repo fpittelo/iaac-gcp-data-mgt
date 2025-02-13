@@ -1,4 +1,4 @@
-###### varialbes.tf ######
+###### Project Variables ######
 
 variable "project_id" {
     description = "The GCP project ID"
@@ -14,11 +14,6 @@ variable "region" {
   description = "The GCP region"
   type        = string
 }
-
-/* variable "zone" {
-    description = "The GCP zone"
-    type        = string
-} */
 
 variable "tags" {
   description = "Tags to apply to resources"
@@ -42,6 +37,16 @@ variable "roles" {
   description = "Liste des rôles à attribuer"
 }
 
+variable "network" {
+  description = "The network for the VM instance"
+  type        = string
+}
+
+variable "subnetwork" {
+  description = "The subnetwork for the VM instance"
+  type        = string
+}
+
 # Define variables for each environment (dev, qa, main)
 
 variable "git_branch" {
@@ -54,31 +59,16 @@ variable "github_run_id" {
   type        = string
 }
 
-variable "owner_email" {
-  description = "The email of the dataset owner"
-  type        = string
-}
-
-variable "network" {
-  description = "The network for the VM instance"
-  type        = string
-}
-
-variable "subnetwork" {
-  description = "The subnetwork for the VM instance"
-  type        = string
-}
-
-variable "service_account_email" {
-  description = "The service account email for the VM instance"
-  type        = string
-}
-
 ####### Variables for GPC Cloud Storage #######
 
-variable "bucket_name" {
+variable "bucket" {
   description = "The name of the Cloud Storage bucket"
   type        = string
+}
+
+variable "bucket_owner_email" {
+  type = string
+  description = "Email address of the bucket owner (for IAM)"
 }
 
 variable "versioning_enabled" {
@@ -91,60 +81,6 @@ variable "lifecycle_rule_age" {
   type = number
   description = "Age (in days) for lifecycle rule (example)"
   default = 30
-}
-
-# variable "kms_key_id" { # For CMEK
-#   type = string
-#   description = "KMS key ID for encryption (optional)"
-#   default = null
-# }
-
-variable "dataset_id" {
-  description = "The BigQuery dataset ID"
-  type        = string
-}
-
-variable "dataset_description" {
-  description = "The description of the dataset"
-  type        = string
-  default     = null
-}
-
-variable "bucket_owner_email" {
-  type = string
-  description = "Email address of the bucket owner (for IAM)"
-}
-
-####### Variables for GPC BigQuery ####
-
-/* variable "default_table_expiration_ms" {
-  type = string
-  description = "Default table expiration in milliseconds"
-  default = "3600000"
-} */
-
-variable "dataset_owner_email" {
-  type = string
-  description = "The email of the user to grant dataOwner access"
-  default = null
-}
-
-variable "data_viewer_group" {
-  type = string
-  description = "The email of the group to grant dataViewer access"
-  default = null
-}
-
-variable "data_editor_group" {
-  type = string
-  description = "The email of the group to grant dataEditor access"
-  default = null
-}
-
-variable "input_file_name" {
-  type = string
-  description = "The name of the input file"
-  default = null
 }
 
 variable "input_folder" {
@@ -168,6 +104,53 @@ variable "temp_folder" {
 variable "error_folder" {
   type = string
   description = "The error folder for the Dataflow job"
+  default = null
+}
+
+###### Variables for Bigquery ######
+
+variable "owner_email" {
+  description = "The email of the dataset owner"
+  type        = string
+}
+
+variable "service_account_email" {
+  description = "The service account email for the VM instance"
+  type        = string
+}
+
+variable "dataset_id" {
+  description = "The BigQuery dataset ID"
+  type        = string
+}
+
+variable "dataset_description" {
+  description = "The description of the dataset"
+  type        = string
+  default     = null
+}
+
+variable "dataset_owner_email" {
+  type = string
+  description = "The email of the user to grant dataOwner access"
+  default = null
+}
+
+variable "data_viewer_group" {
+  type = string
+  description = "The email of the group to grant dataViewer access"
+  default = null
+}
+
+variable "data_editor_group" {
+  type = string
+  description = "The email of the group to grant dataEditor access"
+  default = null
+}
+
+variable "input_file_name" {
+  type = string
+  description = "The name of the input file"
   default = null
 }
 
