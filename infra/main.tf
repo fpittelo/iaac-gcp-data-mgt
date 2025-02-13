@@ -38,9 +38,9 @@ resource "google_project_service" "api_activations" {
   disable_on_destroy = false
 }
 
-resource "google_project_iam_member" "service_account_storage_viewer" {
+resource "google_project_iam_member" "service_account_storage_admin" {
   project = var.project_id
-  role    = "roles/storage.viewer"
+  role    = "roles/storage.admin"
   member  = "serviceAccount:${var.service_account_email}"
 }
 
@@ -48,6 +48,7 @@ resource "google_storage_bucket_iam_member" "member" {
   bucket = var.bucket
   role   = "roles/storage.objectCreator"
   member = "serviceAccount:${var.service_account_email}"
+  depends_on = [module.google_storage_bucket.google_storage_bucket]
 }
 
 resource "google_project_iam_member" "service_account_bigquery_admin" {
