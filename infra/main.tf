@@ -39,7 +39,7 @@ resource "google_project_service" "api_activations" {
 }
 
 resource "google_storage_bucket_iam_member" "member" {
-  bucket = google_storage_bucket.bucket.name
+  bucket = var.bucket
   role   = "roles/storage.objectCreator"
   member = "serviceAccount:${var.service_account_email}"
 }
