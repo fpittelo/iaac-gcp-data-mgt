@@ -111,41 +111,12 @@ variable "error_folder" {
 
 variable "datasets" {
   type = map(object({
-    dataset_id                    = string
-    description                   = string
-    delete_contents_on_destroy    = true
-    owner_email                   = string
+    dataset_id          = string
+    description         = string
+    owner_email         = string
+    delete_contents_on_destroy = bool # Add this property
   }))
-  description = "Map of dataset configurations"
-  default = {
-    "fin_dataset" = {
-      dataset_id          = "DOMAIN_FINANCE"
-      description         = "Production dataset"
-      owner_email         = "frederic.pitteloud@gmail.com"
-    }
-    "hr_dataset" = {
-      dataset_id          = "DOMAIN_HR"
-      description         = "Production dataset"
-      owner_email         = "frederic.pitteloud@gmail.com"
-    }
-    "opr_dataset" = {
-      dataset_id          = "DOMAIN_OPERATIONS"
-      description         = "Production dataset"
-      owner_email         = "frederic.pitteloud@gmail.com"
-    }
-    "pub_dataset" = {
-      dataset_id          = "DOMAIN_PUBLIC"
-      description         = "Production dataset"
-      owner_email         = "frederic.pitteloud@gmail.com"
-    }
-    "shr_dataset" = {
-      dataset_id          = "DOMAIN_SHARED"
-      description         = "Production dataset"
-      owner_email         = "frederic.pitteloud@gmail.com"
-    }
-  }
 }
-
 variable "owner_email" {
   description = "The email of the dataset owner"
   type        = string

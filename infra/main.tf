@@ -125,7 +125,7 @@ resource "google_storage_bucket_object" "swissgrid_data" {
 }
 
 ### BigQuery Deployment ###
-module "bigquery_dataset" {
+module "bigquery_datasets" {
   for_each                    = var.datasets
   source                      = "../modules/bigquery"
   project                     = var.project_id
@@ -133,7 +133,7 @@ module "bigquery_dataset" {
   dataset_id                  = var.dataset_id
   dataset_description         = var.dataset_description
   dataset_owner_email         = var.dataset_owner_email
-
+  delete_contents_on_destroy  = each.value.delete_contents_on_destroy
   depends_on = [ 
     google_project_iam_member.service_account_bigquery_admin,
     google_project_iam_member.bq_dataset_delete,
@@ -193,6 +193,6 @@ resource "google_bigquery_data_transfer_config" "swissgrid_transfer" {
 }
 
 output "dataset_self_link" {
-  value       = module.bigquery_dataset.dataset_self_link  # Corrected line
+  value       = module.bigquery_datasets.dataset_self_link  # Corrected line
   description = "The self link of the created dataset"
 }

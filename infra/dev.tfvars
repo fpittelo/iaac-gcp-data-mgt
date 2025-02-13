@@ -26,8 +26,48 @@ output_folder                   = "output/output.txt"
 temp_folder                     = "temp/temp.txt"
 error_folder                    = "error/error.txt"
 ### BigQuery variables values   ###
-dataset_id                      = "prod_dataset"
-dataset_description             = "Production dataset" 
+# dataset_id                      = "prod_dataset"
+# dataset_description             = "Production dataset" 
+
+datasets = {
+  "prod_dataset" = {
+    dataset_id          = "prod_dataset"
+    description         = "Production dataset"
+    owner_email         = "frederic.pitteloud@gmail.com"
+    delete_contents_on_destroy = true
+  }
+  "op_dataset" = {
+    dataset_id          = "DOMAIN_OPERATIONS"
+    description         = "Production dataset"
+    owner_email         = "frederic.pitteloud@gmail.com"
+    delete_contents_on_destroy = true
+  }
+  "hr_dataset" = {
+    dataset_id          = "DOMAIN_HR"
+    description         = "Production dataset"
+    owner_email         = "frederic.pitteloud@gmail.com"
+    delete_contents_on_destroy = true
+  }
+  "fin_dataset" = {
+    dataset_id          = "DOMAIN_FINANCE"
+    description         = "Production dataset"
+    owner_email         = "frederic.pitteloud@gmail.com"
+    delete_contents_on_destroy = true
+  }
+  "pub_dataset" = {
+    dataset_id          = "DOMAIN_PUBLIC"
+    description         = "Production dataset"
+    owner_email         = "frederic.pitteloud@gmail.com"
+    delete_contents_on_destroy = true
+  }
+  "shr_dataset" = {
+    dataset_id          = "DOMAIN_SHARED"
+    description         = "Production dataset"
+    owner_email         = "frederic.pitteloud@gmail.com"
+    delete_contents_on_destroy = true
+  }
+}
+
 # default_table_expiration_ms   = "3600000"
 dataset_owner_email             = "frederic.pitteloud@gmail.com"
 data_viewer_group               = "frederic.pitteloud@gmail.com"

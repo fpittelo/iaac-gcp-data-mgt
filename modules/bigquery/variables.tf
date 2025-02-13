@@ -20,6 +20,12 @@ variable "dataset_description" {
     type        = string
 }
 
+variable "delete_contents_on_destroy" {
+  type          = bool
+  description   = "Whether to delete contents when dataset is destroyed"
+  default       = false # Default to false for safety!
+}
+
 /* variable "data_viewer_group" {
     description = "The email of the group to grant dataViewer access"
     type        = string
