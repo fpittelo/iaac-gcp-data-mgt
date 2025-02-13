@@ -38,6 +38,12 @@ resource "google_project_service" "api_activations" {
   disable_on_destroy = false
 }
 
+resource "google_storage_bucket_iam_member" "member" {
+  bucket = google_storage_bucket.bucket.name
+  role   = "roles/storage.objectCreator"
+  member = "serviceAccount:${var.service_account_email}"
+}
+
 resource "google_project_iam_member" "service_account_bigquery_admin" {
   project = var.project_id
   role    = "roles/bigquery.admin"
@@ -119,8 +125,6 @@ module "bigquery_dataset" {
   dataset_id                  = var.dataset_id
   dataset_description         = var.dataset_description
   dataset_owner_email         = var.dataset_owner_email
-/*   data_editor_group           = var.data_editor_group
-  data_viewer_group           = var.data_viewer_group */
 
   depends_on = [ 
     google_project_iam_member.service_account_bigquery_admin,
