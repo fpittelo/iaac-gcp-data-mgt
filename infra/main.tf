@@ -38,6 +38,12 @@ resource "google_project_service" "api_activations" {
   disable_on_destroy = false
 }
 
+resource "google_project_iam_member" "service_account_storage_viewer" {
+  project = var.project_id
+  role    = "roles/storage.viewer"
+  member  = "serviceAccount:${var.service_account_email}"
+}
+
 resource "google_storage_bucket_iam_member" "member" {
   bucket = var.bucket
   role   = "roles/storage.objectCreator"
