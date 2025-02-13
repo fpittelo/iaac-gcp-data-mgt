@@ -98,7 +98,7 @@ resource "null_resource" "create_swissgrid_csv" {
 }
 
 # Download and stage the data in Cloud Storage
-resource "google_storage_bucket_obje" "swissgrid_data" {
+resource "google_storage_bucket_object" "swissgrid_data" {
   bucket = var.bucket
   name   = "inputs/swissgrid.csv" # Path within your bucket
   depends_on = [ null_resource.create_swissgrid_csv ]
