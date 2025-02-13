@@ -111,37 +111,20 @@ variable "error_folder" {
 
 variable "datasets" {
   type = map(object({
-    dataset_id          = string
-    description         = string
-    owner_email         = string
-    delete_contents_on_destroy = bool # Add this property
+    dataset_id                  = string
+    description                 = string
+    owner_email                 = string
+    delete_contents_on_destroy  = bool # Add this property
   }))
 }
-variable "owner_email" {
+/* variable "owner_email" {
   description = "The email of the dataset owner"
   type        = string
-}
+} */
 
 variable "service_account_email" {
   description = "The service account email for the VM instance"
   type        = string
-}
-
-variable "dataset_id" {
-  description = "The BigQuery dataset ID"
-  type        = string
-}
-
-variable "dataset_description" {
-  description = "The description of the dataset"
-  type        = string
-  default     = null
-}
-
-variable "dataset_owner_email" {
-  type = string
-  description = "The email of the user to grant dataOwner access"
-  default = null
 }
 
 variable "data_viewer_group" {

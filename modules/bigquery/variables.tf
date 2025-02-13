@@ -15,11 +15,11 @@ variable "dataset_id" {
     type        = string
 }
 
-variable "dataset_description" {
+/* variable "dataset_description" {
     description = "The description of the dataset"
     type        = string
 }
-
+ */
 variable "delete_contents_on_destroy" {
   type          = bool
   description   = "Whether to delete contents when dataset is destroyed"

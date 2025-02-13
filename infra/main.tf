@@ -125,14 +125,11 @@ resource "google_storage_bucket_object" "swissgrid_data" {
 }
 
 ### BigQuery Deployment ###
-module "bigquery_datasets" {
+module "google_bigquery_dataset" {
   for_each                    = var.datasets
   source                      = "../modules/bigquery"
   project                     = var.project_id
   location                    = var.location
-  dataset_id                  = var.dataset_id
-  dataset_description         = var.dataset_description
-  dataset_owner_email         = var.dataset_owner_email
   delete_contents_on_destroy  = each.value.delete_contents_on_destroy
   depends_on = [ 
     google_project_iam_member.service_account_bigquery_admin,
