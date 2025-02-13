@@ -117,11 +117,11 @@ variable "bucket_owner_email" {
 
 ####### Variables for GPC BigQuery ####
 
-variable "default_table_expiration_ms" {
+/* variable "default_table_expiration_ms" {
   type = string
   description = "Default table expiration in milliseconds"
   default = "3600000"
-}
+} */
 
 variable "dataset_owner_email" {
   type = string
