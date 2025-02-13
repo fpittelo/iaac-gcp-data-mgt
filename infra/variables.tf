@@ -15,10 +15,10 @@ variable "region" {
   type        = string
 }
 
-variable "zone" {
+/* variable "zone" {
     description = "The GCP zone"
     type        = string
-}
+} */
 
 variable "tags" {
   description = "Tags to apply to resources"
@@ -76,8 +76,8 @@ variable "service_account_email" {
 
 ####### Variables for GPC Cloud Storage #######
 
-variable "bucket" {
-  description = "The location for the BigQuery dataset"
+variable "bucket_name" {
+  description = "The name of the Cloud Storage bucket"
   type        = string
 }
 

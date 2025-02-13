@@ -20,7 +20,7 @@ variable "dataset_description" {
     type        = string
 }
 
-variable "data_viewer_group" {
+/* variable "data_viewer_group" {
     description = "The email of the group to grant dataViewer access"
     type        = string
 }
@@ -28,7 +28,7 @@ variable "data_viewer_group" {
 variable "data_editor_group" {
     description = "The email of the group to grant dataEditor access"
     type        = string
-}
+} */
 
 #variable "default_table_expiration_ms" {
 #   description = "The default table expiration in milliseconds"

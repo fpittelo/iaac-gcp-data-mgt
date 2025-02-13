@@ -1,7 +1,7 @@
 ### General Project variables values  ###
 region                          = "europe-west6"
 location                        = "europe-west6"
-zone                            = "europe-west6-b"
+# zone                          = "europe-west6-b"
 project_id                      = "iaac-gcp-data-mgt"
 owner_email                     = "frederic.pitteloud@gmail.com"
 network                         = "default"
@@ -16,7 +16,7 @@ roles                           = [
   "roles/storage.objectAdmin"
   ]
 ### Cloud Storage variables values  ###
-bucket                          = "iaac-gcp-data-mgt-data"
+bucket_name                     = "production-bucket"
 versioning_enabled              = true
 lifecycle_rule_age              = 5
 bucket_owner_email              = "frederic.pitteloud@gmail.com"

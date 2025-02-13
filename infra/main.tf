@@ -70,13 +70,12 @@ resource "google_project_iam_member" "bigquery_data_transfer_service_agent" {
 
 #### Create GCP Cloud Storage bucket ####
 module "cloud_storage_bucket" {
-  source                    = "../modules/cloud_storage_bucket"
+  source                    = "../modules/bucket"
   project                   = var.project_id
-  zone                      = var.zone
-  bucket                    = var.bucket
+# zone                      = var.zone
+  bucket_name               = var.bucket_name
   location                  = var.location
   versioning_enabled        = var.versioning_enabled
-  lifecycle_rule_age        = var.lifecycle_rule_age
   bucket_owner_email        = var.bucket_owner_email  
 }
 
@@ -95,7 +94,7 @@ resource "null_resource" "create_swissgrid_csv" {
 
 # Download and stage the data in Cloud Storage
 resource "google_storage_bucket_object" "swissgrid_data" {
-  bucket = var.bucket
+  bucket = var.bucket_name
   name   = "inputs/swissgrid.csv" # Path within your bucket
   depends_on = [ null_resource.create_swissgrid_csv ]
   # Use a local file as a trigger for updates.
@@ -121,8 +120,8 @@ module "bigquery_dataset" {
   dataset_id                  = var.dataset_id
   dataset_description         = var.dataset_description
   dataset_owner_email         = var.dataset_owner_email
-  data_editor_group           = var.data_editor_group
-  data_viewer_group           = var.data_viewer_group
+/*   data_editor_group           = var.data_editor_group
+  data_viewer_group           = var.data_viewer_group */
 
   depends_on = [ 
     google_project_iam_member.service_account_bigquery_admin,
@@ -171,7 +170,7 @@ resource "google_bigquery_data_transfer_config" "swissgrid_transfer" {
 
   params = {
     destination_table_name_template = "swissgrid_data"
-    data_path_template              = "gs://${var.bucket}/inputs/swissgrid.csv"
+    data_path_template              = "gs://${var.bucket_name}/inputs/swissgrid.csv"
     file_format                     = "CSV"
     skip_leading_rows               = 1
     write_disposition               = "APPEND"

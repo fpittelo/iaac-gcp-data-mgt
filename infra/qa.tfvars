@@ -1,7 +1,7 @@
 ### General Project variables values  ###
 region                          = "europe-west6"
 location                        = "europe-west6"
-zone                            = "europe-west6-b"
+# zone                          = "europe-west6-b"
 project_id                      = "iaac-gcp-data-mgt"
 owner_email                     = "frederic.pitteloud@gmail.com"
 network                         = "default"
@@ -13,10 +13,10 @@ member                          = "serviceAccount:github-wif-sa@iaac-gcp-data-mg
 roles                           = [ 
   "roles/serviceusage.serviceUsageAdmin",
   "roles/bigquery.dataOwner",
-  "roles/storage.objectAdmin",
+  "roles/storage.objectAdmin"
   ]
 ### Cloud Storage variables values  ###
-bucket                          = "iaac-gcp-data-mgt-data"
+bucket_name                     = "production-bucket"
 versioning_enabled              = true
 lifecycle_rule_age              = 5
 bucket_owner_email              = "frederic.pitteloud@gmail.com"
@@ -25,21 +25,21 @@ input_folder                    = "input/readme.md"
 output_folder                   = "output/output.txt"
 temp_folder                     = "temp/temp.txt"
 error_folder                    = "error/error.txt"
-### BigQuery variables values  ###
+### BigQuery variables values   ###
 dataset_id                      = "prod_dataset"
-dataset_description             = "BigQuery production dataset" 
-default_table_expiration_ms     = "3600000"
+dataset_description             = "Production dataset" 
+# default_table_expiration_ms   = "3600000"
 dataset_owner_email             = "frederic.pitteloud@gmail.com"
 data_viewer_group               = "frederic.pitteloud@gmail.com"
 data_editor_group               = "frederic.pitteloud@gmail.com"
-### Dataflow variables values  ###
+### Dataflow variables values   ###
 temp_gcs_path                   = ""
 temp_gcs_location               = ""
 max_workers                     = ""
 job_name                        = "dataflow-job"
 input_subscription              = ""
 output_topic                    = ""
-####  Apigee variables values  ###
+####  Apigee variables values   ###
 apigee_org_id                   = "data-mgt-org"
 apigee_env_name                 = "qa"
 apigee_env_display_name         = "Quality Assurance"

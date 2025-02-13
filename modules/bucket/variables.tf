@@ -1,7 +1,7 @@
 ####### Variables for GPC Cloud Storage Bucket #######
 
-variable "bucket" {
-  description = "The location for the BigQuery dataset"
+variable "bucket_name" {
+  description = "The name of the Cloud Storage bucket"
   type        = string
 }
 
@@ -10,10 +10,10 @@ variable "location" {
   type        = string
 }
 
-variable "zone" {
+/* variable "zone" {
     description = "The GCP zone"
     type        = string
-}
+} */
 
 variable "project" {
     description = "The GCP project ID"
