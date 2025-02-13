@@ -1,5 +1,5 @@
 output "bucket" {
-  value = module.cloud_storage_bucket.bucket_name
+  value = module.cloud_storage_bucket.bucket
   description = "Name of the created bucket"
 }
 
