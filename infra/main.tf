@@ -120,7 +120,6 @@ module "bigquery_dataset" {
   location                    = var.location
   dataset_id                  = var.dataset_id
   dataset_description         = var.dataset_description
-  default_table_expiration_ms = var.default_table_expiration_ms
   dataset_owner_email         = var.dataset_owner_email
   data_editor_group           = var.data_editor_group
   data_viewer_group           = var.data_viewer_group
@@ -162,34 +161,7 @@ resource "google_bigquery_table" "swissgrid_data" {
   }
 }
 
-resource "google_bigquery_table" "batch_data" {
-  dataset_id                  = module.bigquery_dataset.dataset_id
-  deletion_protection         = false
-  table_id                    = "data-mgt-table-batch"
-  schema                      = <<-EOF
-  [
-    {
-      "name": "ingestion_time",
-      "type": "TIMESTAMP",
-      "mode": "NULLABLE",
-      "description": "Timestamp of the ingestion"
-    },
-    {
-      "name": "data",
-      "type": "STRING",
-      "mode": "NULLABLE",
-      "description": "Batch data as a JSON string"
-    }
-  ]
-  EOF
-
-  lifecycle {
-    prevent_destroy = false
-  }
-}
-
 ### Bigquery Transfer Configuration ###
-
 resource "google_bigquery_data_transfer_config" "swissgrid_transfer" {
   data_source_id                    = "google_cloud_storage"
   destination_dataset_id            = module.bigquery_dataset.dataset_id
@@ -200,7 +172,6 @@ resource "google_bigquery_data_transfer_config" "swissgrid_transfer" {
   params = {
     destination_table_name_template = "swissgrid_data"
     data_path_template              = "gs://${var.bucket}/inputs/swissgrid.csv"
-#   source_uris                     = "gs://${var.bucket}/inputs/swissgrid.csv"
     file_format                     = "CSV"
     skip_leading_rows               = 1
     write_disposition               = "APPEND"

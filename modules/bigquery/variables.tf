@@ -30,10 +30,10 @@ variable "data_editor_group" {
     type        = string
 }
 
-variable "default_table_expiration_ms" {
-    description = "The default table expiration in milliseconds"
-    type        = string
-}
+#variable "default_table_expiration_ms" {
+#   description = "The default table expiration in milliseconds"
+#   type        = string
+#}
 
 variable "table_id" {
   type = string
