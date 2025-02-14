@@ -1,9 +1,8 @@
 ### General Project variables values  ###
 region                          = "europe-west6"
 location                        = "europe-west6"
-zone                            = "europe-west6-b"
+# zone                          = "europe-west6-b"
 project_id                      = "iaac-gcp-data-mgt"
-owner_email                     = "frederic.pitteloud@gmail.com"
 network                         = "default"
 subnetwork                      = "default"
 service_account_email           = "github-sa-dev@iaac-gcp-vm-dev.iam.gserviceaccount.com"
@@ -16,7 +15,7 @@ roles                           = [
   "roles/storage.objectAdmin"
   ]
 ### Cloud Storage variables values  ###
-bucket                          = "iaac-gcp-data-mgt-data"
+bucket                          = "inputs-oper-data"
 versioning_enabled              = true
 lifecycle_rule_age              = 5
 bucket_owner_email              = "frederic.pitteloud@gmail.com"
@@ -26,10 +25,43 @@ output_folder                   = "output/output.txt"
 temp_folder                     = "temp/temp.txt"
 error_folder                    = "error/error.txt"
 ### BigQuery variables values   ###
-dataset_id                      = "prod_dataset"
-dataset_description             = "Production dataset" 
+# dataset_id                      = "prod_dataset"
+# dataset_description             = "Production dataset" 
+
+datasets = {
+  "DOMAIN_FINANCE" = {
+    dataset_id                  = "DOMAIN_FINANCE"
+    description                 = "Finance dataset"
+    dataset_owner_email         = "frederic.pitteloud@gmail.com"
+    delete_contents_on_destroy  = true
+  },
+  "DOMAIN_HR" = {
+      dataset_id                  = "DOMAIN_HR"
+      description                 = "HR dataset"
+      dataset_owner_email         = "frederic.pitteloud@gmail.com"
+      delete_contents_on_destroy  = true
+    },
+    "DOMAIN_OPERATIONS" = {
+      dataset_id                  = "DOMAIN_OPERATIONS"
+      description                 = "Operations dataset"
+      dataset_owner_email         = "frederic.pitteloud@gmail.com"
+      delete_contents_on_destroy  = true
+    },
+    "DOMAIN_PUBLIC" = {
+      dataset_id                  = "DOMAIN_PUBLIC"
+      description                 = "Public dataset"
+      dataset_owner_email         = "frederic.pitteloud@gmail.com"
+      delete_contents_on_destroy  = true
+    },
+    "DOMAIN_SHARED" = {
+      dataset_id                  = "DOMAIN_SHARED"
+      description                 = "Shared dataset"
+      dataset_owner_email         = "frederic.pitteloud@gmail.com"
+      delete_contents_on_destroy  = true
+    }
+}
+
 # default_table_expiration_ms   = "3600000"
-dataset_owner_email             = "frederic.pitteloud@gmail.com"
 data_viewer_group               = "frederic.pitteloud@gmail.com"
 data_editor_group               = "frederic.pitteloud@gmail.com"
 ### Dataflow variables values   ###

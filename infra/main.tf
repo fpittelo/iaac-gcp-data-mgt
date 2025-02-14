@@ -38,6 +38,19 @@ resource "google_project_service" "api_activations" {
   disable_on_destroy = false
 }
 
+resource "google_project_iam_member" "service_account_storage_admin" {
+  project = var.project_id
+  role    = "roles/storage.admin"
+  member  = "serviceAccount:${var.service_account_email}"
+}
+
+resource "google_storage_bucket_iam_member" "member" {
+  bucket = var.bucket
+  role   = "roles/storage.objectCreator"
+  member = "serviceAccount:${var.service_account_email}"
+  depends_on = [module.google_storage_bucket.google_storage_bucket]
+}
+
 resource "google_project_iam_member" "service_account_bigquery_admin" {
   project = var.project_id
   role    = "roles/bigquery.admin"
@@ -69,14 +82,12 @@ resource "google_project_iam_member" "bigquery_data_transfer_service_agent" {
 }
 
 #### Create GCP Cloud Storage bucket ####
-module "cloud_storage_bucket" {
-  source                    = "../modules/cloud_storage_bucket"
+module "google_storage_bucket" {
+  source                    = "../modules/bucket"
   project                   = var.project_id
-  zone                      = var.zone
   bucket                    = var.bucket
   location                  = var.location
   versioning_enabled        = var.versioning_enabled
-  lifecycle_rule_age        = var.lifecycle_rule_age
   bucket_owner_email        = var.bucket_owner_email  
 }
 
@@ -114,16 +125,14 @@ resource "google_storage_bucket_object" "swissgrid_data" {
 }
 
 ### BigQuery Deployment ###
-module "bigquery_dataset" {
+module "google_bigquery_dataset" {
+  for_each                    = var.datasets
   source                      = "../modules/bigquery"
   project                     = var.project_id
   location                    = var.location
-  dataset_id                  = var.dataset_id
-  dataset_description         = var.dataset_description
-  dataset_owner_email         = var.dataset_owner_email
-  data_editor_group           = var.data_editor_group
-  data_viewer_group           = var.data_viewer_group
-
+  dataset_id                  = each.value.dataset_id
+  delete_contents_on_destroy  = each.value.delete_contents_on_destroy
+  dataset_owner_email         = each.value.dataset_owner_email
   depends_on = [ 
     google_project_iam_member.service_account_bigquery_admin,
     google_project_iam_member.bq_dataset_delete,
@@ -131,7 +140,7 @@ module "bigquery_dataset" {
 }
 
 resource "google_bigquery_table" "swissgrid_data" {
-  dataset_id                  = module.bigquery_dataset.dataset_id
+  dataset_id                  = module.google_bigquery_dataset["DOMAIN_OPERATIONS"].dataset_id
   deletion_protection         = false
   table_id                    = "swissgrid_data"
   schema                      = <<-EOF
@@ -164,7 +173,7 @@ resource "google_bigquery_table" "swissgrid_data" {
 ### Bigquery Transfer Configuration ###
 resource "google_bigquery_data_transfer_config" "swissgrid_transfer" {
   data_source_id                    = "google_cloud_storage"
-  destination_dataset_id            = module.bigquery_dataset.dataset_id
+  destination_dataset_id            = module.google_bigquery_dataset["DOMAIN_OPERATIONS"].dataset_id
   location                          = var.location
   display_name                      = "Swissgrid Data Transfer"
   schedule                          = "every 24 hours"
@@ -180,9 +189,4 @@ resource "google_bigquery_data_transfer_config" "swissgrid_transfer" {
   depends_on = [
     google_storage_bucket_object.swissgrid_data
   ]
-}
-
-output "dataset_self_link" {
-  value       = module.bigquery_dataset.dataset_self_link  # Corrected line
-  description = "The self link of the created dataset"
 }

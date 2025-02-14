@@ -15,12 +15,18 @@ variable "dataset_id" {
     type        = string
 }
 
-variable "dataset_description" {
+/* variable "dataset_description" {
     description = "The description of the dataset"
     type        = string
 }
+ */
+variable "delete_contents_on_destroy" {
+  type          = bool
+  description   = "Whether to delete contents when dataset is destroyed"
+  default       = false # Default to false for safety!
+}
 
-variable "data_viewer_group" {
+/* variable "data_viewer_group" {
     description = "The email of the group to grant dataViewer access"
     type        = string
 }
@@ -28,7 +34,7 @@ variable "data_viewer_group" {
 variable "data_editor_group" {
     description = "The email of the group to grant dataEditor access"
     type        = string
-}
+} */
 
 #variable "default_table_expiration_ms" {
 #   description = "The default table expiration in milliseconds"
