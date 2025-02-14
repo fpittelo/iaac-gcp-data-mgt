@@ -91,6 +91,46 @@ module "google_storage_bucket" {
   bucket_owner_email        = var.bucket_owner_email  
 }
 
+# Create the HR data bucket
+module "google_storage_bucket_inputs_hr_data" {
+  source                = "../modules/bucket"
+  project               = var.project_id
+  bucket                = "inputs-hr-data"
+  location              = var.location
+  versioning_enabled    = var.versioning_enabled
+  bucket_owner_email    = var.bucket_owner_email
+}
+
+# Create the Finance data bucket
+module "google_storage_bucket_inputs_fin_data" {
+  source                = "../modules/bucket"
+  project               = var.project_id
+  bucket                = "inputs-fin-data"
+  location              = var.location
+  versioning_enabled    = var.versioning_enabled
+  bucket_owner_email    = var.bucket_owner_email
+}
+
+# Create the Public data bucket
+module "google_storage_bucket_inputs_pub_data" {
+  source                = "../modules/bucket"
+  project               = var.project_id
+  bucket                = "inputs-pub-data"
+  location              = var.location
+  versioning_enabled    = var.versioning_enabled
+  bucket_owner_email    = var.bucket_owner_email
+}
+
+# Create the Shared data bucket
+module "google_storage_bucket_inputs_shrd_data" {
+  source                = "../modules/bucket"
+  project               = var.project_id
+  bucket                = "inputs-shrd-data"
+  location              = var.location
+  versioning_enabled    = var.versioning_enabled
+  bucket_owner_email    = var.bucket_owner_email
+}
+
 resource "null_resource" "create_swissgrid_csv" {
   provisioner "local-exec" {
     command = <<EOT
