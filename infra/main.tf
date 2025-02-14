@@ -256,6 +256,27 @@ resource "google_bigquery_table" "employees_list" {
 EOF
 }
 
+resource "google_bigquery_table" "salaries" {
+  dataset_id                  = module.google_bigquery_dataset["DOMAIN_HR"].dataset_id
+  table_id                    = "salaries"
+  deletion_protection         = false # Adjust as needed
+
+  schema                      = <<-EOF
+[
+  {
+    "name": "name",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "salaries",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  }
+]
+EOF
+}
+
 ### Bigquery Transfer Configuration ###
 resource "google_bigquery_data_transfer_config" "swissgrid_transfer" {
   data_source_id                    = "google_cloud_storage"
