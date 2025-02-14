@@ -1,5 +1,5 @@
 # Outputs
-output "bucket_name" {
+output "bucket" {
   value = google_storage_bucket.bucket.name
 }
 

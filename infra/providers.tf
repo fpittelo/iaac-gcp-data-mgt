@@ -16,7 +16,7 @@ terraform {
 provider "google" {
   project       = var.project_id
   region        = var.location
-  zone          = var.zone
+# zone          = var.zone
 }
 
 provider "google-beta" {
