@@ -132,6 +132,7 @@ module "google_bigquery_dataset" {
   location                    = var.location
   dataset_id                  = each.value.dataset_id
   delete_contents_on_destroy  = each.value.delete_contents_on_destroy
+  dataset_owner_email         = each.value.dataset_owner_email
   depends_on = [ 
     google_project_iam_member.service_account_bigquery_admin,
     google_project_iam_member.bq_dataset_delete,
