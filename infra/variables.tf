@@ -113,7 +113,7 @@ variable "datasets" {
   type = map(object({
     dataset_id                  = string
     description                 = string
-    owner_email                 = string
+    dataset_owner_email         = string
     delete_contents_on_destroy  = bool # Add this property
   }))
 }
