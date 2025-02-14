@@ -3,7 +3,6 @@ region                          = "europe-west6"
 location                        = "europe-west6"
 # zone                          = "europe-west6-b"
 project_id                      = "iaac-gcp-data-mgt"
-owner_email                     = "frederic.pitteloud@gmail.com"
 network                         = "default"
 subnetwork                      = "default"
 service_account_email           = "github-sa-dev@iaac-gcp-vm-dev.iam.gserviceaccount.com"
@@ -63,7 +62,6 @@ datasets = {
 }
 
 # default_table_expiration_ms   = "3600000"
-dataset_owner_email             = "frederic.pitteloud@gmail.com"
 data_viewer_group               = "frederic.pitteloud@gmail.com"
 data_editor_group               = "frederic.pitteloud@gmail.com"
 ### Dataflow variables values   ###
