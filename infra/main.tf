@@ -210,6 +210,52 @@ resource "google_bigquery_table" "swissgrid_data" {
   }
 }
 
+resource "google_bigquery_table" "employees_list" {
+  dataset_id                  = module.google_bigquery_dataset["DOMAIN_HR"].dataset_id
+  table_id                    = "employees_list"
+  deletion_protection         = false # Adjust as needed
+
+  schema                      = <<-EOF
+[
+  {
+    "name": "name",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "phone",
+    "type": "STRING", # Store as STRING initially
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "email",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "address",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "postalZip",
+    "type": "STRING", # Store as STRING initially
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "region",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "country",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  }
+]
+EOF
+}
+
 ### Bigquery Transfer Configuration ###
 resource "google_bigquery_data_transfer_config" "swissgrid_transfer" {
   data_source_id                    = "google_cloud_storage"
