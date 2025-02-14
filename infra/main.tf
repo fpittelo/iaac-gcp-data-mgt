@@ -224,7 +224,7 @@ resource "google_bigquery_table" "employees_list" {
   },
   {
     "name": "phone",
-    "type": "STRING", # Store as STRING initially
+    "type": "STRING",
     "mode": "NULLABLE"
   },
   {
@@ -239,7 +239,7 @@ resource "google_bigquery_table" "employees_list" {
   },
   {
     "name": "postalZip",
-    "type": "STRING", # Store as STRING initially
+    "type": "STRING",
     "mode": "NULLABLE"
   },
   {
