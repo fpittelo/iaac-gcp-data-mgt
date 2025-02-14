@@ -189,8 +189,3 @@ resource "google_bigquery_data_transfer_config" "swissgrid_transfer" {
     google_storage_bucket_object.swissgrid_data
   ]
 }
-
-output "dataset_self_link" {
-  value       = module.google_bigquery_dataset.dataset_self_link  # Corrected line
-  description = "The self link of the created dataset"
-}
