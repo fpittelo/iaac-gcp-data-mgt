@@ -111,6 +111,16 @@ module "google_storage_bucket_inputs_fin_data" {
   bucket_owner_email    = var.bucket_owner_email
 }
 
+# Create the Academia data bucket
+module "google_storage_bucket_inputs_acd_data" {
+  source                = "../modules/bucket"
+  project               = var.project_id
+  bucket                = "inputs-acd-data"
+  location              = var.location
+  versioning_enabled    = var.versioning_enabled
+  bucket_owner_email    = var.bucket_owner_email
+}
+
 # Create the Public data bucket
 module "google_storage_bucket_inputs_pub_data" {
   source                = "../modules/bucket"

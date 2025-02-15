@@ -29,6 +29,12 @@ error_folder                    = "error/error.txt"
 # dataset_description             = "Production dataset" 
 
 datasets = {
+  "DOMAIN_ACADEMIA" = {
+    dataset_id                  = "DOMAIN_ACADEMIA"
+    description                 = "Academia dataset"
+    dataset_owner_email         = "frederic.pitteloud@gmail.com"
+    delete_contents_on_destroy  = true
+  },
   "DOMAIN_FINANCE" = {
     dataset_id                  = "DOMAIN_FINANCE"
     description                 = "Finance dataset"
@@ -37,7 +43,7 @@ datasets = {
   },
   "DOMAIN_HR" = {
       dataset_id                  = "DOMAIN_HR"
-      description                 = "HR dataset"
+      description                 = "Human Resources dataset"
       dataset_owner_email         = "frederic.pitteloud@gmail.com"
       delete_contents_on_destroy  = true
     },
