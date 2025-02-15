@@ -168,7 +168,14 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-  
+        with:
+          path: .  # Checkout the entire repository (important!)
+          submodules: recursive # If you have submodules in your repo, include this
+          fetch-depth: 0 # To fetch all history, required if you have files in a separate commit
+
+      - name: List Files (DEBUG)
+        run: ls -alR ${{ github.workspace }}
+
       - name: Set auth
         id: 'auth'
         uses: 'google-github-actions/auth@v1'
