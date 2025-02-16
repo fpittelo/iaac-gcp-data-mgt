@@ -188,5 +188,5 @@ jobs:
       - name: upload data
         uses: google-github-actions/upload-cloud-storage@v1
         with:
-          path: 'files/ac_**'
+          path: 'files/ac_*'
           destination: 'inputs-acd-data/inputs'
