@@ -185,8 +185,15 @@ jobs:
           # Value is the email address of the GCP service account #
           service_account: ${{ secrets.SERVICE_ACCOUNT }}
 
-      - name: upload data
-        uses: google-github-actions/upload-cloud-storage@v2
-        with:
-          path: '${{ github.workspace }}/files/ac_schools.csv'
-          destination: 'inputs-acd-data/inputs'
+#     - name: upload data
+#       uses: google-github-actions/upload-cloud-storage@v2
+#       with:
+#         path: '${{ github.workspace }}/files/ac_schools.csv'
+#         destination: 'inputs-acd-data/inputs'
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+    
+      - name: Upload files using gsutil
+        run: |
+          gsutil cp ${{ github.workspace }}/files/ac_* gs://inputs-acd-data/inputs/
