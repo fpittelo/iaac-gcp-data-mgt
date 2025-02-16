@@ -15,7 +15,7 @@ permissions:
 jobs:
   
   Set-up-permissions-for-the-workflow:
-    name: Set SA permissions
+    name: Set permissions
     runs-on: ubuntu-latest
     environment: ${{ github.ref_name }}
     steps:
@@ -24,7 +24,7 @@ jobs:
 
       - name: Set auth
         id: 'auth'
-        uses: 'google-github-actions/auth@v1'
+        uses: 'google-github-actions/auth@v2'
         with:
           # Value is found on the GCP WIF Provider details > Default audience #
           workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
@@ -72,7 +72,7 @@ jobs:
 
       - name: Set auth
         id: 'auth'
-        uses: 'google-github-actions/auth@v1'
+        uses: 'google-github-actions/auth@v2'
         with:
           # Value is found on the GCP WIF Provider details > Default audience #
           workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
@@ -106,8 +106,8 @@ jobs:
             # Value TF_VAR_BUCKET must be defined in Github environement secrets #
             gsutil cp /dev/null gs://${{ secrets.TF_VAR_BUCKET }}/backend/
 
-  terraform-setup:
-    name: Terraform Set Up
+  deploy-fabric:
+    name: Deploy Fabric
     runs-on: ubuntu-latest
     needs: deploy-backend
     environment: ${{ github.ref_name }}
@@ -117,7 +117,7 @@ jobs:
   
       - name: Set auth
         id: 'auth'
-        uses: 'google-github-actions/auth@v1'
+        uses: 'google-github-actions/auth@v2'
         with:
           # Value is found on the GCP WIF Provider details > Default audience #
           workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
@@ -137,24 +137,6 @@ jobs:
           terraform init \
             -backend-config="bucket=${{ secrets.TF_VAR_BUCKET }}" \
             -backend-config="prefix=backend/terraform/state"
-
-  deploy-fabric:
-    name: Deploy Fabric
-    runs-on: ubuntu-latest
-    needs: terraform-setup
-    environment: ${{ github.ref_name }}
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-   
-      - name: Set auth
-        id: 'auth'
-        uses: 'google-github-actions/auth@v1'
-        with:
-          # Value is found on the GCP WIF Provider details > Default audience #
-          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
-          # Value is the email address of the GCP service account #
-          service_account: ${{ secrets.SERVICE_ACCOUNT }}
       
       - name: Install Terraform
         run: |
@@ -177,3 +159,49 @@ jobs:
         run: |
           cd infra
           terraform apply -var-file="${{ github.ref_name }}.tfvars" -var="github_run_id=${{ github.run_id }}" -auto-approve
+
+  upload-data:
+    name: Upload Data
+    runs-on: ubuntu-latest
+    needs: deploy-fabric
+    environment: ${{ github.ref_name }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          path: .  # Checkout the entire repository (important!)
+          submodules: recursive # If you have submodules in your repo, include this
+          fetch-depth: 0 # To fetch all history, requiremmd if you have files in a separate coit
+
+      - name: List Files (DEBUG)
+        run: ls -alR ${{ github.workspace }}
+
+      - name: Set auth
+        id: 'auth'
+        uses: 'google-github-actions/auth@v2'
+        with:
+          # Value is found on the GCP WIF Provider details > Default audience #
+          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+          # Value is the email address of the GCP service account #
+          service_account: ${{ secrets.SERVICE_ACCOUNT }}
+
+#     - name: upload data
+#       uses: google-github-actions/upload-cloud-storage@v2
+#       with:
+#         path: '${{ github.workspace }}/files/ac_schools.csv'
+#         destination: 'inputs-acd-data/inputs'
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+    
+      - name: Upload files using gsutil
+        run: |
+          gsutil cp ${{ github.workspace }}/files/ac_* gs://inputs-acd-data/inputs/
+
+      - name: Upload files using gsutil
+        run: |
+          gsutil cp ${{ github.workspace }}/files/hr_* gs://inputs-hr-data/inputs/
+
+      - name: Upload files using gsutil
+        run: |
+          gsutil cp ${{ github.workspace }}/files/fin_* gs://inputs-fin-data/inputs/

@@ -111,6 +111,16 @@ module "google_storage_bucket_inputs_fin_data" {
   bucket_owner_email    = var.bucket_owner_email
 }
 
+# Create the Academia data bucket
+module "google_storage_bucket_inputs_acd_data" {
+  source                = "../modules/bucket"
+  project               = var.project_id
+  bucket                = "inputs-acd-data"
+  location              = var.location
+  versioning_enabled    = var.versioning_enabled
+  bucket_owner_email    = var.bucket_owner_email
+}
+
 # Create the Public data bucket
 module "google_storage_bucket_inputs_pub_data" {
   source                = "../modules/bucket"
@@ -135,7 +145,6 @@ resource "null_resource" "create_swissgrid_csv" {
   provisioner "local-exec" {
     command = <<EOT
       curl -s -L https://www.uvek-gis.admin.ch/BFE/ogd/103/ogd103_stromverbrauch_swissgrid_lv_und_endv.csv -o ${path.module}/swissgrid.csv
-      sleep 60
     EOT
   }
 
@@ -149,18 +158,9 @@ resource "google_storage_bucket_object" "swissgrid_data" {
   bucket = var.bucket
   name   = "inputs/swissgrid.csv" # Path within your bucket
   depends_on = [ null_resource.create_swissgrid_csv ]
-  # Use a local file as a trigger for updates.
-  # This makes the resource update when the file changes.
   source = "${path.module}/swissgrid.csv"  # Create swissgrid.csv 
   lifecycle {
     ignore_changes = [ detect_md5hash ]
-  }
-  ## Provisioner to download the data to the dummy file
-  provisioner "local-exec" {
-    command = <<EOT
-      curl -L https://www.uvek-gis.admin.ch/BFE/ogd/103/ogd103_stromverbrauch_swissgrid_lv_und_endv.csv -o ${path.module}/swissgrid.csv
-      sleep 60
-    EOT
   }
 }
 
@@ -208,6 +208,73 @@ resource "google_bigquery_table" "swissgrid_data" {
   lifecycle {
     prevent_destroy = false
   }
+}
+
+resource "google_bigquery_table" "employees_list" {
+  dataset_id                  = module.google_bigquery_dataset["DOMAIN_HR"].dataset_id
+  table_id                    = "employees_list"
+  deletion_protection         = false # Adjust as needed
+
+  schema                      = <<-EOF
+[
+  {
+    "name": "name",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "phone",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "email",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "address",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "postalZip",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "region",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "country",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  }
+]
+EOF
+}
+
+resource "google_bigquery_table" "salaries" {
+  dataset_id                  = module.google_bigquery_dataset["DOMAIN_HR"].dataset_id
+  table_id                    = "salaries"
+  deletion_protection         = false # Adjust as needed
+
+  schema                      = <<-EOF
+[
+  {
+    "name": "name",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "salaries",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  }
+]
+EOF
 }
 
 ### Bigquery Transfer Configuration ###
