@@ -24,6 +24,7 @@ resource "google_project_service" "api_activations" {
     "bigquery.googleapis.com",
     "bigquerydatatransfer.googleapis.com",
     "bigquerystorage.googleapis.com",
+    "cloudbuild.googleapis.com",
     "cloudfunctions.googleapis.com",
     "cloudresourcemanager.googleapis.com",
     "cloudscheduler.googleapis.com",
