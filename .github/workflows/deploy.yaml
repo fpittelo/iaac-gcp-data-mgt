@@ -171,7 +171,7 @@ jobs:
         with:
           path: .  # Checkout the entire repository (important!)
           submodules: recursive # If you have submodules in your repo, include this
-          fetch-depth: 0 # To fetch all history, required if you have files in a separate commit
+          fetch-depth: 0 # To fetch all history, requiremmd if you have files in a separate coit
 
       - name: List Files (DEBUG)
         run: ls -alR ${{ github.workspace }}
@@ -188,5 +188,5 @@ jobs:
       - name: upload data
         uses: google-github-actions/upload-cloud-storage@v1
         with:
-          path: 'files/ac_*'
+          path: '${{ github.workspace }}/files/ac_*'
           destination: 'inputs-acd-data/inputs'
