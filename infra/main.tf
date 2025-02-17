@@ -220,32 +220,32 @@ resource "google_bigquery_table" "ac_students" {
       "name": "students_id",
       "type": "STRING",
       "mode": "NULLABLE"
-    }
+    },
     {
       "name": "name",
       "type": "STRING",
       "mode": "NULLABLE"
-    }
+    },
     {
       "name": "phone",
       "type": "STRING",
       "mode": "NULLABLE"
-    }
+    },
     {
       "name": "email",
       "type": "STRING",
       "mode": "NULLABLE"
-    }
+    },
     {
       "name": "address",
       "type": "STRING",
       "mode": "NULLABLE"
-    }
+    },
     {
       "name": "country",
       "type": "STRING",
       "mode": "NULLABLE"
-    }
+    },
     {
       "name": "uid_schools",
       "type": "STRING",
