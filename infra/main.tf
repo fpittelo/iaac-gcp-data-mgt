@@ -180,7 +180,6 @@ module "google_bigquery_dataset" {
    ]
 }
 
-
 ###   BigQuery Tables   ###
 resource "google_bigquery_table" "ac_schools" {
   dataset_id                = module.google_bigquery_dataset["DOMAIN_ACADEMIA"].dataset_id
@@ -258,6 +257,58 @@ resource "google_bigquery_table" "ac_students" {
   }
 }
 
+resource "google_bigquery_table" "fin_students_fees" {
+  dataset_id                  = module.google_bigquery_dataset["DOMAIN_FINANCE"].dataset_id
+  table_id                    = "fin_students_fees"
+  deletion_protection         = false
+  schema                      = <<-EOF
+  [
+    {
+      "name": "uid_transaction",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "transaction_id",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "students_id",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "subscription_year",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "subscription",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "amount",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "revenue_stream",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    }
+    {
+      "name": "payment_status",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    }
+  ]
+  EOF
+  lifecycle {
+    prevent_destroy = false
+  }
+}
 
 resource "google_bigquery_table" "swissgrid_data" {
   dataset_id                  = module.google_bigquery_dataset["DOMAIN_OPERATIONS"].dataset_id
