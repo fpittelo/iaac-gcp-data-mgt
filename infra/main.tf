@@ -310,6 +310,49 @@ resource "google_bigquery_table" "fin_students_fees" {
   }
 }
 
+resource "google_bigquery_table" "hr_employees_list" {
+  dataset_id                  = module.google_bigquery_dataset["DOMAIN_HR"].dataset_id
+  table_id                    = "hr_employees_list"
+  deletion_protection         = false
+  schema                      = <<-EOF
+  [
+    {
+      "name": "uid_employees",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "name",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "phone",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "email",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "address",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "country",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    }
+  ]
+  EOF
+  lifecycle {
+    prevent_destroy = false
+  }
+}
+
 resource "google_bigquery_table" "swissgrid_data" {
   dataset_id                  = module.google_bigquery_dataset["DOMAIN_OPERATIONS"].dataset_id
   deletion_protection         = false
