@@ -409,6 +409,59 @@ resource "google_bigquery_table" "hr_countries" {
   }
 }
 
+resource "google_bigquery_table" "pub_epfl_students_data" {
+  dataset_id                  = module.google_bigquery_dataset["DOMAIN_PUBLIC"].dataset_id
+  table_id                    = "pub_epfl_students_data"
+  deletion_protection         = false
+  schema                      = <<-EOF
+  [
+    {
+      "name": "year",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "student_count",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "department",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "phd_student_count",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "average_age",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "international_percentage",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "country",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "continent",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    }
+  ]
+  EOF
+  lifecycle {
+    prevent_destroy = false
+  }
+}
+
 resource "google_bigquery_table" "swissgrid_data" {
   dataset_id                  = module.google_bigquery_dataset["DOMAIN_OPERATIONS"].dataset_id
   deletion_protection         = false
