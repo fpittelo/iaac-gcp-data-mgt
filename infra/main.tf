@@ -152,6 +152,7 @@ resource "null_resource" "create_opr_swissgrid_csv" {
   triggers = {
     always_run = "${timestamp()}"
   }
+  depends_on = [ google_storage_bucket_object.opr_swissgrid_data ]
 }
 
 # Download and stage the data in Cloud Storage
