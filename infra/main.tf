@@ -461,6 +461,34 @@ resource "google_bigquery_table" "pub_epfl_students_data" {
   }
 }
 
+resource "google_bigquery_table" "shr_epfl_employee_students_data" {
+  dataset_id                  = module.google_bigquery_dataset["DOMAIN_SHARED"].dataset_id
+  table_id                    = "shr_epfl_employee_students_data"
+  deletion_protection         = false
+  schema                      = <<-EOF
+  [
+    {
+      "name": "year",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "student_count",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "employee_count",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    }
+  ]
+  EOF
+  lifecycle {
+    prevent_destroy = false
+  }
+}
+
 resource "google_bigquery_table" "swissgrid_data" {
   dataset_id                  = module.google_bigquery_dataset["DOMAIN_OPERATIONS"].dataset_id
   deletion_protection         = false
