@@ -180,6 +180,85 @@ module "google_bigquery_dataset" {
    ]
 }
 
+
+###   BigQuery Tables   ###
+resource "google_bigquery_table" "ac_schools" {
+  dataset_id                = module.google_bigquery_dataset["DOMAIN_ACADEMIA"].dataset_id
+  table_id                    = "ac_schools"
+  deletion_protection         = false
+  schema                      = <<-EOF
+  [
+    {
+      "name": "uid_schools",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "schools",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    }
+  ]
+  EOF
+  lifecycle {
+    prevent_destroy = false
+  }
+}
+
+resource "google_bigquery_table" "ac_students" {
+  dataset_id                  = module.google_bigquery_dataset["DOMAIN_ACADEMIA"].dataset_id
+  table_id                    = "ac_students_list"
+  deletion_protection         = false
+  schema                      = <<-EOF
+  [
+    {
+      "name": "uid_students",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "students_id",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    }
+    {
+      "name": "name",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    }
+    {
+      "name": "phone",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    }
+    {
+      "name": "email",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    }
+    {
+      "name": "address",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    }
+    {
+      "name": "country",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    }
+    {
+      "name": "uid_schools",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    }
+  ]
+  EOF
+  lifecycle {
+    prevent_destroy = false
+  }
+}
+
+
 resource "google_bigquery_table" "swissgrid_data" {
   dataset_id                  = module.google_bigquery_dataset["DOMAIN_OPERATIONS"].dataset_id
   deletion_protection         = false
