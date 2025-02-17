@@ -521,6 +521,27 @@ resource "google_bigquery_table" "swissgrid_data" {
 }
 
 ### Bigquery Transfer Configuration ###
+
+resource "google_bigquery_data_transfer_config" "ac_schools_transfer" {
+  data_source_id                    = "google_cloud_storage"
+  destination_dataset_id            = module.google_bigquery_dataset["DOMAIN_ACADEMIA"].dataset_id
+  location                          = var.location
+  display_name                      = "ac_schools_transfer"
+  schedule                          = "every 24 hours"
+
+  params = {
+    destination_table_name_template = "ac_schools"
+    data_path_template              = "gs://inputs-acd-data/inputs/ac_schools.csv"
+    file_format                     = "CSV"
+    skip_leading_rows               = 1
+    write_disposition               = "APPEND"
+  }
+
+  depends_on = [
+    google_storage_bucket_object.google_storage_bucket_inputs_acd_data
+  ]
+}
+
 resource "google_bigquery_data_transfer_config" "swissgrid_transfer" {
   data_source_id                    = "google_cloud_storage"
   destination_dataset_id            = module.google_bigquery_dataset["DOMAIN_OPERATIONS"].dataset_id
