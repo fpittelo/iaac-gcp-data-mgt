@@ -353,6 +353,62 @@ resource "google_bigquery_table" "hr_employees_list" {
   }
 }
 
+resource "google_bigquery_table" "hr_salaries" {
+  dataset_id                  = module.google_bigquery_dataset["DOMAIN_HR"].dataset_id
+  table_id                    = "hr_salaries"
+  deletion_protection         = false
+  schema                      = <<-EOF
+  [
+    {
+      "name": "uid_salaries",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "name",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "salaries",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    }
+  ]
+  EOF
+  lifecycle {
+    prevent_destroy = false
+  }
+}
+
+resource "google_bigquery_table" "hr_countries" {
+  dataset_id                  = module.google_bigquery_dataset["DOMAIN_HR"].dataset_id
+  table_id                    = "hr_countries"
+  deletion_protection         = false
+  schema                      = <<-EOF
+  [
+    {
+      "name": "uid_countries",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "country",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "Continent",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    }
+  ]
+  EOF
+  lifecycle {
+    prevent_destroy = false
+  }
+}
+
 resource "google_bigquery_table" "swissgrid_data" {
   dataset_id                  = module.google_bigquery_dataset["DOMAIN_OPERATIONS"].dataset_id
   deletion_protection         = false
