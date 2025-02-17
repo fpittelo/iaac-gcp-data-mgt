@@ -133,19 +133,19 @@ module "google_storage_bucket_inputs_pub_data" {
 }
 
 # Create the Shared data bucket
-module "google_storage_bucket_inputs_shrd_data" {
+module "google_storage_bucket_inputs_shr_data" {
   source                = "../modules/bucket"
   project               = var.project_id
-  bucket                = "inputs-shrd-data"
+  bucket                = "inputs-shr-data"
   location              = var.location
   versioning_enabled    = var.versioning_enabled
   bucket_owner_email    = var.bucket_owner_email
 }
 
-resource "null_resource" "create_oper_swissgrid_csv" {
+resource "null_resource" "create_opr_swissgrid_csv" {
   provisioner "local-exec" {
     command = <<EOT
-      curl -s -L https://www.uvek-gis.admin.ch/BFE/ogd/103/ogd103_stromverbrauch_swissgrid_lv_und_endv.csv -o ${path.module}/oper_swissgrid.csv
+      curl -s -L https://www.uvek-gis.admin.ch/BFE/ogd/103/ogd103_stromverbrauch_swissgrid_lv_und_endv.csv -o ${path.module}/opr_swissgrid.csv
     EOT
   }
 
@@ -155,11 +155,11 @@ resource "null_resource" "create_oper_swissgrid_csv" {
 }
 
 # Download and stage the data in Cloud Storage
-resource "google_storage_bucket_object" "oper_swissgrid_data" {
+resource "google_storage_bucket_object" "opr_swissgrid_data" {
   bucket = var.bucket
-  name   = "inputs/oper_swissgrid.csv" # Path within your bucket
-  depends_on = [ null_resource.create_oper_swissgrid_csv ]
-  source = "${path.module}/oper_swissgrid.csv"  # Create swissgrid.csv 
+  name   = "inputs/opr_swissgrid.csv" # Path within your bucket
+  depends_on = [ null_resource.create_opr_swissgrid_csv ]
+  source = "${path.module}/opr_swissgrid.csv"  # Create swissgrid.csv 
   lifecycle {
     ignore_changes = [ detect_md5hash ]
   }
@@ -465,7 +465,7 @@ resource "google_bigquery_table" "pub_epfl_students_data" {
 resource "google_bigquery_table" "swissgrid_data" {
   dataset_id                  = module.google_bigquery_dataset["DOMAIN_OPERATIONS"].dataset_id
   deletion_protection         = false
-  table_id                    = "oper_swissgrid_data"
+  table_id                    = "opr_swissgrid_data"
   schema                      = <<-EOF
   [
     {
@@ -502,14 +502,14 @@ resource "google_bigquery_data_transfer_config" "swissgrid_transfer" {
   schedule                          = "every 24 hours"
 
   params = {
-    destination_table_name_template = "oper_swissgrid_data"
-    data_path_template              = "gs://${var.bucket}/inputs/oper_swissgrid.csv"
+    destination_table_name_template = "opr_swissgrid_data"
+    data_path_template              = "gs://${var.bucket}/inputs/opr_swissgrid.csv"
     file_format                     = "CSV"
     skip_leading_rows               = 1
     write_disposition               = "APPEND"
   }
 
   depends_on = [
-    google_storage_bucket_object.oper_swissgrid_data
+    google_storage_bucket_object.opr_swissgrid_data
   ]
 }
