@@ -206,4 +206,4 @@ jobs:
 
       - name: Upload files using gsutil
         run: |
-          gsutil cp ${{ github.workspace }}/files/shr_* gs://inputs-shrd-data/inputs/
+          gsutil cp ${{ github.workspace }}/files/shr_* gs://inputs-shr-data/inputs/

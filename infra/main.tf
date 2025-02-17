@@ -133,33 +133,32 @@ module "google_storage_bucket_inputs_pub_data" {
 }
 
 # Create the Shared data bucket
-module "google_storage_bucket_inputs_shrd_data" {
+module "google_storage_bucket_inputs_shr_data" {
   source                = "../modules/bucket"
   project               = var.project_id
-  bucket                = "inputs-shrd-data"
+  bucket                = "inputs-shr-data"
   location              = var.location
   versioning_enabled    = var.versioning_enabled
   bucket_owner_email    = var.bucket_owner_email
 }
 
-resource "null_resource" "create_swissgrid_csv" {
+resource "null_resource" "create_opr_swissgrid_csv" {
   provisioner "local-exec" {
     command = <<EOT
-      curl -s -L https://www.uvek-gis.admin.ch/BFE/ogd/103/ogd103_stromverbrauch_swissgrid_lv_und_endv.csv -o ${path.module}/swissgrid.csv
+      curl -s -L https://www.uvek-gis.admin.ch/BFE/ogd/103/ogd103_stromverbrauch_swissgrid_lv_und_endv.csv -o ${path.module}/opr_swissgrid.csv
     EOT
   }
-
   triggers = {
     always_run = "${timestamp()}"
   }
 }
 
 # Download and stage the data in Cloud Storage
-resource "google_storage_bucket_object" "swissgrid_data" {
+resource "google_storage_bucket_object" "opr_swissgrid_data" {
   bucket = var.bucket
-  name   = "inputs/swissgrid.csv" # Path within your bucket
-  depends_on = [ null_resource.create_swissgrid_csv ]
-  source = "${path.module}/swissgrid.csv"  # Create swissgrid.csv 
+  name   = "inputs/opr_swissgrid.csv" # Path within your bucket
+  depends_on = [ null_resource.create_opr_swissgrid_csv ]
+  source = "${path.module}/opr_swissgrid.csv"  # Create swissgrid.csv 
   lifecycle {
     ignore_changes = [ detect_md5hash ]
   }
@@ -180,10 +179,320 @@ module "google_bigquery_dataset" {
    ]
 }
 
+###   BigQuery Tables   ###
+resource "google_bigquery_table" "ac_schools" {
+  dataset_id                = module.google_bigquery_dataset["DOMAIN_ACADEMIA"].dataset_id
+  table_id                    = "ac_schools"
+  deletion_protection         = false
+  schema                      = <<-EOF
+  [
+    {
+      "name": "uid_schools",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "schools",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    }
+  ]
+  EOF
+  lifecycle {
+    prevent_destroy = false
+  }
+}
+
+resource "google_bigquery_table" "ac_students" {
+  dataset_id                  = module.google_bigquery_dataset["DOMAIN_ACADEMIA"].dataset_id
+  table_id                    = "ac_students_list"
+  deletion_protection         = false
+  schema                      = <<-EOF
+  [
+    {
+      "name": "uid_students",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "students_id",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "name",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "phone",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "email",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "address",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "country",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "uid_schools",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    }
+  ]
+  EOF
+  lifecycle {
+    prevent_destroy = false
+  }
+}
+
+resource "google_bigquery_table" "fin_students_fees" {
+  dataset_id                  = module.google_bigquery_dataset["DOMAIN_FINANCE"].dataset_id
+  table_id                    = "fin_students_fees"
+  deletion_protection         = false
+  schema                      = <<-EOF
+  [
+    {
+      "name": "uid_transaction",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "transaction_id",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "students_id",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "subscription_year",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "subscription",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "amount",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "revenue_stream",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "payment_status",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    }
+  ]
+  EOF
+  lifecycle {
+    prevent_destroy = false
+  }
+}
+
+resource "google_bigquery_table" "hr_employees_list" {
+  dataset_id                  = module.google_bigquery_dataset["DOMAIN_HR"].dataset_id
+  table_id                    = "hr_employees_list"
+  deletion_protection         = false
+  schema                      = <<-EOF
+  [
+    {
+      "name": "uid_employees",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "name",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "phone",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "email",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "address",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "country",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    }
+  ]
+  EOF
+  lifecycle {
+    prevent_destroy = false
+  }
+}
+
+resource "google_bigquery_table" "hr_salaries" {
+  dataset_id                  = module.google_bigquery_dataset["DOMAIN_HR"].dataset_id
+  table_id                    = "hr_salaries"
+  deletion_protection         = false
+  schema                      = <<-EOF
+  [
+    {
+      "name": "uid_salaries",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "name",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "salaries",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    }
+  ]
+  EOF
+  lifecycle {
+    prevent_destroy = false
+  }
+}
+
+resource "google_bigquery_table" "hr_countries" {
+  dataset_id                  = module.google_bigquery_dataset["DOMAIN_HR"].dataset_id
+  table_id                    = "hr_countries"
+  deletion_protection         = false
+  schema                      = <<-EOF
+  [
+    {
+      "name": "uid_countries",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "country",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "Continent",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    }
+  ]
+  EOF
+  lifecycle {
+    prevent_destroy = false
+  }
+}
+
+resource "google_bigquery_table" "pub_epfl_students_data" {
+  dataset_id                  = module.google_bigquery_dataset["DOMAIN_PUBLIC"].dataset_id
+  table_id                    = "pub_epfl_students_data"
+  deletion_protection         = false
+  schema                      = <<-EOF
+  [
+    {
+      "name": "year",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "student_count",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "department",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "phd_student_count",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "average_age",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "international_percentage",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "country",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "continent",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    }
+  ]
+  EOF
+  lifecycle {
+    prevent_destroy = false
+  }
+}
+
+resource "google_bigquery_table" "shr_epfl_employee_students_data" {
+  dataset_id                  = module.google_bigquery_dataset["DOMAIN_SHARED"].dataset_id
+  table_id                    = "shr_epfl_employee_students_data"
+  deletion_protection         = false
+  schema                      = <<-EOF
+  [
+    {
+      "name": "year",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "student_count",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "employee_count",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    }
+  ]
+  EOF
+  lifecycle {
+    prevent_destroy = false
+  }
+}
+
 resource "google_bigquery_table" "swissgrid_data" {
   dataset_id                  = module.google_bigquery_dataset["DOMAIN_OPERATIONS"].dataset_id
   deletion_protection         = false
-  table_id                    = "swissgrid_data"
+  table_id                    = "opr_swissgrid_data"
   schema                      = <<-EOF
   [
     {
@@ -211,73 +520,6 @@ resource "google_bigquery_table" "swissgrid_data" {
   }
 }
 
-resource "google_bigquery_table" "employees_list" {
-  dataset_id                  = module.google_bigquery_dataset["DOMAIN_HR"].dataset_id
-  table_id                    = "employees_list"
-  deletion_protection         = false # Adjust as needed
-
-  schema                      = <<-EOF
-[
-  {
-    "name": "name",
-    "type": "STRING",
-    "mode": "NULLABLE"
-  },
-  {
-    "name": "phone",
-    "type": "STRING",
-    "mode": "NULLABLE"
-  },
-  {
-    "name": "email",
-    "type": "STRING",
-    "mode": "NULLABLE"
-  },
-  {
-    "name": "address",
-    "type": "STRING",
-    "mode": "NULLABLE"
-  },
-  {
-    "name": "postalZip",
-    "type": "STRING",
-    "mode": "NULLABLE"
-  },
-  {
-    "name": "region",
-    "type": "STRING",
-    "mode": "NULLABLE"
-  },
-  {
-    "name": "country",
-    "type": "STRING",
-    "mode": "NULLABLE"
-  }
-]
-EOF
-}
-
-resource "google_bigquery_table" "salaries" {
-  dataset_id                  = module.google_bigquery_dataset["DOMAIN_HR"].dataset_id
-  table_id                    = "salaries"
-  deletion_protection         = false # Adjust as needed
-
-  schema                      = <<-EOF
-[
-  {
-    "name": "name",
-    "type": "STRING",
-    "mode": "NULLABLE"
-  },
-  {
-    "name": "salaries",
-    "type": "STRING",
-    "mode": "NULLABLE"
-  }
-]
-EOF
-}
-
 ### Bigquery Transfer Configuration ###
 resource "google_bigquery_data_transfer_config" "swissgrid_transfer" {
   data_source_id                    = "google_cloud_storage"
@@ -287,14 +529,14 @@ resource "google_bigquery_data_transfer_config" "swissgrid_transfer" {
   schedule                          = "every 24 hours"
 
   params = {
-    destination_table_name_template = "swissgrid_data"
-    data_path_template              = "gs://${var.bucket}/inputs/swissgrid.csv"
+    destination_table_name_template = "opr_swissgrid_data"
+    data_path_template              = "gs://${var.bucket}/inputs/opr_swissgrid.csv"
     file_format                     = "CSV"
     skip_leading_rows               = 1
     write_disposition               = "APPEND"
   }
 
   depends_on = [
-    google_storage_bucket_object.swissgrid_data
+    google_storage_bucket_object.opr_swissgrid_data
   ]
 }
