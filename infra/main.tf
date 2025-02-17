@@ -158,7 +158,7 @@ resource "null_resource" "create_oper_swissgrid_csv" {
 resource "google_storage_bucket_object" "oper_swissgrid_data" {
   bucket = var.bucket
   name   = "inputs/oper_swissgrid.csv" # Path within your bucket
-  depends_on = [ null_resource.create_swissgrid_csv ]
+  depends_on = [ null_resource.create_oper_swissgrid_csv ]
   source = "${path.module}/oper_swissgrid.csv"  # Create swissgrid.csv 
   lifecycle {
     ignore_changes = [ detect_md5hash ]
@@ -457,6 +457,6 @@ resource "google_bigquery_data_transfer_config" "swissgrid_transfer" {
   }
 
   depends_on = [
-    google_storage_bucket_object.swissgrid_data
+    google_storage_bucket_object.oper_swissgrid_data
   ]
 }
