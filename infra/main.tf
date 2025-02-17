@@ -297,7 +297,7 @@ resource "google_bigquery_table" "fin_students_fees" {
       "name": "revenue_stream",
       "type": "STRING",
       "mode": "NULLABLE"
-    }
+    },
     {
       "name": "payment_status",
       "type": "STRING",
