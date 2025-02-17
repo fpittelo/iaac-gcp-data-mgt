@@ -15,7 +15,7 @@ roles                           = [
   "roles/storage.objectAdmin"
   ]
 ### Cloud Storage variables values  ###
-bucket                          = "inputs-oper-data"
+bucket                          = "inputs-opr-data"
 versioning_enabled              = true
 lifecycle_rule_age              = 5
 bucket_owner_email              = "frederic.pitteloud@gmail.com"
