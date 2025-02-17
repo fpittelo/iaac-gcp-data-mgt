@@ -148,18 +148,16 @@ resource "null_resource" "create_opr_swissgrid_csv" {
       curl -s -L https://www.uvek-gis.admin.ch/BFE/ogd/103/ogd103_stromverbrauch_swissgrid_lv_und_endv.csv -o ${path.module}/opr_swissgrid.csv
     EOT
   }
-
   triggers = {
     always_run = "${timestamp()}"
   }
-  depends_on = [ google_storage_bucket_object.opr_swissgrid_data ]
 }
 
 # Download and stage the data in Cloud Storage
 resource "google_storage_bucket_object" "opr_swissgrid_data" {
   bucket = var.bucket
   name   = "inputs/opr_swissgrid.csv" # Path within your bucket
-# depends_on = [ null_resource.create_opr_swissgrid_csv ]
+  depends_on = [ null_resource.create_opr_swissgrid_csv ]
   source = "${path.module}/opr_swissgrid.csv"  # Create swissgrid.csv 
   lifecycle {
     ignore_changes = [ detect_md5hash ]
