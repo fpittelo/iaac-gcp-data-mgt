@@ -584,7 +584,7 @@ resource "google_bigquery_data_transfer_config" "hr_countries_transfer" {
   }
 }
 
-resource "google_bigquery_data_transfer_config" "hr_employees_list_transfer" {
+/* resource "google_bigquery_data_transfer_config" "hr_employees_list_transfer" {
   display_name                      = "HR Employees List Data Transfer"
   location                          = var.location
   data_source_id                    = "google_cloud_storage"
@@ -598,9 +598,9 @@ resource "google_bigquery_data_transfer_config" "hr_employees_list_transfer" {
     skip_leading_rows               = 1
     write_disposition               = "APPEND"
   }
-}
+} */
 
-resource "google_bigquery_data_transfer_config" "hr_salaries_transfer" {
+/* resource "google_bigquery_data_transfer_config" "hr_salaries_transfer" {
   display_name                      = "HR Salaries Data Transfer"
   location                          = var.location
   data_source_id                    = "google_cloud_storage"
@@ -614,7 +614,7 @@ resource "google_bigquery_data_transfer_config" "hr_salaries_transfer" {
     skip_leading_rows               = 1
     write_disposition               = "APPEND"
   }
-}
+} */
 
 resource "google_bigquery_data_transfer_config" "swissgrid_transfer" {
   data_source_id                    = "google_cloud_storage"
@@ -636,7 +636,7 @@ resource "google_bigquery_data_transfer_config" "swissgrid_transfer" {
   ]
 }
 
-resource "google_bigquery_data_transfer_config" "pub_students_data_transfer" {
+/* resource "google_bigquery_data_transfer_config" "pub_students_data_transfer" {
   display_name                      = "Public Students Data Transfer"
   location                          = var.location
   data_source_id                    = "google_cloud_storage"
@@ -650,7 +650,7 @@ resource "google_bigquery_data_transfer_config" "pub_students_data_transfer" {
     skip_leading_rows               = 1
     write_disposition               = "APPEND"
   }
-}
+} */
 
 resource "google_bigquery_data_transfer_config" "shr_employees_students_data_transfer" {
   display_name                      = "Shared Employees Students Data Transfer"
