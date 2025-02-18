@@ -569,7 +569,7 @@ resource "google_bigquery_data_transfer_config" "fin_students_fees_transfer" {
 }
 
 resource "google_bigquery_data_transfer_config" "hr_countries_transfer" {
-  display_name                      = "HR Countries Data Transfer"
+  display_name                      = "Countries Data Transfer"
   location                          = var.location
   data_source_id                    = "google_cloud_storage"
   destination_dataset_id            = module.google_bigquery_dataset["DOMAIN_HR"].dataset_id
@@ -653,7 +653,7 @@ resource "google_bigquery_data_transfer_config" "swissgrid_transfer" {
 } */
 
 resource "google_bigquery_data_transfer_config" "shr_employees_students_data_transfer" {
-  display_name                      = "Shared Employees Students Data Transfer"
+  display_name                      = "Employees Students Data Transfer"
   location                          = var.location
   data_source_id                    = "google_cloud_storage"
   destination_dataset_id            = module.google_bigquery_dataset["DOMAIN_SHARED"].dataset_id
@@ -661,7 +661,7 @@ resource "google_bigquery_data_transfer_config" "shr_employees_students_data_tra
 
   params = {
     data_path_template              = "gs://inputs-shr-data/inputs/shr_epfl_employee_student_data.csv"
-    destination_table_name_template = "shr_epfl_employee_student_data"
+    destination_table_name_template = "shr_epfl_employee_students_data"
     file_format                     = "CSV"
     skip_leading_rows               = 1
     write_disposition               = "APPEND"
