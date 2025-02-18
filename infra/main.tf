@@ -141,6 +141,24 @@ module "google_storage_bucket_inputs_shr_data" {
   versioning_enabled    = var.versioning_enabled
   bucket_owner_email    = var.bucket_owner_email
 }
+#### Upload the data to the buckets ####
+
+provider "http" {}
+  
+data "http" "ac_schools" {
+  url = "https://raw.githubusercontent.com/fpittelo/iaac-gcp-data-mgt/refs/heads/main/files/ac_schools.csv"
+}
+
+resource "google_storage_bucket" " inputs-acd-data" {
+  name                  = "inputs-acd-data"
+  location              = var.location
+}
+
+resource "google_storage_bucket_object" "ac_schools" {
+  name                  = "inputs/ac_schools.csv"
+  bucket                = "inputs-acd-data"
+  content               = data.http.ac_schools.body
+  }                   
 
 resource "null_resource" "create_opr_swissgrid_csv" {
   provisioner "local-exec" {
