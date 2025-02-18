@@ -153,16 +153,6 @@ resource "null_resource" "create_opr_swissgrid_csv" {
   }
 }
 
-# Download and stage the data in Cloud Storage
-resource "google_storage_bucket_object" "ac_schools" {
-  bucket = "inputs-acd-data"
-  name   = "inputs/ac_schools.csv" # Path within your bucket
-  source = "${path.module}/ac_schools.csv"  # Create ac_schools.csv 
-  lifecycle {
-    ignore_changes = [ detect_md5hash ]
-  }
-}
-
 resource "google_storage_bucket_object" "opr_swissgrid_data" {
   bucket = var.bucket
   name   = "inputs/opr_swissgrid.csv" # Path within your bucket
@@ -530,17 +520,16 @@ resource "google_bigquery_table" "swissgrid_data" {
 }
 
 ### Bigquery Transfer Configuration ###
-
 resource "google_bigquery_data_transfer_config" "ac_schools_transfer" {
+  display_name                      = "ac_schools_transfer"
+  location                          = var.location
   data_source_id                    = "google_cloud_storage"
   destination_dataset_id            = module.google_bigquery_dataset["DOMAIN_ACADEMIA"].dataset_id
-  location                          = var.location
-  display_name                      = "ac_schools_transfer"
   schedule                          = "every 24 hours"
 
   params = {
-    destination_table_name_template = "ac_schools"
     data_path_template              = "gs://inputs-acd-data/inputs/ac_schools.csv"
+    destination_table_name_template = "ac_schools"
     file_format                     = "CSV"
     skip_leading_rows               = 1
     write_disposition               = "APPEND"
