@@ -154,6 +154,15 @@ resource "null_resource" "create_opr_swissgrid_csv" {
 }
 
 # Download and stage the data in Cloud Storage
+resource "google_storage_bucket_object" "ac_schools" {
+  bucket = "inputs-acd-data"
+  name   = "inputs/ac_schools.csv" # Path within your bucket
+  source = "${path.module}/ac_schools.csv"  # Create ac_schools.csv 
+  lifecycle {
+    ignore_changes = [ detect_md5hash ]
+  }
+}
+
 resource "google_storage_bucket_object" "opr_swissgrid_data" {
   bucket = var.bucket
   name   = "inputs/opr_swissgrid.csv" # Path within your bucket
@@ -538,7 +547,7 @@ resource "google_bigquery_data_transfer_config" "ac_schools_transfer" {
   }
 
   depends_on = [
-    google_storage_bucket_object.google_storage_bucket_inputs_acd_data
+    google_storage_bucket_object.ac_schools
   ]
 }
 
