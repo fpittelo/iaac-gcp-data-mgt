@@ -521,7 +521,7 @@ resource "google_bigquery_table" "swissgrid_data" {
 
 ### Bigquery Transfer Configuration ###
 resource "google_bigquery_data_transfer_config" "ac_schools_transfer" {
-  display_name                      = "ac_schools_transfer"
+  display_name                      = "Schools Data Transfer"
   location                          = var.location
   data_source_id                    = "google_cloud_storage"
   destination_dataset_id            = module.google_bigquery_dataset["DOMAIN_ACADEMIA"].dataset_id
@@ -534,10 +534,86 @@ resource "google_bigquery_data_transfer_config" "ac_schools_transfer" {
     skip_leading_rows               = 1
     write_disposition               = "APPEND"
   }
+}
 
-/*     depends_on = [
-    google_storage_bucket_object.ac_schools
-  ]  */
+resource "google_bigquery_data_transfer_config" "ac_students_list_transfer" {
+  display_name                      = "Students Data Transfer"
+  location                          = var.location
+  data_source_id                    = "google_cloud_storage"
+  destination_dataset_id            = module.google_bigquery_dataset["DOMAIN_ACADEMIA"].dataset_id
+  schedule                          = "every 24 hours"
+
+  params = {
+    data_path_template              = "gs://inputs-acd-data/inputs/ac_students_list.csv"
+    destination_table_name_template = "ac_students_list"
+    file_format                     = "CSV"
+    skip_leading_rows               = 1
+    write_disposition               = "APPEND"
+  }
+}
+
+resource "google_bigquery_data_transfer_config" "fin_students_fees_transfer" {
+  display_name                      = "Students Fees Data Transfer"
+  location                          = var.location
+  data_source_id                    = "google_cloud_storage"
+  destination_dataset_id            = module.google_bigquery_dataset["DOMAIN_FINANCE"].dataset_id
+  schedule                          = "every 24 hours"
+
+  params = {
+    data_path_template              = "gs://inputs-fin-data/inputs/fin_students_fees.csv"
+    destination_table_name_template = "fin_students_fees"
+    file_format                     = "CSV"
+    skip_leading_rows               = 1
+    write_disposition               = "APPEND"
+  }
+}
+
+resource "google_bigquery_data_transfer_config" "hr_countries_transfer" {
+  display_name                      = "HR Countries Data Transfer"
+  location                          = var.location
+  data_source_id                    = "google_cloud_storage"
+  destination_dataset_id            = module.google_bigquery_dataset["DOMAIN_HR"].dataset_id
+  schedule                          = "every 24 hours"
+
+  params = {
+    data_path_template              = "gs://inputs-hr-data/inputs/hr_countries.csv"
+    destination_table_name_template = "hr_countries"
+    file_format                     = "CSV"
+    skip_leading_rows               = 1
+    write_disposition               = "APPEND"
+  }
+}
+
+resource "google_bigquery_data_transfer_config" "hr_employees_list_transfer" {
+  display_name                      = "HR Employees List Data Transfer"
+  location                          = var.location
+  data_source_id                    = "google_cloud_storage"
+  destination_dataset_id            = module.google_bigquery_dataset["DOMAIN_HR"].dataset_id
+  schedule                          = "every 24 hours"
+
+  params = {
+    data_path_template              = "gs://inputs-hr-data/inputs/hr_employees_list.csv"
+    destination_table_name_template = "hr_employees_list"
+    file_format                     = "CSV"
+    skip_leading_rows               = 1
+    write_disposition               = "APPEND"
+  }
+}
+
+resource "google_bigquery_data_transfer_config" "hr_salaries_transfer" {
+  display_name                      = "HR Salaries Data Transfer"
+  location                          = var.location
+  data_source_id                    = "google_cloud_storage"
+  destination_dataset_id            = module.google_bigquery_dataset["DOMAIN_HR"].dataset_id
+  schedule                          = "every 24 hours"
+
+  params = {
+    data_path_template              = "gs://inputs-hr-data/inputs/hr_salaries.csv"
+    destination_table_name_template = "hr_salaries"
+    file_format                     = "CSV"
+    skip_leading_rows               = 1
+    write_disposition               = "APPEND"
+  }
 }
 
 resource "google_bigquery_data_transfer_config" "swissgrid_transfer" {
@@ -558,4 +634,36 @@ resource "google_bigquery_data_transfer_config" "swissgrid_transfer" {
   depends_on = [
     google_storage_bucket_object.opr_swissgrid_data
   ]
+}
+
+resource "google_bigquery_data_transfer_config" "pub_students_data_transfer" {
+  display_name                      = "Public Students Data Transfer"
+  location                          = var.location
+  data_source_id                    = "google_cloud_storage"
+  destination_dataset_id            = module.google_bigquery_dataset["DOMAIN_PUBLIC"].dataset_id
+  schedule                          = "every 24 hours"
+
+  params = {
+    data_path_template              = "gs://inputs-pub-data/inputs/pub_epfl_student_data.csv"
+    destination_table_name_template = "pub_epfl_student_data.csv"
+    file_format                     = "CSV"
+    skip_leading_rows               = 1
+    write_disposition               = "APPEND"
+  }
+}
+
+resource "google_bigquery_data_transfer_config" "shr_employees_students_data_transfer" {
+  display_name                      = "Shared Employees Students Data Transfer"
+  location                          = var.location
+  data_source_id                    = "google_cloud_storage"
+  destination_dataset_id            = module.google_bigquery_dataset["DOMAIN_SHARED"].dataset_id
+  schedule                          = "every 24 hours"
+
+  params = {
+    data_path_template              = "gs://inputs-shr-data/inputs/shr_epfl_employee_student_data.csv"
+    destination_table_name_template = "shr_epfl_employee_student_data"
+    file_format                     = "CSV"
+    skip_leading_rows               = 1
+    write_disposition               = "APPEND"
+  }
 }
