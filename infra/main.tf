@@ -156,7 +156,7 @@ resource "null_resource" "create_opr_swissgrid_csv" {
 resource "google_storage_bucket_object" "ac_schools" {
   bucket = "inputs-acd-data"  # Ou une variable si vous préférez
   name   = "inputs/ac_schools.csv"
-  source = "${path.module}/inputs/ac_schools.csv"
+  source = "../inputs/ac_schools.csv"
 }
 
 resource "google_storage_bucket_object" "opr_swissgrid_data" {
