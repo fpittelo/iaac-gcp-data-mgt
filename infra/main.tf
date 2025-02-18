@@ -636,8 +636,8 @@ resource "google_bigquery_data_transfer_config" "swissgrid_transfer" {
   ]
 }
 
-/* resource "google_bigquery_data_transfer_config" "pub_students_data_transfer" {
-  display_name                      = "Public Students Data Transfer"
+resource "google_bigquery_data_transfer_config" "pub_student_data_transfer" {
+  display_name                      = "Public Student Data Transfer"
   location                          = var.location
   data_source_id                    = "google_cloud_storage"
   destination_dataset_id            = module.google_bigquery_dataset["DOMAIN_PUBLIC"].dataset_id
@@ -645,12 +645,12 @@ resource "google_bigquery_data_transfer_config" "swissgrid_transfer" {
 
   params = {
     data_path_template              = "gs://inputs-pub-data/inputs/pub_epfl_student_data.csv"
-    destination_table_name_template = "pub_epfl_student_data.csv"
+    destination_table_name_template = "pub_epfl_students_data.csv"
     file_format                     = "CSV"
     skip_leading_rows               = 1
     write_disposition               = "APPEND"
   }
-} */
+}
 
 resource "google_bigquery_data_transfer_config" "shr_employees_students_data_transfer" {
   display_name                      = "Employees Students Data Transfer"
