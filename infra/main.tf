@@ -541,9 +541,9 @@ resource "google_bigquery_data_transfer_config" "ac_schools_transfer" {
     write_disposition               = "APPEND"
   }
 
-  /* depends_on = [
+    depends_on = [
     google_storage_bucket_object.ac_schools
-  ] */
+  ] 
 }
 
 resource "google_bigquery_data_transfer_config" "swissgrid_transfer" {
