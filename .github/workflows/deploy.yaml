@@ -192,18 +192,18 @@ jobs:
 #       run: |
 #         gsutil cp ${{ github.workspace }}/files/ac_* gs://inputs-acd-data/inputs/
 
-      - name: Upload files using gsutil
-        run: |
-          gsutil cp ${{ github.workspace }}/files/hr_* gs://inputs-hr-data/inputs/
+#     - name: Upload files using gsutil
+#       run: |
+#         gsutil cp ${{ github.workspace }}/files/hr_* gs://inputs-hr-data/inputs/
 
-      - name: Upload files using gsutil
-        run: |
-          gsutil cp ${{ github.workspace }}/files/fin_* gs://inputs-fin-data/inputs/
+#     - name: Upload files using gsutil
+#       run: |
+#         gsutil cp ${{ github.workspace }}/files/fin_* gs://inputs-fin-data/inputs/
       
-      - name: Upload files using gsutil
-        run: |
-          gsutil cp ${{ github.workspace }}/files/pub_* gs://inputs-pub-data/inputs/
+#     - name: Upload files using gsutil
+#       run: |
+#         gsutil cp ${{ github.workspace }}/files/pub_* gs://inputs-pub-data/inputs/
 
-      - name: Upload files using gsutil
-        run: |
-          gsutil cp ${{ github.workspace }}/files/shr_* gs://inputs-shr-data/inputs/
+#     - name: Upload files using gsutil
+#       run: |
+#         gsutil cp ${{ github.workspace }}/files/shr_* gs://inputs-shr-data/inputs/
