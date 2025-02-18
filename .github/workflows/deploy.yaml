@@ -160,34 +160,31 @@ jobs:
           cd infra
           terraform apply -var-file="${{ github.ref_name }}.tfvars" -var="github_run_id=${{ github.run_id }}" -auto-approve
 
-  upload-data:
-    name: Upload Data
-    runs-on: ubuntu-latest
-    needs: deploy-fabric
-    environment: ${{ github.ref_name }}
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-        with:
-          path: .  # Checkout the entire repository (important!)
-          submodules: recursive # If you have submodules in your repo, include this
-          fetch-depth: 0 # To fetch all history, requiremmd if you have files in a separate coit
-
-      - name: List Files (DEBUG)
-        run: ls -alR ${{ github.workspace }}
-
-      - name: Set auth
-        id: 'auth'
-        uses: 'google-github-actions/auth@v2'
-        with:
-          # Value is found on the GCP WIF Provider details > Default audience #
-          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
-          # Value is the email address of the GCP service account #
-          service_account: ${{ secrets.SERVICE_ACCOUNT }}
-
-      - name: Set up Cloud SDK
-        uses: google-github-actions/setup-gcloud@v2
-    
+# upload-data:
+#   name: Upload Data
+#   runs-on: ubuntu-latest
+#   needs: deploy-fabric
+#   environment: ${{ github.ref_name }}
+#   steps:
+#     - name: Checkout code
+#       uses: actions/checkout@v3
+#       with:
+#         path: .  # Checkout the entire repository (important!)
+#         submodules: recursive # If you have submodules in your repo, include this
+#         fetch-depth: 0 # To fetch all history, requiremmd if you have files in a separate coit
+#      - name: List Files (DEBUG)
+#       run: ls -alR ${{ github.workspace }}
+#      - name: Set auth
+#       id: 'auth'
+#       uses: 'google-github-actions/auth@v2'
+#       with:
+#         # Value is found on the GCP WIF Provider details > Default audience #
+#         workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+#         # Value is the email address of the GCP service account #
+#         service_account: ${{ secrets.SERVICE_ACCOUNT }}
+#      - name: Set up Cloud SDK
+#       uses: google-github-actions/setup-gcloud@v2
+#   
 #     - name: Upload files using gsutil
 #       run: |
 #         gsutil cp ${{ github.workspace }}/files/ac_* gs://inputs-acd-data/inputs/
