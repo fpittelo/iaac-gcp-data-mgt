@@ -600,7 +600,7 @@ resource "google_bigquery_data_transfer_config" "hr_countries_transfer" {
   }
 } */
 
-/* resource "google_bigquery_data_transfer_config" "hr_salaries_transfer" {
+resource "google_bigquery_data_transfer_config" "hr_salaries_transfer" {
   display_name                      = "Salaries Data Transfer"
   location                          = var.location
   data_source_id                    = "google_cloud_storage"
@@ -614,7 +614,7 @@ resource "google_bigquery_data_transfer_config" "hr_countries_transfer" {
     skip_leading_rows               = 1
     write_disposition               = "APPEND"
   }
-} */
+}
 
 resource "google_bigquery_data_transfer_config" "swissgrid_transfer" {
   data_source_id                    = "google_cloud_storage"
