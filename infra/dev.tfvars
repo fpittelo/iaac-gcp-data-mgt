@@ -65,6 +65,12 @@ datasets = {
       dataset_owner_email         = "frederic.pitteloud@gmail.com"
       delete_contents_on_destroy  = true
     }
+    "DOMAIN_SANDBOX" = {
+      dataset_id                  = "DOMAIN_SANDBOX"
+      description                 = "Sandbox dataset"
+      dataset_owner_email         = "frederic.pitteloud@gmail.com"
+      delete_contents_on_destroy  = true
+    }
 }
 
 # default_table_expiration_ms   = "3600000"
