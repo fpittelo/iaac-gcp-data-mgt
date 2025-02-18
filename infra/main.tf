@@ -601,7 +601,7 @@ resource "google_bigquery_data_transfer_config" "hr_countries_transfer" {
 } */
 
 /* resource "google_bigquery_data_transfer_config" "hr_salaries_transfer" {
-  display_name                      = "HR Salaries Data Transfer"
+  display_name                      = "Salaries Data Transfer"
   location                          = var.location
   data_source_id                    = "google_cloud_storage"
   destination_dataset_id            = module.google_bigquery_dataset["DOMAIN_HR"].dataset_id
@@ -645,7 +645,7 @@ resource "google_bigquery_data_transfer_config" "pub_student_data_transfer" {
 
   params = {
     data_path_template              = "gs://inputs-pub-data/inputs/pub_epfl_student_data.csv"
-    destination_table_name_template = "pub_epfl_students_data.csv"
+    destination_table_name_template = "pub_epfl_students_data"
     file_format                     = "CSV"
     skip_leading_rows               = 1
     write_disposition               = "APPEND"
