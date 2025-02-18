@@ -149,7 +149,7 @@ data "http" "ac_schools" {
   url = "https://raw.githubusercontent.com/fpittelo/iaac-gcp-data-mgt/refs/heads/main/files/ac_schools.csv"
 }
 
-resource "google_storage_bucket" " inputs-acd-data" {
+resource "google_storage_bucket" "inputs-acd-data" {
   name                  = "inputs-acd-data"
   location              = var.location
 }
