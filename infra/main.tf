@@ -151,7 +151,7 @@ data "http" "ac_schools" {
 
 resource "google_storage_bucket_object" "ac_schools" {
   name                  = "inputs/ac_schools.csv"
-  bucket                = module.google_storage_bucket_inputs_acd_data.bucket_name
+  bucket                = "inputs-acd-data"
   content               = data.http.ac_schools.body
   depends_on            = [module.google_storage_bucket_inputs_acd_data]
   }                   
@@ -162,7 +162,7 @@ data "http" "ac_students_list" {
 
 resource "google_storage_bucket_object" "ac_students_list" {
   name                  = "inputs/ac_students_list.csv"
-  bucket                = module.google_storage_bucket_inputs_acd_data.bucket_name
+  bucket                = "inputs-acd-data"
   content               = data.http.ac_students_list.body
   depends_on            = [module.google_storage_bucket_inputs_acd_data]
 }    
@@ -173,7 +173,7 @@ data "http" "hr_countries" {
 
 resource "google_storage_bucket_object" "hr_countries" {
   name                  = "inputs/hr_countries.csv"
-  bucket                = module.google_storage_bucket_inputs_hr_data.bucket_name
+  bucket                = "inputs-hr-data"
   content               = data.http.hr_countries.body
   depends_on            = [module.google_storage_bucket_inputs_hr_data]
 }
@@ -184,7 +184,7 @@ data "http" "hr_employees_list" {
 
 resource "google_storage_bucket_object" "hr_employees_list" {
   name                  = "inputs/hr_employees_list.csv"
-  bucket                = module.google_storage_bucket_inputs_hr_data.bucket_name
+  bucket                = "inputs-hr-data"
   content               = data.http.hr_employees_list.body
   depends_on            = [module.google_storage_bucket_inputs_hr_data]
 }
@@ -195,7 +195,7 @@ data "http" "hr_salaries" {
 
 resource "google_storage_bucket_object" "hr_salaries" {
   name                  = "inputs/hr_salaries.csv"
-  bucket                = module.google_storage_bucket_inputs_hr_data.bucket_name
+  bucket                = "inputs-hr-data"
   content               = data.http.hr_salaries.body
   depends_on            = [module.google_storage_bucket_inputs_hr_data]
 }
@@ -206,7 +206,7 @@ data "http" "fin_students_fees" {
 
 resource "google_storage_bucket_object" "fin_students_fees" {
   name                  = "inputs/fin_students_fees.csv"
-  bucket                = module.google_storage_bucket_inputs_fin_data.bucket_name
+  bucket                = "inputs-fin-data"
   content               = data.http.fin_students_fees.body
   depends_on            = [module.google_storage_bucket_inputs_fin_data]
 }
@@ -217,7 +217,7 @@ data "http" "pub_epfl_student_data" {
 
 resource "google_storage_bucket_object" "pub_epfl_student_data" {
   name                  = "inputs/pub_epfl_student_data.csv"
-  bucket                = module.google_storage_bucket_inputs_pub_data.bucket_name
+  bucket                = "inputs-pub-data"
   content               = data.http.pub_epfl_student_data.body
   depends_on            = [module.google_storage_bucket_inputs_pub_data]
 }
@@ -228,7 +228,7 @@ data "http" "shr_epfl_employee_student_data" {
 
 resource "google_storage_bucket_object" "shr_epfl_employee_student_data" {
   name                  = "inputs/shr_epfl_employee_student_data.csv"
-  bucket                = module.google_storage_bucket_inputs_shr_data.bucket_name
+  bucket                = "inputs-shr-data"
   content               = data.http.shr_epfl_employee_student_data.body
   depends_on            = [module.google_storage_bucket_inputs_shr_data]
 }
