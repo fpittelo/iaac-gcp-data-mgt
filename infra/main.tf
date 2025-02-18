@@ -153,6 +153,12 @@ resource "null_resource" "create_opr_swissgrid_csv" {
   }
 }
 
+resource "google_storage_bucket_object" "ac_schools" {
+  bucket = "inputs-acd-data"  # Ou une variable si vous préférez
+  name   = "inputs/ac_schools.csv"
+  source = "./ac_schools.csv"  # Assurez-vous que le fichier existe localement
+}
+
 resource "google_storage_bucket_object" "opr_swissgrid_data" {
   bucket = var.bucket
   name   = "inputs/opr_swissgrid.csv" # Path within your bucket
@@ -535,9 +541,9 @@ resource "google_bigquery_data_transfer_config" "ac_schools_transfer" {
     write_disposition               = "APPEND"
   }
 
-  depends_on = [
+  /* depends_on = [
     google_storage_bucket_object.ac_schools
-  ]
+  ] */
 }
 
 resource "google_bigquery_data_transfer_config" "swissgrid_transfer" {
