@@ -23,7 +23,7 @@ provider "google" {
 # zone          = var.zone
 }
 
-provider "google-beta" {
+/* provider "google-beta" {
   project       = var.project_id
   region        = var.location
-}
+} */
