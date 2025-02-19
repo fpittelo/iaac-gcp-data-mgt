@@ -674,6 +674,10 @@ resource "google_bigquery_data_transfer_config" "hr_countries_transfer" {
     skip_leading_rows               = 1
     write_disposition               = "APPEND"
   }
+  depends_on = [
+    module.google_bigquery_dataset["DOMAIN_HR"].google_bigquery_dataset.dataset,
+    google_bigquery_table.hr_countries
+  ]
 }
 
 resource "google_bigquery_data_transfer_config" "hr_employees_list_transfer" {
@@ -706,6 +710,10 @@ resource "google_bigquery_data_transfer_config" "hr_salaries_transfer" {
     skip_leading_rows               = 1
     write_disposition               = "APPEND"
   }
+  depends_on = [
+    module.google_bigquery_dataset["DOMAIN_HR"].google_bigquery_dataset.dataset,
+    google_bigquery_table.hr_salaries
+  ]
 }
 
 resource "google_bigquery_data_transfer_config" "swissgrid_transfer" {
