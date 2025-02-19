@@ -168,6 +168,12 @@ variable "output_folder" {
   default = null
 }
 
+variable "output_topic" {
+  type = string
+  description = "The output folder for the Dataflow job"
+  default = null
+}
+
 variable "temp_folder" {
   type = string
   description = "The temporary folder for the Dataflow job"
