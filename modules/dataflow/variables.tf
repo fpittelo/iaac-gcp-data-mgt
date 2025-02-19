@@ -1,41 +1,27 @@
 ### Modules Input Variables ###
-
-variable "project" {
-    description = "The GCP project ID"
-    type        = string
-}
-
-variable "region" {
-    description = "The region for the Dataflow job"
-    type        = string
-}
-
 variable "job_name" {
-    description = "The name of the Dataflow job"
-    type        = string
+  type = string
+  description = "Le nom du job Dataflow"
 }
 
-variable "temp_gcs_location" {
-    description = "The GCS location for temporary files"
-    type        = string
+variable "template_gcs_path" {
+  type = string
+  description = "Le chemin GCS vers le template du job Dataflow"
 }
 
-variable "temp_gcs_path" {
-    description = "The GCS path for temporary files"
-    type        = string
+variable "template_gcs_location" {
+  type = string
+  description = "L'emplacement GCS pour les fichiers temporaires"
 }
 
-variable "input_subscription" {
-    description = "The Pub/Sub input subscription"
-    type        = string
+variable "parameters" {
+  type = map(string)
+  description = "Paramètres du job Dataflow"
+  default = {}
 }
 
-variable "output_topic" {
-    description = "The Pub/Sub output topic"
-    type        = string
-}
-
-variable "max_workers" {
-    description = "The maximum number of workers"
-    type        = string
+variable "on_delete" {
+  type = string
+  description = "Action à effectuer lors de la suppression du job (cancel ou drain)"
+  default = "cancel"
 }

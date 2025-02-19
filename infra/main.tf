@@ -767,3 +767,12 @@ resource "google_bigquery_data_transfer_config" "shr_employees_students_data_tra
     write_disposition               = "APPEND"
   }
 }
+
+/* ### Dataflow Deployment ###
+module "dataflow_job" {
+  source                            = "../modules/dataflow"
+  job_name                          = "dataflow-job"
+  template_gcs_location             = var.template_gcs_location
+  template_gcs_path                 = var.template_gcs_path
+  parameters                        = var.parameters
+} */
