@@ -675,7 +675,7 @@ resource "google_bigquery_data_transfer_config" "hr_countries_transfer" {
     write_disposition               = "APPEND"
   }
   depends_on = [
-    module.google_bigquery_dataset["DOMAIN_HR"].google_bigquery_dataset.dataset,
+    module.google_bigquery_dataset["DOMAIN_HR"],
     google_bigquery_table.hr_countries
   ]
 }
@@ -711,7 +711,7 @@ resource "google_bigquery_data_transfer_config" "hr_salaries_transfer" {
     write_disposition               = "APPEND"
   }
   depends_on = [
-    module.google_bigquery_dataset["DOMAIN_HR"].google_bigquery_dataset.dataset,
+    module.google_bigquery_dataset["DOMAIN_HR"],
     google_bigquery_table.hr_salaries
   ]
 }
