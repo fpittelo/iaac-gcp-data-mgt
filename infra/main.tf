@@ -30,6 +30,7 @@ resource "google_project_service" "api_activations" {
     "cloudscheduler.googleapis.com",
     "compute.googleapis.com",
     "dataflow.googleapis.com",
+    "datapipelines.googleapis.com",
     "iam.googleapis.com",
     "pubsub.googleapis.com",
     "secretmanager.googleapis.com",
