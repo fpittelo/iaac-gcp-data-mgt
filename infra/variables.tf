@@ -162,6 +162,12 @@ variable "input_folder" {
   default = null
 }
 
+variable "input_subscription" {
+  type = string
+  description = "The input subscription for the Dataflow job"
+  default = null
+}
+
 variable "output_folder" {
   type = string
   description = "The output folder for the Dataflow job"
@@ -171,6 +177,12 @@ variable "output_folder" {
 variable "output_topic" {
   type = string
   description = "The output folder for the Dataflow job"
+  default = null
+}
+
+variable "max_workers" {
+  type = string
+  description = "The maximum number of workers for the Dataflow job"
   default = null
 }
 
