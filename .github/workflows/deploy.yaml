@@ -219,7 +219,7 @@ jobs:
         run: |
           bq load --source_format=CSV --skip_leading_rows=1 \
             ${{ secrets.GCP_PROJECT_ID }}:${{ secrets.BQ_DATASET_OPERATIONS }}.opr_swissgrid_data \
-            gs://${{ secrets.TF_VAR_BUCKET }}/inputs/opr_swissgrid.csv
+            gs://inputs-opr-data/inputs/opr_swissgrid.csv
 
       - name: Transfer pub_epfl_students_data Data
         run: |
