@@ -1,7 +1,6 @@
 ### General Project variables values  ###
 region                          = "europe-west6"
 location                        = "europe-west6"
-# zone                          = "europe-west6-b"
 project_id                      = "iaac-gcp-data-mgt"
 network                         = "default"
 subnetwork                      = "default"
@@ -25,9 +24,6 @@ output_folder                   = "output/output.txt"
 temp_folder                     = "temp/temp.txt"
 error_folder                    = "error/error.txt"
 ### BigQuery variables values   ###
-# dataset_id                      = "prod_dataset"
-# dataset_description             = "Production dataset" 
-
 datasets = {
   "DOMAIN_ACADEMIA" = {
     dataset_id                  = "DOMAIN_ACADEMIA"
@@ -77,8 +73,8 @@ datasets = {
 data_viewer_group               = "frederic.pitteloud@gmail.com"
 data_editor_group               = "frederic.pitteloud@gmail.com"
 ### Dataflow variables values   ###
-temp_gcs_path                   = ""
-temp_gcs_location               = ""
+template_gcs_path               = ""
+template_gcs_location           = ""
 max_workers                     = ""
 job_name                        = "dataflow-job"
 input_subscription              = ""

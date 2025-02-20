@@ -83,30 +83,6 @@ variable "lifecycle_rule_age" {
   default = 30
 }
 
-variable "input_folder" {
-  type = string
-  description = "The input folder for the Dataflow job"
-  default = null
-}
-
-variable "output_folder" {
-  type = string
-  description = "The output folder for the Dataflow job"
-  default = null
-}
-
-variable "temp_folder" {
-  type = string
-  description = "The temporary folder for the Dataflow job"
-  default = null
-}
-
-variable "error_folder" {
-  type = string
-  description = "The error folder for the Dataflow job"
-  default = null
-}
-
 ###### Variables for Bigquery ######
 
 variable "datasets" {
@@ -145,42 +121,81 @@ variable "input_file_name" {
   default = null
 }
 
+####### Variables for GPC Dataflow ####
+
+variable "job_name" {
+  type = string
+  description = "Le nom du job Dataflow"
+}
+
+variable "template_gcs_path" {
+  type = string
+  description = "Le chemin GCS vers le template du job Dataflow"
+}
+
+variable "template_gcs_location" {
+  type = string
+  description = "L'emplacement GCS pour les fichiers temporaires"
+}
+
+variable "parameters" {
+  type = map(string)
+  description = "Paramètres du job Dataflow"
+  default = {}
+}
+
+variable "on_delete" {
+  type = string
+  description = "Action à effectuer lors de la suppression du job (cancel ou drain)"
+  default = "cancel"
+}
+
 variable "deletion_protection" {
   type = string
   description = "The error folder for the Dataflow job"
   default = null
 }
 
-####### Variables for GPC Dataflow ####
-
-variable "job_name" {
-    description = "The name of the Dataflow job"
-    type        = string
-}
-
-variable "temp_gcs_location" {
-    description = "The GCS location for temporary files"
-    type        = string
-}
-
-variable "temp_gcs_path" {
-    description = "The GCS path for temporary files"
-    type        = string
+variable "input_folder" {
+  type = string
+  description = "The input folder for the Dataflow job"
+  default = null
 }
 
 variable "input_subscription" {
-    description = "The Pub/Sub input subscription"
-    type        = string
+  type = string
+  description = "The input subscription for the Dataflow job"
+  default = null
+}
+
+variable "output_folder" {
+  type = string
+  description = "The output folder for the Dataflow job"
+  default = null
 }
 
 variable "output_topic" {
-    description = "The Pub/Sub output topic"
-    type        = string
+  type = string
+  description = "The output folder for the Dataflow job"
+  default = null
 }
 
 variable "max_workers" {
-    description = "The maximum number of workers"
-    type        = string
+  type = string
+  description = "The maximum number of workers for the Dataflow job"
+  default = null
+}
+
+variable "temp_folder" {
+  type = string
+  description = "The temporary folder for the Dataflow job"
+  default = null
+}
+
+variable "error_folder" {
+  type = string
+  description = "The error folder for the Dataflow job"
+  default = null
 }
 
 #### APIGEE Variables ####
