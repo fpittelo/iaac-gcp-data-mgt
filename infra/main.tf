@@ -626,6 +626,10 @@ resource "google_bigquery_data_transfer_config" "ac_schools_transfer" {
     skip_leading_rows               = 1
     write_disposition               = "APPEND"
   }
+  depends_on = [ 
+    module.google_bigquery_dataset["DOMAIN_ACADEMIA"],
+    google_bigquery_table.ac_schools
+   ]
 }
 
 resource "google_bigquery_data_transfer_config" "ac_students_list_transfer" {
@@ -642,6 +646,10 @@ resource "google_bigquery_data_transfer_config" "ac_students_list_transfer" {
     skip_leading_rows               = 1
     write_disposition               = "APPEND"
   }
+  depends_on = [  
+    module.google_bigquery_dataset["DOMAIN_ACADEMIA"],
+    google_bigquery_table.ac_students
+  ]
 }
 
 resource "google_bigquery_data_transfer_config" "fin_students_fees_transfer" {
@@ -658,6 +666,10 @@ resource "google_bigquery_data_transfer_config" "fin_students_fees_transfer" {
     skip_leading_rows               = 1
     write_disposition               = "APPEND"
   }
+  depends_on = [ 
+    module.google_bigquery_dataset["DOMAIN_FINANCE"],
+    google_bigquery_table.fin_students_fees
+  ]
 }
 
 resource "google_bigquery_data_transfer_config" "hr_countries_transfer" {
@@ -694,6 +706,10 @@ resource "google_bigquery_data_transfer_config" "hr_employees_list_transfer" {
     skip_leading_rows               = 1
     write_disposition               = "APPEND"
   }
+  depends_on = [
+    module.google_bigquery_dataset["DOMAIN_HR"],
+    google_bigquery_table.hr_employees_list
+  ]
 }
 
 resource "google_bigquery_data_transfer_config" "hr_salaries_transfer" {
@@ -750,6 +766,10 @@ resource "google_bigquery_data_transfer_config" "pub_student_data_transfer" {
     skip_leading_rows               = 1
     write_disposition               = "APPEND"
   }
+  depends_on = [
+    module.google_bigquery_dataset["DOMAIN_PUBLIC"],
+    google_bigquery_table.pub_epfl_students_data
+   ]
 }
 
 resource "google_bigquery_data_transfer_config" "shr_employees_students_data_transfer" {
@@ -766,6 +786,10 @@ resource "google_bigquery_data_transfer_config" "shr_employees_students_data_tra
     skip_leading_rows               = 1
     write_disposition               = "APPEND"
   }
+  depends_on = [ 
+    module.google_bigquery_dataset["DOMAIN_SHARED"],
+    google_bigquery_table.shr_epfl_employee_students_data
+   ]
 }
 
 /* ### Dataflow Deployment ###
