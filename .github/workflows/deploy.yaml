@@ -159,48 +159,77 @@ jobs:
         run: |
           cd infra
           terraform apply -var-file="${{ github.ref_name }}.tfvars" -var="github_run_id=${{ github.run_id }}" -auto-approve
+  
+  data_transfer:
+    name: Data Transfer
+    runs-on: ubuntu-latest
+    needs: deploy-fabric
+    environment: ${{ github.ref_name }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-# upload-data:
-#   name: Upload Data
-#   runs-on: ubuntu-latest
-#   needs: deploy-fabric
-#   environment: ${{ github.ref_name }}
-#   steps:
-#     - name: Checkout code
-#       uses: actions/checkout@v3
-#       with:
-#         path: .  # Checkout the entire repository (important!)
-#         submodules: recursive # If you have submodules in your repo, include this
-#         fetch-depth: 0 # To fetch all history, requiremmd if you have files in a separate coit
-#      - name: List Files (DEBUG)
-#       run: ls -alR ${{ github.workspace }}
-#      - name: Set auth
-#       id: 'auth'
-#       uses: 'google-github-actions/auth@v2'
-#       with:
-#         # Value is found on the GCP WIF Provider details > Default audience #
-#         workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
-#         # Value is the email address of the GCP service account #
-#         service_account: ${{ secrets.SERVICE_ACCOUNT }}
-#      - name: Set up Cloud SDK
-#       uses: google-github-actions/setup-gcloud@v2
-#   
-#     - name: Upload files using gsutil
-#       run: |
-#         gsutil cp ${{ github.workspace }}/files/ac_* gs://inputs-acd-data/inputs/
+      - name: Set auth
+        id: 'auth'
+        uses: 'google-github-actions/auth@v2'
+        with:
+          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.SERVICE_ACCOUNT }}
 
-#     - name: Upload files using gsutil
-#       run: |
-#         gsutil cp ${{ github.workspace }}/files/hr_* gs://inputs-hr-data/inputs/
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
 
-#     - name: Upload files using gsutil
-#       run: |
-#         gsutil cp ${{ github.workspace }}/files/fin_* gs://inputs-fin-data/inputs/
-      
-#     - name: Upload files using gsutil
-#       run: |
-#         gsutil cp ${{ github.workspace }}/files/pub_* gs://inputs-pub-data/inputs/
+      - name: Transfer ac_schools Data
+        run: |
+          bq load --source_format=CSV --skip_leading_rows=1 \
+            ${{ secrets.GCP_PROJECT_ID }}:${{ secrets.BQ_DATASET_ACADEMIA }}.ac_schools \
+            gs://inputs-acd-data/inputs/ac_schools.csv
 
-#     - name: Upload files using gsutil
-#       run: |
-#         gsutil cp ${{ github.workspace }}/files/shr_* gs://inputs-shr-data/inputs/
+      - name: Transfer ac_students_list Data
+        run: |
+          bq load --source_format=CSV --skip_leading_rows=1 \
+            ${{ secrets.GCP_PROJECT_ID }}:${{ secrets.BQ_DATASET_ACADEMIA }}.ac_students_list \
+            gs://inputs-acd-data/inputs/ac_students_list.csv
+
+      - name: Transfer fin_students_fees Data
+        run: |
+          bq load --source_format=CSV --skip_leading_rows=1 \
+            ${{ secrets.GCP_PROJECT_ID }}:${{ secrets.BQ_DATASET_FINANCE }}.fin_students_fees \
+            gs://inputs-fin-data/inputs/fin_students_fees.csv
+
+      - name: Transfer hr_countries Data
+        run: |
+          bq load --source_format=CSV --skip_leading_rows=1 \
+            ${{ secrets.GCP_PROJECT_ID }}:${{ secrets.BQ_DATASET_HR }}.hr_countries \
+            gs://inputs-hr-data/inputs/hr_countries.csv
+
+      - name: Transfer hr_employees_list Data
+        run: |
+          bq load --source_format=CSV --skip_leading_rows=1 \
+            ${{ secrets.GCP_PROJECT_ID }}:${{ secrets.BQ_DATASET_HR }}.hr_employees_list \
+            gs://inputs-hr-data/inputs/hr_employees_list.csv
+
+      - name: Transfer hr_salaries Data
+        run: |
+          bq load --source_format=CSV --skip_leading_rows=1 \
+            ${{ secrets.GCP_PROJECT_ID }}:${{ secrets.BQ_DATASET_HR }}.hr_salaries \
+            gs://inputs-hr-data/inputs/hr_salaries.csv
+
+      - name: Transfer opr_swissgrid_data Data
+        run: |
+          bq load --source_format=CSV --skip_leading_rows=1 \
+            ${{ secrets.GCP_PROJECT_ID }}:${{ secrets.BQ_DATASET_OPERATIONS }}.opr_swissgrid_data \
+            gs://inputs-opr-data/inputs/opr_swissgrid.csv
+
+      - name: Transfer pub_epfl_students_data Data
+        run: |
+          bq load --source_format=CSV --skip_leading_rows=1 \
+            ${{ secrets.GCP_PROJECT_ID }}:${{ secrets.BQ_DATASET_PUBLIC }}.pub_epfl_students_data \
+            gs://inputs-pub-data/inputs/pub_epfl_student_data.csv
+
+      - name: Transfer shr_epfl_employee_students_data Data
+        run: |
+          bq load --source_format=CSV --skip_leading_rows=1 \
+            ${{ secrets.GCP_PROJECT_ID }}:${{ secrets.BQ_DATASET_SHARED }}.shr_epfl_employee_students_data \
+            gs://inputs-shr-data/inputs/shr_epfl_employee_student_data.csv
+##### The End #####

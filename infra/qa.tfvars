@@ -1,7 +1,6 @@
 ### General Project variables values  ###
 region                          = "europe-west6"
 location                        = "europe-west6"
-# zone                          = "europe-west6-b"
 project_id                      = "iaac-gcp-data-mgt"
 network                         = "default"
 subnetwork                      = "default"
@@ -25,9 +24,6 @@ output_folder                   = "output/output.txt"
 temp_folder                     = "temp/temp.txt"
 error_folder                    = "error/error.txt"
 ### BigQuery variables values   ###
-# dataset_id                      = "prod_dataset"
-# dataset_description             = "Production dataset" 
-
 datasets = {
   "DOMAIN_ACADEMIA" = {
     dataset_id                  = "DOMAIN_ACADEMIA"
