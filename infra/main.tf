@@ -612,7 +612,7 @@ resource "google_bigquery_table" "swissgrid_data" {
 }
 
 ### Bigquery Transfer Configuration ###
-resource "google_bigquery_data_transfer_config" "ac_schools_transfer" {
+/* resource "google_bigquery_data_transfer_config" "ac_schools_transfer" {
   display_name                      = "Schools Data Transfer"
   location                          = var.location
   data_source_id                    = "google_cloud_storage"
@@ -790,7 +790,7 @@ resource "google_bigquery_data_transfer_config" "shr_employees_students_data_tra
     module.google_bigquery_dataset["DOMAIN_SHARED"],
     google_bigquery_table.shr_epfl_employee_students_data
    ]
-}
+} */
 
 /* ### Dataflow Deployment ###
 module "dataflow_job" {
