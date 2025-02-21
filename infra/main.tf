@@ -80,6 +80,12 @@ resource "google_project_iam_member" "bq_dataset_view" {
   member  = "serviceAccount:${var.service_account_email}"
 }
 
+resource "google_project_iam_member" "dataplex_viewer" {
+  project = var.project_id
+  role    = "roles/dataplex.viewer"
+  member  = "serviceAccount:${var.service_account_email}"
+}
+
 resource "google_project_iam_member" "bigquery_data_transfer_service_agent" {
   project = var.project_id
   role    = "roles/bigquery.admin"
