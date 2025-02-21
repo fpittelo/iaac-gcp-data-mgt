@@ -619,8 +619,9 @@ module "google_dataplex_lake" {
   source                  = "../modules/dataplex_lake"
   lake_name               = "dataplex-lake"
   location                = var.location
-# labels                  = var.labels
+  labels                  = var.labels
   metastore_service       = "DATAPLEX_ASSET"
+  git_branch              = var.git_branch
 }
 
 /* ### Dataflow Deployment ###
