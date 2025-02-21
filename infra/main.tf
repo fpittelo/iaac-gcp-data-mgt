@@ -35,6 +35,9 @@ resource "google_project_service" "api_activations" {
     "pubsub.googleapis.com",
     "secretmanager.googleapis.com",
     "storage.googleapis.com",
+    "dataplex.googleapis.com", # Dataplex API
+    "datacatalog.googleapis.com", # Data Catalog API (Dataplex dependency)
+    "datalineage.googleapis.com", # Data Lineage API (Optional, but commonly used)
   ])
   service            = each.key
   disable_on_destroy = false
