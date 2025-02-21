@@ -40,7 +40,7 @@ resource "google_project_service" "api_activations" {
     "datalineage.googleapis.com", # Data Lineage API (Optional, but commonly used)
   ])
   service            = each.key
-  disable_on_destroy = true
+  disable_on_destroy = false
 }
 
 resource "google_project_iam_member" "service_account_storage_admin" {
