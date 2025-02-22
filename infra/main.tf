@@ -667,7 +667,7 @@ resource "google_dataplex_asset" "raw_bucket_asset" {
   description           = "GCS bucket asset for raw data - ${element(var.raw_data_bucket_names, count.index)}"
   dataplex_zone         = google_dataplex_zone.raw_zone.id
   resource_spec {
-    name = "gs://${element(var.raw_data_bucket_names, count.index)}"
+    name = "projects/${var.project_id}/buckets/${element(var.raw_data_bucket_names, count.index)}"
     type = "STORAGE_BUCKET"
   }
   discovery_spec {
