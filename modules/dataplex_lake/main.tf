@@ -1,16 +1,19 @@
 resource "google_dataplex_lake" "cygnus_lake" {
   name              = var.lake_name
   labels            = var.labels
-  location          = "europe-west1"
+  location          = var.location
     metastore {
       service         = "projects/${var.project_id}/locations/${"europe-west1"}/services/${var.metastore_service_id}"
+  }
+  timeouts {
+    create = "30m"
   }
 }
 
 resource "google_dataplex_zone" "raw_zone" {
   name              = "${var.lake_name}-raw"
   lake              = google_dataplex_lake.cygnus_lake.id
-  location          = "europe-west1"
+  location          = var.location
   type              = "RAW"
   description       = "Raw data zone for the lake"
   labels            = var.labels
@@ -25,7 +28,7 @@ resource "google_dataplex_zone" "raw_zone" {
 resource "google_dataplex_zone" "curated_zone" {
   name              = "${var.lake_name}-curated"
   lake              = google_dataplex_lake.cygnus_lake.id
-  location          = "europe-west1"
+  location          = var.location
   type              = "CURATED"
   description       = "Curated data zone for the lake"
   labels            = var.labels
