@@ -624,8 +624,8 @@ resource "google_bigquery_table" "swissgrid_data" {
 module "google_dataplex_lake" {
   source                  = "../modules/dataplex_lake"
   project_id              = var.project_id
+  location                = "europe-west1"
   lake_name               = var.lake_name
-  location                = var.location
   labels                  = var.labels
   metastore_service_id    = var.metastore_service_id
   git_branch              = var.git_branch

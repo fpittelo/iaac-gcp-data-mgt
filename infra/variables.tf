@@ -6,10 +6,9 @@ variable "project_id" {
 }
 
 variable "location" {
-  description = "The location for the BigQuery dataset"
+  description = "Resource location"
   type        = string
 }
-
 variable "region" {
   description = "The GCP region"
   type        = string

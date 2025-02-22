@@ -2,9 +2,8 @@ resource "google_dataplex_lake" "default" {
   name              = var.lake_name
   labels            = var.labels
   location          = "europe-west1"
-
     metastore {
-      service         = "projects/${var.project_id}/locations/${var.location}/services/${var.metastore_service_id}"
+      service         = "projects/${var.project_id}/locations/${"europe-west1"}/services/${var.metastore_service_id}"
   }
 }
 
