@@ -623,7 +623,7 @@ resource "google_bigquery_table" "swissgrid_data" {
 ### Dataplex Lake Deployment ###
 module "google_dataplex_lake" {
   source                  = "../modules/dataplex_lake"
-  lake_name               = "dataplex-lake"
+  lake_name               = var.lake_name
   location                = var.location
   labels                  = var.labels
   metastore_service       = "DATAPLEX_ASSET"

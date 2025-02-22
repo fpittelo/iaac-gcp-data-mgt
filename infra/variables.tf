@@ -121,6 +121,12 @@ variable "input_file_name" {
   default = null
 }
 
+####### Variables for GPC Dataplex ####
+variable "lake_name" {
+  type = string
+  description = "The name of the Dataplex lake"
+  default = null
+}
 ####### Variables for GPC Dataflow ####
 
 variable "job_name" {
