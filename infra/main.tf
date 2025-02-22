@@ -676,10 +676,13 @@ resource "google_dataplex_asset" "raw_bucket_asset" {
     csv_options {
       header_rows = 1
       encoding = "UTF-8"
+      delimiter = ","
     }
     json_options {
       encoding = "UTF-8"
     }
+    include_patterns = ["**/*.csv", "**/*.json"]
+    exclude_patterns = ["**/*.tmp"]
   }
   labels = var.labels
 }
