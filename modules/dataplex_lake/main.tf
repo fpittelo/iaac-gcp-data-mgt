@@ -1,4 +1,4 @@
-resource "google_dataplex_lake" "default" {
+resource "google_dataplex_lake" "cygnus_lake" {
   name              = var.lake_name
   labels            = var.labels
   location          = "europe-west1"
@@ -9,7 +9,7 @@ resource "google_dataplex_lake" "default" {
 
 resource "google_dataplex_zone" "raw_zone" {
   name              = "${var.lake_name}-raw"
-  lake              = google_dataplex_lake.default.id
+  lake              = google_dataplex_lake.cygnus_lake.id
   location          = "europe-west1"
   type              = "RAW"
   description       = "Raw data zone for the lake"
@@ -24,7 +24,7 @@ resource "google_dataplex_zone" "raw_zone" {
 
 resource "google_dataplex_zone" "curated_zone" {
   name              = "${var.lake_name}-curated"
-  lake              = google_dataplex_lake.default.id
+  lake              = google_dataplex_lake.cygnus_lake.id
   location          = "europe-west1"
   type              = "CURATED"
   description       = "Curated data zone for the lake"
