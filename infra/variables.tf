@@ -127,10 +127,10 @@ variable "lake_name" {
   default = null
 }
 
-variable "metastore_service_id" {
+/* variable "metastore_service_id" {
   description = "The Github branch name"
   type        = string
-}
+} */
 ####### Variables for GPC Dataflow ####
 variable "job_name" {
   type = string

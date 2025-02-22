@@ -621,14 +621,42 @@ resource "google_bigquery_table" "swissgrid_data" {
 }
 
 ### Dataplex Lake Deployment ###
-module "google_dataplex_lake" {
-  source                  = "../modules/dataplex_lake"
-  project_id              = var.project_id
-  location                = var.location
-  lake_name               = var.lake_name
-  labels                  = var.labels
-  metastore_service_id    = var.metastore_service_id
-  git_branch              = var.git_branch
+resource "google_dataplex_lake" "cygnus_lake" {
+  location              = var.location
+  name                  = var.lake_name
+  description           = "Data Management Lake"
+  project               = var.project_id
+  labels                = var.labels
+}
+
+resource "google_dataplex_zone" "raw_zone" {
+  name                  = "${var.lake_name}-raw"
+  lake                  = google_dataplex_lake.cygnus_lake.id
+  location              = var.location
+  type                  = "RAW"
+  description           = "Raw data zone for the lake"
+  labels                = var.labels
+  resource_spec {
+    location_type = "SINGLE_REGION"
+  }
+  discovery_spec {
+    enabled = false
+  }
+}
+
+resource "google_dataplex_zone" "curated_zone" {
+  name                  = "${var.lake_name}-curated"
+  lake                  = google_dataplex_lake.cygnus_lake.id
+  location              = var.location
+  type                  = "CURATED"
+  description           = "Curated data zone for the lake"
+  labels                = var.labels
+  resource_spec {
+    location_type = "SINGLE_REGION"
+  }
+  discovery_spec {
+    enabled = false
+  }
 }
 
 /* ### Dataflow Deployment ###

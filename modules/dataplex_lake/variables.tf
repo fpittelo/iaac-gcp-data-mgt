@@ -13,11 +13,11 @@ variable "location" {
   description = "Location of the lake"
 }
 
-variable "metastore_service" {
+/* variable "metastore_service" {
   type          = string
   description   = "Metastore service for the lake"
   default       = "DATAPLEX_ASSET"
-}
+} */
 
 variable "git_branch" {
   description = "The Github branch name"
