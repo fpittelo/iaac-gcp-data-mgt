@@ -23,3 +23,13 @@ variable "git_branch" {
   description = "The Github branch name"
   type        = string
 }
+
+variable "project_id" {
+  description = "The Github branch name"
+  type        = string
+}
+
+variable "metastore_service_id" {
+  description = "The Github branch name"
+  type        = string
+}

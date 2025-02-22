@@ -127,8 +127,12 @@ variable "lake_name" {
   description = "The name of the Dataplex lake"
   default = null
 }
-####### Variables for GPC Dataflow ####
 
+variable "metastore_service_id" {
+  description = "The Github branch name"
+  type        = string
+}
+####### Variables for GPC Dataflow ####
 variable "job_name" {
   type = string
   description = "Le nom du job Dataflow"
