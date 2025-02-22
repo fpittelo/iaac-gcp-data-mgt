@@ -3,7 +3,7 @@ resource "google_dataplex_lake" "cygnus_lake" {
   labels            = var.labels
   location          = var.location
     metastore {
-      service         = "projects/${var.project_id}/locations/${"europe-west1"}/services/${var.metastore_service_id}"
+      service         = "projects/${var.project_id}/locations/${var.location}/services/${var.metastore_service_id}"
   }
   timeouts {
     create = "30m"
