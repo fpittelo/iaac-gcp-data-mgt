@@ -80,11 +80,11 @@ resource "google_project_iam_member" "bq_dataset_view" {
   member  = "serviceAccount:${var.service_account_email}"
 }
 
-resource "google_project_iam_member" "dataplex_admin" {
+/* resource "google_project_iam_member" "dataplex_admin" {
   project = var.project_id
   role    = "roles/dataplex.admin"
   member  = "serviceAccount:${var.service_account_email}"
-}
+} */
 
 resource "google_project_iam_member" "dataplex_admin" {
   project = var.project_id
