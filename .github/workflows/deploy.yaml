@@ -56,6 +56,13 @@ jobs:
             --role="roles/dataflow.developer"
       
       - name:
+        #### Use the github environment secrets DEV/GCP_PROJECT_ID ####
+        run: |
+          gcloud projects add-iam-policy-binding ${{ secrets.GCP_PROJECT_ID }} \
+            --member="serviceAccount:${{ secrets.SERVICE_ACCOUNT }}" \
+            --role="roles/dataplex.admin"
+
+      - name:
         run: |  
           gcloud projects add-iam-policy-binding ${{ secrets.GCP_PROJECT_ID }} \
             --member="serviceAccount:service-571690378641@gcp-sa-bigquerydatatransfer.iam.gserviceaccount.com" \

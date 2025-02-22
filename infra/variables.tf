@@ -6,10 +6,9 @@ variable "project_id" {
 }
 
 variable "location" {
-  description = "The location for the BigQuery dataset"
+  description = "Resource location"
   type        = string
 }
-
 variable "region" {
   description = "The GCP region"
   type        = string
@@ -121,8 +120,18 @@ variable "input_file_name" {
   default = null
 }
 
-####### Variables for GPC Dataflow ####
+####### Variables for GPC Dataplex ####
+variable "lake_name" {
+  type = string
+  description = "The name of the Dataplex lake"
+  default = null
+}
 
+/* variable "metastore_service_id" {
+  description = "The Github branch name"
+  type        = string
+} */
+####### Variables for GPC Dataflow ####
 variable "job_name" {
   type = string
   description = "Le nom du job Dataflow"

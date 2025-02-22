@@ -80,6 +80,12 @@ resource "google_project_iam_member" "bq_dataset_view" {
   member  = "serviceAccount:${var.service_account_email}"
 }
 
+/* resource "google_project_iam_member" "dataplex_admin" {
+  project = var.project_id
+  role    = "roles/dataplex.admin"
+  member  = "serviceAccount:${var.service_account_email}"
+} */
+
 resource "google_project_iam_member" "bigquery_data_transfer_service_agent" {
   project = var.project_id
   role    = "roles/bigquery.admin"
@@ -611,6 +617,45 @@ resource "google_bigquery_table" "swissgrid_data" {
   EOF
   lifecycle {
     prevent_destroy = false
+  }
+}
+
+### Dataplex Lake Deployment ###
+resource "google_dataplex_lake" "cygnus_lake" {
+  location              = var.location
+  name                  = var.lake_name
+  description           = "Data Management Lake"
+  project               = var.project_id
+  labels                = var.labels
+}
+
+resource "google_dataplex_zone" "raw_zone" {
+  name                  = "${var.lake_name}-raw"
+  lake                  = google_dataplex_lake.cygnus_lake.id
+  location              = var.location
+  type                  = "RAW"
+  description           = "Raw data zone for the lake"
+  labels                = var.labels
+  resource_spec {
+    location_type = "SINGLE_REGION"
+  }
+  discovery_spec {
+    enabled = false
+  }
+}
+
+resource "google_dataplex_zone" "curated_zone" {
+  name                  = "${var.lake_name}-curated"
+  lake                  = google_dataplex_lake.cygnus_lake.id
+  location              = var.location
+  type                  = "CURATED"
+  description           = "Curated data zone for the lake"
+  labels                = var.labels
+  resource_spec {
+    location_type = "SINGLE_REGION"
+  }
+  discovery_spec {
+    enabled = false
   }
 }
 

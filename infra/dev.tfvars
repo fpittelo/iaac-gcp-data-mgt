@@ -72,6 +72,9 @@ datasets = {
 # default_table_expiration_ms   = "3600000"
 data_viewer_group               = "frederic.pitteloud@gmail.com"
 data_editor_group               = "frederic.pitteloud@gmail.com"
+###  Dataplex variables values   ###
+lake_name                       = "data-mgt-lake"
+# metastore_service_id            = "DATAPLEX_ASSET"
 ### Dataflow variables values   ###
 template_gcs_path               = ""
 template_gcs_location           = ""
