@@ -39,7 +39,7 @@ datasets = {
   },
   "DOMAIN_HR" = {
       dataset_id                  = "DOMAIN_HR"
-      description                 = "HR dataset"
+      description                 = "Human Resources dataset"
       dataset_owner_email         = "frederic.pitteloud@gmail.com"
       delete_contents_on_destroy  = true
     },
@@ -74,7 +74,7 @@ data_viewer_group               = "frederic.pitteloud@gmail.com"
 data_editor_group               = "frederic.pitteloud@gmail.com"
 ###  Dataplex variables values   ###
 lake_name                       = "data-mgt-lake"
-metastore_service_id            = "DATAPLEX_ASSET"
+# metastore_service_id          = "DATAPLEX_ASSET"
 ### Dataflow variables values   ###
 template_gcs_path               = ""
 template_gcs_location           = ""

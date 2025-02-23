@@ -127,10 +127,18 @@ variable "lake_name" {
   default = null
 }
 
-/* variable "metastore_service_id" {
-  description = "The Github branch name"
-  type        = string
-} */
+variable "raw_data_bucket_names" {
+  type        = list(string)
+  description = "List of Cloud Storage bucket names for raw data assets"
+  default     = [
+    "inputs-acd-data",
+    "inputs-fin-data",
+    "inputs-hr-data",
+    "inputs-opr-data",
+    "inputs-pub-data",
+    "inputs-shr-data"
+  ]
+}
 ####### Variables for GPC Dataflow ####
 variable "job_name" {
   type = string

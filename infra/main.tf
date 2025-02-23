@@ -652,11 +652,39 @@ resource "google_dataplex_zone" "curated_zone" {
   description           = "Curated data zone for the lake"
   labels                = var.labels
   resource_spec {
-    location_type = "SINGLE_REGION"
+    location_type       = "SINGLE_REGION"
   }
   discovery_spec {
-    enabled = false
+    enabled             = false
   }
+}
+
+resource "google_dataplex_asset" "raw_bucket_asset" {
+  count                 = length(var.raw_data_bucket_names)
+  name                  = "raw-bucket-assets-${count.index + 1}"
+  location              = var.location
+  lake                  = google_dataplex_lake.cygnus_lake.id
+  description           = "GCS bucket asset for raw data - ${element(var.raw_data_bucket_names, count.index)}"
+  dataplex_zone         = google_dataplex_zone.raw_zone.id
+  resource_spec {
+    name = "projects/${var.project_id}/buckets/${element(var.raw_data_bucket_names, count.index)}"
+    type = "STORAGE_BUCKET"
+  }
+  discovery_spec {
+    enabled = true
+    schedule = "0 * * * *" # Hourly discovery
+    csv_options {
+      header_rows = 1
+      encoding = "UTF-8"
+      delimiter = ","
+    }
+    json_options {
+      encoding = "UTF-8"
+    }
+    include_patterns = ["**/*.csv", "**/*.json"]
+    exclude_patterns = ["**/*.tmp"]
+  }
+  labels = var.labels
 }
 
 /* ### Dataflow Deployment ###
