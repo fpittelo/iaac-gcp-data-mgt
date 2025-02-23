@@ -26,43 +26,43 @@ error_folder                    = "error/error.txt"
 ### BigQuery variables values   ###
 datasets = {
   "DOMAIN_ACADEMIA" = {
-    dataset_id                  = "domain-academia"
+    dataset_id                  = "academia"
     description                 = "Academia dataset"
     dataset_owner_email         = "frederic.pitteloud@gmail.com"
     delete_contents_on_destroy  = true
   },
   "DOMAIN_FINANCE" = {
-    dataset_id                  = "domain-finance"
+    dataset_id                  = "finance"
     description                 = "Finance dataset"
     dataset_owner_email         = "frederic.pitteloud@gmail.com"
     delete_contents_on_destroy  = true
   },
   "DOMAIN_HR" = {
-      dataset_id                  = "domain-hr"
+      dataset_id                  = "hr"
       description                 = "Human Resources dataset"
       dataset_owner_email         = "frederic.pitteloud@gmail.com"
       delete_contents_on_destroy  = true
     },
     "DOMAIN_OPERATIONS" = {
-      dataset_id                  = "domain-operations"
+      dataset_id                  = "operations"
       description                 = "Operations dataset"
       dataset_owner_email         = "frederic.pitteloud@gmail.com"
       delete_contents_on_destroy  = true
     },
     "DOMAIN_PUBLIC" = {
-      dataset_id                  = "domain-public"
+      dataset_id                  = "public"
       description                 = "Public dataset"
       dataset_owner_email         = "frederic.pitteloud@gmail.com"
       delete_contents_on_destroy  = true
     },
     "DOMAIN_SHARED" = {
-      dataset_id                  = "domain-shared"
+      dataset_id                  = "shared"
       description                 = "Shared dataset"
       dataset_owner_email         = "frederic.pitteloud@gmail.com"
       delete_contents_on_destroy  = true
     }
     "DOMAIN_SANDBOX" = {
-      dataset_id                  = "domain-sandbox"
+      dataset_id                  = "sandbox"
       description                 = "Sandbox dataset"
       dataset_owner_email         = "frederic.pitteloud@gmail.com"
       delete_contents_on_destroy  = true
