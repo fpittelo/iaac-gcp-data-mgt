@@ -481,10 +481,10 @@ resource "google_bigquery_table" "hr_salaries" {
 }
 
 resource "google_bigquery_table" "hr_countries" {
-  dataset_id                  = module.google_bigquery_dataset["DOMAIN_HR"].dataset_id
-  table_id                    = "hr_countries"
-  deletion_protection         = false
-  schema                      = <<-EOF
+  dataset_id            = module.google_bigquery_dataset["DOMAIN_HR"].dataset_id
+  table_id              = "hr_countries"
+  deletion_protection   = false
+  schema                = <<-EOF
   [
     {
       "name": "uid_countries",
@@ -509,10 +509,10 @@ resource "google_bigquery_table" "hr_countries" {
 }
 
 resource "google_bigquery_table" "pub_epfl_students_data" {
-  dataset_id                  = module.google_bigquery_dataset["DOMAIN_PUBLIC"].dataset_id
-  table_id                    = "pub_epfl_students_data"
-  deletion_protection         = false
-  schema                      = <<-EOF
+  dataset_id            = module.google_bigquery_dataset["DOMAIN_PUBLIC"].dataset_id
+  table_id              = "pub_epfl_students_data"
+  deletion_protection   = false
+  schema                = <<-EOF
   [
     {
       "name": "year",
@@ -562,10 +562,10 @@ resource "google_bigquery_table" "pub_epfl_students_data" {
 }
 
 resource "google_bigquery_table" "shr_epfl_employee_students_data" {
-  dataset_id                  = module.google_bigquery_dataset["DOMAIN_SHARED"].dataset_id
-  table_id                    = "shr_epfl_employee_students_data"
-  deletion_protection         = false
-  schema                      = <<-EOF
+  dataset_id            = module.google_bigquery_dataset["DOMAIN_SHARED"].dataset_id
+  table_id              = "shr_epfl_employee_students_data"
+  deletion_protection   = false
+  schema                = <<-EOF
   [
     {
       "name": "year",
@@ -585,15 +585,15 @@ resource "google_bigquery_table" "shr_epfl_employee_students_data" {
   ]
   EOF
   lifecycle {
-    prevent_destroy = false
+    prevent_destroy     = false
   }
 }
 
 resource "google_bigquery_table" "swissgrid_data" {
-  dataset_id                  = module.google_bigquery_dataset["DOMAIN_OPERATIONS"].dataset_id
-  deletion_protection         = false
-  table_id                    = "opr_swissgrid_data"
-  schema                      = <<-EOF
+  dataset_id            = module.google_bigquery_dataset["DOMAIN_OPERATIONS"].dataset_id
+  deletion_protection   = false
+  table_id              = "opr_swissgrid_data"
+  schema                = <<-EOF
   [
     {
       "name": "Datum",
@@ -671,20 +671,40 @@ resource "google_dataplex_asset" "raw_bucket_asset" {
     type = "STORAGE_BUCKET"
   }
   discovery_spec {
-    enabled = true
-    schedule = "0 * * * *" # Hourly discovery
+    enabled             = true
+    schedule            = "0 * * * *" # Hourly discovery
     csv_options {
-      header_rows = 1
-      encoding = "UTF-8"
-      delimiter = ","
+      header_rows       = 1
+      encoding          = "UTF-8"
+      delimiter         = ","
     }
     json_options {
-      encoding = "UTF-8"
+      encoding          = "UTF-8"
     }
-    include_patterns = ["**/*.csv", "**/*.json"]
-    exclude_patterns = ["**/*.tmp"]
+    include_patterns    = ["**/*.csv", "**/*.json"]
+    exclude_patterns    = ["**/*.tmp"]
   }
-  labels = var.labels
+  labels                = var.labels
+}
+
+resource "google_dataplex_asset" "bigquery_asset" {
+  for_each              = var.datasets
+  name                  = "bq-asset-${each.value.dataset_id}"
+  location              = var.location
+  lake                  = google_dataplex_lake.cygnus_lake.id
+  description           = "BigQuery dataset asset - ${each.value.dataset_id}"
+  dataplex_zone         = google_dataplex_zone.curated_zone.id
+  
+  resource_spec {
+    type                = "BIGQUERY_DATASET"
+    name                = "projects/${var.project_id}/datasets/${each.value.dataset_id}"
+  }
+  discovery_spec {
+    enabled             = true
+    schedule            = "0 * * * *" # Hourly discovery
+  }
+
+  labels                = var.labels
 }
 
 /* ### Dataflow Deployment ###
