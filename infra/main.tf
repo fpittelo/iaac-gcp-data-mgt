@@ -689,7 +689,8 @@ resource "google_dataplex_asset" "raw_bucket_asset" {
 
 resource "google_dataplex_asset" "bigquery_asset" {
   for_each              = var.datasets
-  name                  = "bq-asset-${each.value.dataset_id}"
+# name                  = "bq-asset-${each.value.dataset_id}"
+  name                  = "bq-asset-${lower(replace(each.value.dataset_id, "_", "-"))}"
   location              = var.location
   lake                  = google_dataplex_lake.cygnus_lake.id
   description           = "BigQuery dataset asset - ${each.value.dataset_id}"
